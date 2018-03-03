@@ -20,10 +20,22 @@ public class PlayerMovement : MonoBehaviour {
 
     private bool isAiming;
     private float rangedTimer;
+    private float arrowVel;
+    [SerializeField]
+    private GameObject arrowPrefab;
 
     private bool die;
+
+    public bool colliding;
+    private GameObject colGO;
+
+    private Dictionary<string, int> dmg = new Dictionary<string, int>();
+
+    public bool controle;
     // Use this for initialization
     void Start () {
+        arrowVel = 15f;
+
         ////// GET THE ANIMATOR COMPONENT AND SET THE PLAYER VELOCITY ///////
         anim = GetComponent<Animator>();
         vel = 3f;
@@ -35,10 +47,20 @@ public class PlayerMovement : MonoBehaviour {
         anim.SetBool("isWalking", isWalking);
         anim.SetFloat("x", x);
         anim.SetFloat("y", y);
+
+        ////////////// SET THE ATTACKS DAMAGE /////////////////
+        dmg.Add("Close",10); // Close Range Attack DMG
+        dmg.Add("Range",25); // Ranged Attack DMG
+        dmg.Add("Magic", 50); // Magic Attack DMG
+
+        colGO = null; // Variable used to detect the colliding enemy
+        controle = false;
     }
 	
 	// Update is called once per frame
 	void Update () {
+//        Debug.Log("y: " + anim.GetFloat("y") + " x: " + anim.GetFloat("x"));
+
         //////////// READ THE INPUTS //////////////////
         x = Input.GetAxis("Horizontal");
         y = Input.GetAxis("Vertical");
@@ -55,14 +77,23 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.E))
             die = true;
 
-        if (Input.GetKeyDown(KeyCode.C) && isMagicActive == false && isAiming == false && die == false)
+        if (Input.GetKeyDown(KeyCode.C) && isMagicActive == false && isAiming == false && die == false && attackTimer == 0)
+        {
             isAttacking = true;
+            controle = true;
+        }
 
-        if (Input.GetKeyDown(KeyCode.X) && isAttacking == false && isAiming == false && die == false)
+        if (Input.GetKeyDown(KeyCode.X) && isAttacking == false && isAiming == false && die == false && magicTimer == 0)
+        {
             isMagicActive = true;
+            controle = true;
+        }
 
-        if (Input.GetKeyDown(KeyCode.Z) && isAttacking == false && isMagicActive == false && die == false)
+        if (Input.GetKeyDown(KeyCode.Z) && isAttacking == false && isMagicActive == false && die == false && rangedTimer == 0)
+        {
             isAiming = true;
+            controle = true;
+        }
 
         ///////////////////////// SET ANIMATIONS //////////////////////
         isWalking = (Mathf.Abs(x) + Mathf.Abs(y)) > 0;
@@ -106,8 +137,28 @@ public class PlayerMovement : MonoBehaviour {
 
             rangedTimer += Time.deltaTime;
 
-            if (rangedTimer >= 1.083f)  // THIS VALUE IS THE LONG RANGE ANIMATION TIME
+
+                if (rangedTimer >= 1.083f)  // THIS VALUE IS THE LONG RANGE ANIMATION TIME
             {
+                Quaternion rot = Quaternion.Euler(0, 0, 0);
+
+                if (anim.GetFloat("y") > 0 && anim.GetFloat("x") == 0)
+                    rot = Quaternion.Euler(0, 0, 90);
+
+                else if (anim.GetFloat("y") < 0 && anim.GetFloat("x") == 0)
+                    rot = Quaternion.Euler(0, 0, -90);
+
+                else if (anim.GetFloat("x") > 0 && anim.GetFloat("y") == 0)
+                    rot = Quaternion.Euler(0, 0, 0);
+
+                else if (anim.GetFloat("x") < 0 && anim.GetFloat("y") == 0)
+                    rot = Quaternion.Euler(0, 0, 180);
+
+                GameObject arrow = (GameObject)Instantiate(arrowPrefab, transform.position, rot);
+
+                arrow.GetComponent<Arrow>().arrowVel = arrowVel;
+                arrow.GetComponent<Arrow>().dmg = dmg["Range"];
+
                 isAiming = false;
                 anim.SetBool("isAiming", isAiming);
                 rangedTimer = 0;
@@ -145,26 +196,41 @@ public class PlayerMovement : MonoBehaviour {
         {
             anim.speed = 1;
         }
-    }
 
-    private void OnTriggerStay2D(Collider2D col)
-    {
-        if(col.transform.position.y > transform.position.y && y > 0)
+        //////////// ATTACK DETECTION WHILE COLLIDING //////////////////
+        if (colGO != null)
         {
-            if(isAttacking)
+            if (colGO.transform.position.y > transform.position.y && anim.GetFloat("y") > 0 && anim.GetFloat("x") == 0 || colGO.transform.position.y < transform.position.y && anim.GetFloat("y") < 0 && anim.GetFloat("x") == 0 || colGO.transform.position.x > transform.position.x && anim.GetFloat("x") > 0 && anim.GetFloat("y") == 0 || colGO.transform.position.x < transform.position.x && anim.GetFloat("x") < 0 && anim.GetFloat("y") == 0)
             {
-                Debug.Log("Attacked");
-            }
+                if (colGO.gameObject.tag == "Enemy")
+                {
+                    if (isAttacking && controle && attackTimer >= 0.4f)
+                    {
+                        colGO.GetComponent<EnemyHealth>().TakeDamage(dmg["Close"]);
+                        controle = false;
+                    }
+/*
 
-            else if(isAiming)
-            {
-                Debug.Log("Aimimg");
-            }
-
-            else if(isMagicActive)
-            {
-                Debug.Log("Magic Attack");
+                    else if (isMagicActive && controle)
+                    {
+                        colGO.GetComponent<EnemyHealth>().TakeDamage(dmg["Magic"]);
+                        controle = false;
+                    }*/
+                }
             }
         }
+    }
+
+    //////////// DETECT COLLISIONS /////////////////
+    private void OnTriggerStay2D(Collider2D col)
+    {
+        colliding = true;
+        colGO = col.gameObject;
+    }
+
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        colliding = false;
+        colGO = null;
     }
 }

@@ -9,15 +9,30 @@ public class ReOrderLayer : MonoBehaviour {
 	void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
         spriteRenderer = GetComponent<SpriteRenderer>();
-
     }
 	
 	// Update is called once per frame
 	void Update () {
-		if(player.transform.position.y > transform.position.y)
-            spriteRenderer.sortingOrder = player.GetComponent<SpriteRenderer>().sortingOrder + 1;
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        foreach (var r in renderers)
+        {
+            r.sortingOrder = spriteRenderer.sortingOrder + 1;
+        }
+
+        if (player.transform.position.y > transform.position.y)
+        {
+            foreach (var r in renderers)
+            {
+                r.sortingOrder = spriteRenderer.sortingOrder + 1;
+            }
+
+            if(GetComponentInChildren<SpriteRenderer>().sortingOrder > spriteRenderer.sortingOrder)
+                spriteRenderer.sortingOrder = player.GetComponent<SpriteRenderer>().sortingOrder + 1;
+        }
 
         else
-            spriteRenderer.sortingOrder = player.GetComponent<SpriteRenderer>().sortingOrder - 1;
+        {
+            spriteRenderer.sortingOrder = player.GetComponent<SpriteRenderer>().sortingOrder - 2;
+        }
     }
 }
