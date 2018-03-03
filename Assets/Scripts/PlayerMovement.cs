@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour {
     void Start () {
         ////// GET THE ANIMATOR COMPONENT AND SET THE PLAYER VELOCITY ///////
         anim = GetComponent<Animator>();
-        vel = 2.3f;
+        vel = 3f;
 
         //////// SET THE PLAYER FACING DOWN /////////////////
         isWalking = true;
