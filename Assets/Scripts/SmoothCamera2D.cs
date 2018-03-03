@@ -4,12 +4,17 @@ using System.Collections;
 public class SmoothCamera2D : MonoBehaviour
 {
 
-    public float dampTime = 0.15f;
+    private float dampTime = 0.15f;
     private Vector3 velocity = Vector3.zero;
-    public Transform target;
+    private Transform target;
+
+    private void Start()
+    {
+        target = GameObject.FindGameObjectWithTag("Player").transform;
+    }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (target)
         {

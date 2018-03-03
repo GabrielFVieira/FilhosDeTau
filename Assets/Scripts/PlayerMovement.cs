@@ -20,6 +20,8 @@ public class PlayerMovement : MonoBehaviour {
 
     private bool isAiming;
     private float rangedTimer;
+
+    private bool die;
     // Use this for initialization
     void Start () {
         ////// GET THE ANIMATOR COMPONENT AND SET THE PLAYER VELOCITY ///////
@@ -41,7 +43,7 @@ public class PlayerMovement : MonoBehaviour {
         x = Input.GetAxis("Horizontal");
         y = Input.GetAxis("Vertical");
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && isMagicActive == false && isAiming == false && isAttacking == false)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && isMagicActive == false && isAiming == false && isAttacking == false && die == false)
             run = true;
 
         if (Input.GetKeyUp(KeyCode.LeftShift))
@@ -50,19 +52,23 @@ public class PlayerMovement : MonoBehaviour {
             run = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.C) && isMagicActive == false && isAiming == false)
+        if (Input.GetKeyDown(KeyCode.E))
+            die = true;
+
+        if (Input.GetKeyDown(KeyCode.C) && isMagicActive == false && isAiming == false && die == false)
             isAttacking = true;
 
-        if (Input.GetKeyDown(KeyCode.X) && isAttacking == false && isAiming == false)
+        if (Input.GetKeyDown(KeyCode.X) && isAttacking == false && isAiming == false && die == false)
             isMagicActive = true;
 
-        if (Input.GetKeyDown(KeyCode.Z) && isAttacking == false && isMagicActive == false)
+        if (Input.GetKeyDown(KeyCode.Z) && isAttacking == false && isMagicActive == false && die == false)
             isAiming = true;
 
         ///////////////////////// SET ANIMATIONS //////////////////////
         isWalking = (Mathf.Abs(x) + Mathf.Abs(y)) > 0;
         anim.SetBool("isWalking", isWalking);
-        
+        anim.SetBool("Died", die);
+
         ///////////////// CLOSE ATTACK ////////////////
         if (isAttacking)
         {
@@ -109,7 +115,7 @@ public class PlayerMovement : MonoBehaviour {
         }
 
         ///////////////// WALK ///////////////
-        if (isWalking && isAttacking == false && isMagicActive == false && isAiming == false)
+        if (isWalking && isAttacking == false && isMagicActive == false && isAiming == false && die == false)
         {
             if (run)
             {
@@ -135,6 +141,30 @@ public class PlayerMovement : MonoBehaviour {
             }
         }
 
-        
+        if (die)
+        {
+            anim.speed = 1;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D col)
+    {
+        if(col.transform.position.y > transform.position.y && y > 0)
+        {
+            if(isAttacking)
+            {
+                Debug.Log("Attacked");
+            }
+
+            else if(isAiming)
+            {
+                Debug.Log("Aimimg");
+            }
+
+            else if(isMagicActive)
+            {
+                Debug.Log("Magic Attack");
+            }
+        }
     }
 }
