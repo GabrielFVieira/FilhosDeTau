@@ -344,6 +344,7 @@ MonoBehaviour:
   maxHealth: 100
   healthBar: {fileID: 1304387857316018}
   healthBarCanvas: {fileID: 1652253312571492}
+  maxDistInv: 0
   attacked: 0
   hurtAnim: {fileID: 7400000, guid: d200c378ab0c8d746bf92ba9de67f360, type: 2}
 --- !u!114 &114653784156958138

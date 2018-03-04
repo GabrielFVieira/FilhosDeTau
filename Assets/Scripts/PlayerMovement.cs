@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     private float y;
 
     private bool run;
+    private float runVel;
+    private float energy;
 
     private bool isAttacking;
     private float attackTimer;
@@ -42,17 +44,23 @@ public class PlayerMovement : MonoBehaviour
     private float initialVel;
     private bool controlSlow;
     public bool controle;
+    [SerializeField]
+    private GameObject clawHUD;
 
     private bool roll;
+    private float rollEnergyConsum;
     [SerializeField]
     private AnimationClip rollClip;
     private float rollTimer;
     private Vector2 curAxis = new Vector2();
+
     // Use this for initialization
     void Start()
     {
+        clawHUD.SetActive(false);
+        rollEnergyConsum = 10;
         arrowVel = 15f;
-
+        runVel = 1.8f;
         ////// GET THE ANIMATOR COMPONENT AND SET THE PLAYER VELOCITY ///////
         anim = GetComponent<Animator>();
         vel = 3f;
@@ -77,38 +85,41 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //        Debug.Log("y: " + anim.GetFloat("y") + " x: " + anim.GetFloat("x"));
+        energy = GetComponent<EnergyBar>().curEnergy;
 
         //////////// READ THE INPUTS //////////////////
         x = Input.GetAxis("Horizontal");
         y = Input.GetAxis("Vertical");
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && isMagicActive == false && isAiming == false && isAttacking == false && die == false && controlSlow == false)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && isMagicActive == false && isAiming == false && isAttacking == false && die == false && controlSlow == false && energy > 0)
             run = true;
 
-        if (Input.GetKeyUp(KeyCode.LeftShift))
+        if (Input.GetKeyUp(KeyCode.LeftShift) || energy <= 0)
         {
             anim.speed = 1;
             run = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.V) && isMagicActive == false && isAiming == false && isAttacking == false && roll == false && run && die == false && isWalking)
+        if (Input.GetKeyDown(KeyCode.V) && isMagicActive == false && isAiming == false && isAttacking == false && roll == false && run && die == false && isWalking && energy > rollEnergyConsum)
             roll = true;
 
         if (Input.GetKeyDown(KeyCode.C) && isMagicActive == false && isAiming == false && roll == false && die == false && attackTimer == 0)
         {
+            anim.speed = 1;
             isAttacking = true;
             controle = true;
         }
 
         if (Input.GetKeyDown(KeyCode.X) && isAttacking == false && isAiming == false && roll == false && die == false && magicTimer == 0)
         {
+            anim.speed = 1;
             isMagicActive = true;
             controle = true;
         }
 
         if (Input.GetKeyDown(KeyCode.Z) && isAttacking == false && isMagicActive == false && roll == false && die == false && rangedTimer == 0)
         {
+            anim.speed = 1;
             isAiming = true;
             controle = true;
         }
@@ -123,6 +134,12 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool("isWalking", isWalking);
         anim.SetBool("Roll", roll);
         die = anim.GetBool("Died");
+
+        if (die)
+        {
+            anim.speed = 1;
+            clawHUD.SetActive(false);
+        }
 
         ///////////////// CLOSE ATTACK ////////////////
         if (isAttacking)
@@ -158,7 +175,6 @@ public class PlayerMovement : MonoBehaviour
         if (isAiming)
         {
             anim.SetBool("isAiming", isAiming);
-
             rangedTimer += Time.deltaTime;
 
 
@@ -194,29 +210,14 @@ public class PlayerMovement : MonoBehaviour
             run = true;
             if(rollTimer == 0)
             {
-                if(Mathf.Abs(x) > Mathf.Abs(y))
-                {
-                    if(x > 0)
-                        curAxis = new Vector2(1, 0);
-
-                    else
-                        curAxis = new Vector2(-1, 0);
-                }
-
-                else
-                {
-                    if (y > 0)
-                        curAxis = new Vector2(0, 1);
-
-                    else
-                        curAxis = new Vector2(0, -1);
-                }
+                curAxis = new Vector2(x, y);
+                GetComponent<EnergyBar>().curEnergy -= rollEnergyConsum;
             }
 
             anim.speed = 2f;
 
             rollTimer += Time.deltaTime;
-            transform.Translate(curAxis.x * vel * 2f * Time.deltaTime, curAxis.y * vel * 2f * Time.deltaTime, 0);
+            transform.Translate(curAxis.x * vel * 3f * Time.deltaTime, curAxis.y * vel * 3f * Time.deltaTime, 0);
 
             if (rollTimer >= rollClip.length * 0.5f)
             {
@@ -225,6 +226,12 @@ public class PlayerMovement : MonoBehaviour
                 roll = false;
                 rollTimer = 0;
                 anim.speed = 1f;
+
+                if (Input.GetKey(KeyCode.LeftShift))
+                    run = true;
+
+                else
+                    run = false;
             }
 
         }
@@ -234,44 +241,27 @@ public class PlayerMovement : MonoBehaviour
         {
             if (run)
             {
-                    ///////////// SPEED UP THE ANIMATION ///////////////
-                    anim.speed = 1.5f;
+                Move(runVel);
 
-                    anim.SetFloat("x", x);
-                    anim.SetFloat("y", y);
-
-                    ///////////// MOVE THE PLAYER (ACCELERATED) ///////////////////
-                    transform.Translate(x * vel * 1.7f * Time.deltaTime, y * vel * 1.7f * Time.deltaTime, 0);
+                GetComponent<EnergyBar>().curEnergy -= 10 * Time.deltaTime;
             }
 
             else
             {
-                    anim.speed = 1;
-
-                    anim.SetFloat("x", x);
-                    anim.SetFloat("y", y);
-
-                    ///////////// MOVE THE PLAYER ///////////////////
-                    transform.Translate(x * vel * Time.deltaTime, y * vel * Time.deltaTime, 0);
+                Move(1);
             }
         }
 
-        if (die)
-        {
-            anim.speed = 1;
-        }
         //////////// ATTACK DETECTION WHILE COLLIDING //////////////////
         if (colGO != null)
         {
             if (colGO.transform.position.y > transform.position.y && anim.GetFloat("y") > 0 && anim.GetFloat("x") == 0 || colGO.transform.position.y < transform.position.y && anim.GetFloat("y") < 0 && anim.GetFloat("x") == 0 || colGO.transform.position.x > transform.position.x && anim.GetFloat("x") > 0 && anim.GetFloat("y") == 0 || colGO.transform.position.x < transform.position.x && anim.GetFloat("x") < 0 && anim.GetFloat("y") == 0)
             {
-                if (colGO.gameObject.tag == "Enemy")
+                if (colGO.gameObject.tag == "Enemy" && isAttacking && controle && attackTimer >= 0.4f)
                 {
-                    if (isAttacking && controle && attackTimer >= 0.4f)
-                    {
-                        colGO.GetComponent<EnemyHealth>().TakeDamage(dmg["Close"]);
-                        controle = false;
-                    }
+                       colGO.GetComponent<EnemyHealth>().TakeDamage(dmg["Close"]);
+                       controle = false;
+
                 }
             }
         }
@@ -285,6 +275,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 vel = initialVel;
                 controlSlow = false;
+                clawHUD.SetActive(false);
                 slowTimer = 0;
             }
         }
@@ -294,6 +285,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (controlSlow == false)
         {
+            clawHUD.SetActive(true);
             controlSlow = true;
             maxSlowTime = time;
             initialVel = vel;
@@ -310,5 +302,16 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerExit2D(Collider2D col)
     {
         colGO = null;
+    }
+
+    private void Move(float speed)
+    {
+        anim.speed = speed;
+
+        anim.SetFloat("x", x);
+        anim.SetFloat("y", y);
+
+        ///////////// MOVE THE PLAYER ///////////////////
+        transform.Translate(x * vel * speed * Time.deltaTime, y * vel * speed * Time.deltaTime, 0);
     }
 }
