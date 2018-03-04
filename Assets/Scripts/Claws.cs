@@ -30,4 +30,15 @@ public class Claws : MonoBehaviour {
         }
 
     }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player" && controle)
+        {
+            collision.GetComponent<PlayerHealth>().TakeDamage(dmg);
+            collision.GetComponent<PlayerMovement>().SpeedDown(slow, slowTime);
+            controle = false;
+        }
+
+    }
 }

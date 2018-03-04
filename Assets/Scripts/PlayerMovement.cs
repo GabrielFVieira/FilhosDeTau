@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
     private float arrowVel;
     [SerializeField]
     private GameObject arrowPrefab;
+    public int ammo;
 
     private bool die;
 
@@ -57,10 +58,13 @@ public class PlayerMovement : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        /////////// SET VARIABLES OF SOME ACTIONS ///////////
+        ammo = 10;
         clawHUD.SetActive(false);
         rollEnergyConsum = 10;
         arrowVel = 15f;
         runVel = 1.8f;
+
         ////// GET THE ANIMATOR COMPONENT AND SET THE PLAYER VELOCITY ///////
         anim = GetComponent<Animator>();
         vel = 3f;
@@ -117,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
             controle = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.Z) && isAttacking == false && isMagicActive == false && roll == false && die == false && rangedTimer == 0)
+        if (Input.GetKeyDown(KeyCode.Z) && isAttacking == false && isMagicActive == false && roll == false && die == false && rangedTimer == 0 && ammo > 0)
         {
             anim.speed = 1;
             isAiming = true;
@@ -201,6 +205,7 @@ public class PlayerMovement : MonoBehaviour
 
                 isAiming = false;
                 anim.SetBool("isAiming", isAiming);
+                ammo -= 1;
                 rangedTimer = 0;
             }
         }
