@@ -14,7 +14,7 @@ public class EnemyHealth : MonoBehaviour {
 
     private float calcHealth;
 
-    private float maxDistInv;
+    public float maxDistInv;
 
     public bool attacked;
     private float timer;
@@ -86,14 +86,20 @@ public class EnemyHealth : MonoBehaviour {
 
     public void TakeDamage(int dano)
     {
-        if (GetComponent<Animator>().GetBool("isFurious") == false)
+        if (gameObject.name != "RagDool")
         {
-            curHealth -= dano;
-            if (Random.Range(1, 6) != 2 && gameObject.name != "RagDool" && attacked == false)
+            if (GetComponent<Animator>().GetBool("isFurious") == false)
             {
-                attacked = true;
-                GetComponent<Animator>().SetBool("Hurt", true);
+                curHealth -= dano;
+                if (Random.Range(1, 6) != 2 && attacked == false)
+                {
+                    attacked = true;
+                    GetComponent<Animator>().SetBool("Hurt", true);
+                }
             }
         }
+
+        else
+            curHealth -= dano;
     }
 }

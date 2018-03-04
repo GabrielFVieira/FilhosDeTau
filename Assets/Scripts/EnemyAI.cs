@@ -45,17 +45,13 @@ public class EnemyAI : MonoBehaviour {
         isDead = anim.GetBool("Died");
 
         if (Vector2.Distance(transform.position, target.position) > maxDist)
-        {
             isWalking = false;
-        }
 
         if (range <= minDist && target == spawn)
             isWalking = false;
 
-        else
-        {
+        else if (range > minDist && target == spawn)
             isWalking = true;
-        }
 
         if(anim.GetBool("Hurt") || anim.GetBool("isFurious"))
         {
@@ -81,11 +77,23 @@ public class EnemyAI : MonoBehaviour {
             }
         }
 
-        if (isWalking && isDead == false )
+        if (GetComponent<EnemyHealth>().curHealth < GetComponent<EnemyHealth>().maxHealth)
+        {
+            maxDist = 15;
+            GetComponent<EnemyHealth>().maxDistInv = 10;
+        }
+
+        range = Vector2.Distance(transform.position, target.position);
+
+        if (range < maxDist && anim.GetBool("isFurious") == false && anim.GetBool("Hurt") == false && range != 0)
+            isWalking = true;
+
+        if (isWalking && isDead == false)
         {
             if(target.position.x > transform.position.x && Mathf.Abs(target.transform.position.x - transform.position.x) > Mathf.Abs(target.transform.position.y - transform.position.y))
             {
                 //Debug.Log("Right");
+                GetComponent<SpriteRenderer>().flipX = true; // Remove after put a new animation with all 4 way move
                 x = 1;
                 y = 0;
             }
@@ -93,6 +101,7 @@ public class EnemyAI : MonoBehaviour {
             else if (target.position.x < transform.position.x && Mathf.Abs(target.transform.position.x - transform.position.x) > Mathf.Abs(target.transform.position.y - transform.position.y))
             {
                 //Debug.Log("Left");
+                GetComponent<SpriteRenderer>().flipX = false; // Remove after put a new animation with all 4 way move
                 x = -1;
                 y = 0;
             }
@@ -111,12 +120,8 @@ public class EnemyAI : MonoBehaviour {
                 x = 0;
             }
 
-            range = Vector2.Distance(transform.position, target.position);
-
             if (range > minDist && isAttacking == false)
-            {
                 transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
-            }
 
             if (range <= minDist && isAttacking == false && timer == 0 && GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>().curHealth > 0)
             {
@@ -136,16 +141,12 @@ public class EnemyAI : MonoBehaviour {
     private void OnTriggerStay2D(Collider2D col)
     {
         if (col.gameObject.tag == "Player")
-        {
             colGO = col.gameObject;
-        }
     }
 
     private void OnTriggerExit2D(Collider2D col)
     {
         if (col.gameObject.tag == "Player")
-        {
             colGO = null;
-        }
     }
 }

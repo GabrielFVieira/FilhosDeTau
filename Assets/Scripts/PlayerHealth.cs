@@ -13,9 +13,13 @@ public class PlayerHealth : MonoBehaviour {
     private GameObject healthBarCanvas;
 
     private float calcHealth;
+
+    private float invTimer;
+    private bool control;
     // Use this for initialization
     void Start()
     {
+        control = true;
         maxHealth = 100;
         curHealth = maxHealth;
     }
@@ -29,11 +33,14 @@ public class PlayerHealth : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        if(curHealth == maxHealth || curHealth == 0)
+        if (curHealth == maxHealth || curHealth == 0 || control)
             healthBarCanvas.SetActive(false);
 
         else
+        {
             healthBarCanvas.SetActive(true);
+            control = false;
+        }
 
         if (curHealth < 0)
             curHealth = 0;
@@ -42,10 +49,25 @@ public class PlayerHealth : MonoBehaviour {
         {
             GetComponent<Animator>().SetBool("Died", true);
         }
+
+        if (control == false)
+        {
+            invTimer += Time.deltaTime;
+            if (invTimer > 10)
+            {
+                control = true;
+                invTimer = 0;
+            }
+        }
+
+        if (GetComponent<PlayerMovement>().colGO == null)
+            invTimer = 0;
 	}
 
     public void TakeDamage(int dano)
     {
         curHealth -= dano;
+        control = false;
+        invTimer = 0;
     }
 }

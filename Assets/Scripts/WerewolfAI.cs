@@ -51,7 +51,7 @@ public class WerewolfAI : MonoBehaviour {
             timer = 0;
         }
 
-        if (ai.controle && ai.isAttacking == false && controle && Random.Range(0, 30) == 5 && anim.GetBool("Died") == false && isFurious == false)
+        if (ai.controle && ai.isAttacking == false && controle && Random.Range(0, 30) == 5 && anim.GetBool("Died") == false && anim.GetBool("Hurt") == false && isFurious == false)
         { 
             Vector3 pos = new Vector3();
 

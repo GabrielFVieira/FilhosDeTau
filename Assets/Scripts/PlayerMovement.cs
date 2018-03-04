@@ -33,11 +33,21 @@ public class PlayerMovement : MonoBehaviour
 
     private bool die;
 
-    private GameObject colGO;
+    public GameObject colGO;
 
     private Dictionary<string, int> dmg = new Dictionary<string, int>();
 
+    private float slowTimer;
+    private float maxSlowTime;
+    private float initialVel;
+    private bool controlSlow;
     public bool controle;
+
+    private bool roll;
+    [SerializeField]
+    private AnimationClip rollClip;
+    private float rollTimer;
+    private Vector2 curAxis = new Vector2();
     // Use this for initialization
     void Start()
     {
@@ -73,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
         x = Input.GetAxis("Horizontal");
         y = Input.GetAxis("Vertical");
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && isMagicActive == false && isAiming == false && isAttacking == false && die == false)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && isMagicActive == false && isAiming == false && isAttacking == false && die == false && controlSlow == false)
             run = true;
 
         if (Input.GetKeyUp(KeyCode.LeftShift))
@@ -82,27 +92,36 @@ public class PlayerMovement : MonoBehaviour
             run = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.C) && isMagicActive == false && isAiming == false && die == false && attackTimer == 0)
+        if (Input.GetKeyDown(KeyCode.V) && isMagicActive == false && isAiming == false && isAttacking == false && roll == false && run && die == false && isWalking)
+            roll = true;
+
+        if (Input.GetKeyDown(KeyCode.C) && isMagicActive == false && isAiming == false && roll == false && die == false && attackTimer == 0)
         {
             isAttacking = true;
             controle = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.X) && isAttacking == false && isAiming == false && die == false && magicTimer == 0)
+        if (Input.GetKeyDown(KeyCode.X) && isAttacking == false && isAiming == false && roll == false && die == false && magicTimer == 0)
         {
             isMagicActive = true;
             controle = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.Z) && isAttacking == false && isMagicActive == false && die == false && rangedTimer == 0)
+        if (Input.GetKeyDown(KeyCode.Z) && isAttacking == false && isMagicActive == false && roll == false && die == false && rangedTimer == 0)
         {
             isAiming = true;
             controle = true;
         }
 
         ///////////////////////// SET ANIMATIONS //////////////////////
-        isWalking = (Mathf.Abs(x) + Mathf.Abs(y)) > 0;
+        if(roll)
+            isWalking = true;
+
+        else
+            isWalking = (Mathf.Abs(x) + Mathf.Abs(y)) > 0;
+
         anim.SetBool("isWalking", isWalking);
+        anim.SetBool("Roll", roll);
         die = anim.GetBool("Died");
 
         ///////////////// CLOSE ATTACK ////////////////
@@ -170,30 +189,70 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        if(roll)
+        {
+            run = true;
+            if(rollTimer == 0)
+            {
+                if(Mathf.Abs(x) > Mathf.Abs(y))
+                {
+                    if(x > 0)
+                        curAxis = new Vector2(1, 0);
+
+                    else
+                        curAxis = new Vector2(-1, 0);
+                }
+
+                else
+                {
+                    if (y > 0)
+                        curAxis = new Vector2(0, 1);
+
+                    else
+                        curAxis = new Vector2(0, -1);
+                }
+            }
+
+            anim.speed = 2f;
+
+            rollTimer += Time.deltaTime;
+            transform.Translate(curAxis.x * vel * 2f * Time.deltaTime, curAxis.y * vel * 2f * Time.deltaTime, 0);
+
+            if (rollTimer >= rollClip.length * 0.5f)
+            {
+                anim.SetFloat("x", curAxis.x);
+                anim.SetFloat("y", curAxis.y);
+                roll = false;
+                rollTimer = 0;
+                anim.speed = 1f;
+            }
+
+        }
+
         ///////////////// WALK ///////////////
-        if (isWalking && isAttacking == false && isMagicActive == false && isAiming == false && die == false)
+        if (isWalking && isAttacking == false && isMagicActive == false && isAiming == false && die == false && roll == false)
         {
             if (run)
             {
-                ///////////// SPEED UP THE ANIMATION ///////////////
-                anim.speed = 1.5f;
+                    ///////////// SPEED UP THE ANIMATION ///////////////
+                    anim.speed = 1.5f;
 
-                anim.SetFloat("x", x);
-                anim.SetFloat("y", y);
+                    anim.SetFloat("x", x);
+                    anim.SetFloat("y", y);
 
-                ///////////// MOVE THE PLAYER (ACCELERATED) ///////////////////
-                transform.Translate(x * vel * 1.7f * Time.deltaTime, y * vel * 1.7f * Time.deltaTime, 0);
+                    ///////////// MOVE THE PLAYER (ACCELERATED) ///////////////////
+                    transform.Translate(x * vel * 1.7f * Time.deltaTime, y * vel * 1.7f * Time.deltaTime, 0);
             }
 
             else
             {
-                anim.speed = 1;
+                    anim.speed = 1;
 
-                anim.SetFloat("x", x);
-                anim.SetFloat("y", y);
+                    anim.SetFloat("x", x);
+                    anim.SetFloat("y", y);
 
-                ///////////// MOVE THE PLAYER ///////////////////
-                transform.Translate(x * vel * Time.deltaTime, y * vel * Time.deltaTime, 0);
+                    ///////////// MOVE THE PLAYER ///////////////////
+                    transform.Translate(x * vel * Time.deltaTime, y * vel * Time.deltaTime, 0);
             }
         }
 
@@ -215,6 +274,30 @@ public class PlayerMovement : MonoBehaviour
                     }
                 }
             }
+        }
+
+        if(controlSlow)
+        {
+            slowTimer += Time.deltaTime;
+            anim.speed = 1;
+            run = false;
+            if (slowTimer > maxSlowTime)
+            {
+                vel = initialVel;
+                controlSlow = false;
+                slowTimer = 0;
+            }
+        }
+    }
+
+    public void SpeedDown(float slow, float time)
+    {
+        if (controlSlow == false)
+        {
+            controlSlow = true;
+            maxSlowTime = time;
+            initialVel = vel;
+            vel *= slow;
         }
     }
 

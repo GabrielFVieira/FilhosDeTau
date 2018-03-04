@@ -21324,6 +21324,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114355937860142454, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: rollClip
+      value: 
+      objectReference: {fileID: 7400000, guid: 2f47b6f3649a068469202b6a5d724ef8, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 288721ad577de204b9ecccbfb61c2209, type: 2}
   m_IsPrefabParent: 0
