@@ -8,7 +8,6 @@ public class EnemyHealth : MonoBehaviour {
 
     [SerializeField]
     private GameObject healthBar;
-    private float initialSize;
 
     [SerializeField]
     private GameObject healthBarCanvas;
@@ -16,9 +15,14 @@ public class EnemyHealth : MonoBehaviour {
     private float calcHealth;
 
     private float maxDistInv;
+
+    public bool attacked;
+    private float timer;
+
+    [SerializeField]
+    private AnimationClip hurtAnim;
     // Use this for initialization
     void Start () {
-        maxHealth = 100;
         curHealth = maxHealth;
 
         healthBarCanvas.SetActive(false);
@@ -30,6 +34,7 @@ public class EnemyHealth : MonoBehaviour {
     {
         calcHealth = curHealth / maxHealth;
         healthBar.transform.localScale = new Vector3(calcHealth, healthBar.transform.localScale.y, healthBar.transform.localScale.z);
+        healthBarCanvas.GetComponent<Canvas>().sortingOrder = GetComponent<SpriteRenderer>().sortingOrder;
     }
 
     // Update is called once per frame
@@ -37,16 +42,34 @@ public class EnemyHealth : MonoBehaviour {
         if(curHealth < maxHealth)
             healthBarCanvas.SetActive(true);
 
-
-        if (curHealth < 0)
+        if(attacked)
         {
+            timer += Time.deltaTime;
+
+            if(timer >= hurtAnim.length * 2 && hurtAnim != null)
+            {
+                GetComponent<Animator>().SetBool("Hurt", false);
+                attacked = false;
+                timer = 0;
+            }
+        }
+
+        if (curHealth <= 0)
+        {
+            if (gameObject.name != "RagDool")
+            {
+                GetComponent<Animator>().SetBool("Died", true);
+                Destroy(gameObject, 1);
+            }
+
+            healthBarCanvas.SetActive(false);
             curHealth = 0;
         }
 
         if (curHealth != 0)
         {
             GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player.transform.position.x > transform.position.x + maxDistInv || player.transform.position.x < transform.position.x - maxDistInv || player.transform.position.y > transform.position.y + maxDistInv || player.transform.position.y < transform.position.y - maxDistInv)
+            if (Vector2.Distance(transform.position, player.transform.position) > maxDistInv)
             {
                 healthBarCanvas.SetActive(false);
             }
@@ -63,6 +86,14 @@ public class EnemyHealth : MonoBehaviour {
 
     public void TakeDamage(int dano)
     {
-        curHealth -= dano;
+        if (GetComponent<Animator>().GetBool("isFurious") == false)
+        {
+            curHealth -= dano;
+            if (Random.Range(1, 6) != 2 && gameObject.name != "RagDool" && attacked == false)
+            {
+                attacked = true;
+                GetComponent<Animator>().SetBool("Hurt", true);
+            }
+        }
     }
 }

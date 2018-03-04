@@ -25,9 +25,8 @@ public class ReOrderLayer : MonoBehaviour {
             {
                 r.sortingOrder = spriteRenderer.sortingOrder + 1;
             }
-
-            if(GetComponentInChildren<SpriteRenderer>().sortingOrder > spriteRenderer.sortingOrder)
-                spriteRenderer.sortingOrder = player.GetComponent<SpriteRenderer>().sortingOrder + 1;
+            
+            spriteRenderer.sortingOrder = player.GetComponent<SpriteRenderer>().sortingOrder + 1;
         }
 
         else

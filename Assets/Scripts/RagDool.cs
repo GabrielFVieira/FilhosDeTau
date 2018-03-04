@@ -6,6 +6,9 @@ public class RagDool : MonoBehaviour {
     private EnemyHealth health;
     private bool attacked;
     private float timer;
+
+    [SerializeField]
+    AnimationClip attackedClip;
     // Use this for initialization
     void Start () {
         health = GetComponent<EnemyHealth>();
@@ -21,7 +24,7 @@ public class RagDool : MonoBehaviour {
         if (attacked)
             timer += Time.deltaTime;
 
-        if(timer >= 0.667f)
+        if(timer >= attackedClip.length)
         {
             health.curHealth = health.maxHealth;
             attacked = false;
