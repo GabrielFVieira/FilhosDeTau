@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 70681510408131716}
   m_Layer: 0
   m_Name: Barrel2
-  m_TagString: Untagged
+  m_TagString: Objects
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 70455651040307680}
   m_Layer: 0
   m_Name: Barrel1
-  m_TagString: Untagged
+  m_TagString: Objects
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 70038123513618402}
   m_Layer: 0
   m_Name: Barrel3
-  m_TagString: Untagged
+  m_TagString: Objects
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 114884957779354836}
   m_Layer: 0
   m_Name: Barrels
-  m_TagString: Untagged
+  m_TagString: Objects
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

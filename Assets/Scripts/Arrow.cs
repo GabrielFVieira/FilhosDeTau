@@ -22,9 +22,12 @@ public class Arrow : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Enemy" && controle)
         {
-            collision.GetComponent<EnemyHealth>().TakeDamage(dmg);
-            controle = false;
-            Destroy(gameObject, 0.05f);
+            if (collision.gameObject.transform.position.y > transform.position.y - 0.2f && collision.gameObject.transform.position.y < transform.position.y + 0.4f)
+            {
+                collision.GetComponent<EnemyHealth>().TakeDamage(dmg);
+                controle = false;
+                Destroy(gameObject, 0.05f);
+            }
         }
 
         if (collision.gameObject.tag == "Untagged")

@@ -23,7 +23,7 @@ public class EnergyBar : MonoBehaviour {
         maxEnergy = 50;
         curEnergy = maxEnergy;
 
-        rechargeMaxTimer = 6;
+        rechargeMaxTimer = 3;
     }
 
     private void FixedUpdate()

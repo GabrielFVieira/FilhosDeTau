@@ -15,18 +15,18 @@ public class PlayerMovement : MonoBehaviour
     private float runVel;
     private float energy;
 
-    private bool isAttacking;
     private float attackTimer;
+
+    private bool isAttacking;
     [SerializeField]
     private AnimationClip closeAttack;
 
     private bool isMagicActive;
-    private float magicTimer;
     [SerializeField]
     private AnimationClip magicAttack;
 
     private bool isAiming;
-    private float rangedTimer;
+    private bool controlArrow;
     [SerializeField]
     private AnimationClip rangedAttack;
     private float arrowVel;
@@ -56,11 +56,14 @@ public class PlayerMovement : MonoBehaviour
     private float rollTimer;
     private Vector2 curAxis = new Vector2();
 
-    private GameManager manager;
+    [SerializeField]
+    private Texture2D texture;
+    private Sprite[] ranged;
     // Use this for initialization
     void Start()
     {
-        manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        /////////// PICK UO ALL THE LONG RANGE ATTACK ANIMATION FRAMES //////////////
+        ranged = Resources.LoadAll<Sprite>(string.Format("Player/Sprites/PlayerLRA", texture.name));
 
         /////////// SET VARIABLES OF SOME ACTIONS ///////////
         ammo = maxAmmo;
@@ -68,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
         rollEnergyConsum = 10;
         arrowVel = 15f;
         runVel = 1.8f;
+        controlArrow = true;
 
         ////// GET THE ANIMATOR COMPONENT AND SET THE PLAYER VELOCITY ///////
         anim = GetComponent<Animator>();
@@ -111,21 +115,21 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.V) && isMagicActive == false && isAiming == false && isAttacking == false && roll == false && run && die == false && isWalking && energy > rollEnergyConsum)
             roll = true;
 
-        if (Input.GetKeyDown(KeyCode.C) && isMagicActive == false && isAiming == false && roll == false && die == false && attackTimer == 0)
+        if (Input.GetKeyDown(KeyCode.C) && isMagicActive == false && isAiming == false && roll == false && die == false && isAttacking == false)
         {
             anim.speed = 1;
             isAttacking = true;
             controle = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.X) && isAttacking == false && isAiming == false && roll == false && die == false && magicTimer == 0)
+        if (Input.GetKeyDown(KeyCode.X) && isAttacking == false && isAiming == false && roll == false && die == false && isMagicActive == false)
         {
             anim.speed = 1;
             isMagicActive = true;
             controle = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.Z) && isAttacking == false && isMagicActive == false && roll == false && die == false && rangedTimer == 0 && ammo > 0)
+        if (Input.GetKeyDown(KeyCode.Z) && isAttacking == false && isMagicActive == false && roll == false && die == false && isAiming == false && ammo > 0)
         {
             anim.speed = 1;
             isAiming = true;
@@ -152,69 +156,23 @@ public class PlayerMovement : MonoBehaviour
         ///////////////// CLOSE ATTACK ////////////////
         if (isAttacking)
         {
-            anim.SetBool("isAttacking", isAttacking);
-
-            attackTimer += Time.deltaTime;
-
-            if (attackTimer >= closeAttack.length)  // THIS VALUE IS THE CLOSE ATTACK ANIMATION TIME
-            {
-                isAttacking = false;
-                anim.SetBool("isAttacking", isAttacking);
-                attackTimer = 0;
-            }
+            StartCoroutine(Attacks("isAttacking", isAttacking, closeAttack.length));
         }
 
         ///////////////// MAGIC ////////////////////
         if (isMagicActive)
         {
-            anim.SetBool("isMagicActive", isMagicActive);
-
-            magicTimer += Time.deltaTime;
-
-            if (magicTimer >= magicAttack.length) // THIS VALUE IS THE MAGIC ANIMATION TIME
-            {
-                isMagicActive = false;
-                anim.SetBool("isMagicActive", isMagicActive);
-                magicTimer = 0;
-            }
+            StartCoroutine(Attacks("isMagicActive", isMagicActive, magicAttack.length));
         }
 
         ////////////////// LONG RANGE //////////////////
         if (isAiming)
         {
-            anim.SetBool("isAiming", isAiming);
-            rangedTimer += Time.deltaTime;
-
-
-            if (rangedTimer >= rangedAttack.length)  // THIS VALUE IS THE LONG RANGE ANIMATION TIME
-            {
-                Quaternion rot = Quaternion.Euler(0, 0, 0);
-
-                if (anim.GetFloat("y") > 0 && anim.GetFloat("x") == 0)
-                    rot = Quaternion.Euler(0, 0, 90);
-
-                else if (anim.GetFloat("y") < 0 && anim.GetFloat("x") == 0)
-                    rot = Quaternion.Euler(0, 0, -90);
-
-                else if (anim.GetFloat("x") > 0 && anim.GetFloat("y") == 0)
-                    rot = Quaternion.Euler(0, 0, 0);
-
-                else if (anim.GetFloat("x") < 0 && anim.GetFloat("y") == 0)
-                    rot = Quaternion.Euler(0, 0, 180);
-
-                GameObject arrow = (GameObject)Instantiate(arrowPrefab, transform.position, rot);
-
-                arrow.GetComponent<Arrow>().arrowVel = arrowVel;
-                arrow.GetComponent<Arrow>().dmg = dmg["Range"];
-
-                isAiming = false;
-                anim.SetBool("isAiming", isAiming);
-                ammo -= 1;
-                rangedTimer = 0;
-            }
+            StartCoroutine(Attacks("isAiming", isAiming, rangedAttack.length));
         }
 
-        if(roll)
+        //////////// PLAYER ROOL /////////////////
+        if (roll)
         {
             run = true;
             if(rollTimer == 0)
@@ -266,7 +224,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (colGO.transform.position.y > transform.position.y && anim.GetFloat("y") > 0 && anim.GetFloat("x") == 0 || colGO.transform.position.y < transform.position.y && anim.GetFloat("y") < 0 && anim.GetFloat("x") == 0 || colGO.transform.position.x > transform.position.x && anim.GetFloat("x") > 0 && anim.GetFloat("y") == 0 || colGO.transform.position.x < transform.position.x && anim.GetFloat("x") < 0 && anim.GetFloat("y") == 0)
             {
-                if (colGO.gameObject.tag == "Enemy" && isAttacking && controle && attackTimer >= 0.4f)
+                if (colGO.gameObject.tag == "Enemy" && isAttacking && controle && attackTimer >= (closeAttack.length / 5) * 4)
                 {
                        colGO.GetComponent<EnemyHealth>().TakeDamage(dmg["Close"]);
                        controle = false;
@@ -275,7 +233,9 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if(controlSlow)
+        //////////// SLOW-PLAYER CONTROLLER /////////////////
+
+        if (controlSlow)
         {
             slowTimer += Time.deltaTime;
             anim.speed = 1;
@@ -289,6 +249,8 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
+    //////////// SLOW THE PLAYER /////////////////
 
     public void SpeedDown(float slow, float time)
     {
@@ -322,5 +284,67 @@ public class PlayerMovement : MonoBehaviour
 
         ///////////// MOVE THE PLAYER ///////////////////
         transform.Translate(x * vel * speed * Time.deltaTime, y * vel * speed * Time.deltaTime, 0);
+    }
+
+    IEnumerator Attacks(string attackName, bool attackType, float attackClipLenght)
+    {
+        anim.SetBool(attackName, attackType);
+        attackTimer += Time.deltaTime;
+        bool above = false;
+
+        Quaternion rot = Quaternion.Euler(0, 0, 0);
+
+        for(int i = 0; i < ranged.Length; i++)
+        {
+            if(GetComponent<SpriteRenderer>().sprite == ranged[i])
+            {
+                if(i <= 12) // FACING TOP
+                {
+                    rot = Quaternion.Euler(0, 0, 90);
+                    above = true;
+                }
+
+                else if (i > 12 && i <= 25) // FACING LEFT
+                {
+                    rot = Quaternion.Euler(0, 0, 180);
+                }
+
+                else if (i > 26 && i <= 38) // FACING BOTTOM
+                {
+                    rot = Quaternion.Euler(0, 0, -90);
+                }
+
+                else
+                    rot = Quaternion.Euler(0, 0, 0); // FACING RIGHT
+            }
+        }
+
+        if (attackName == "isAiming" && attackTimer >= attackClipLenght - 0.2f && controlArrow)
+        {
+            GameObject arrow = (GameObject)Instantiate(arrowPrefab, transform.position, rot);
+            arrow.GetComponent<Arrow>().arrowVel = arrowVel;
+            arrow.GetComponent<Arrow>().dmg = dmg["Range"];
+            ammo -= 1;
+            if(above)
+                arrow.GetComponent<SpriteRenderer>().sortingOrder = GetComponent<SpriteRenderer>().sortingOrder - 1;
+
+            else
+                arrow.GetComponent<SpriteRenderer>().sortingOrder = GetComponent<SpriteRenderer>().sortingOrder + 1;
+
+            above = false;
+            controlArrow = false;
+        }
+
+        yield return new WaitForSeconds(attackClipLenght);
+
+        attackType = false;
+        isAttacking = false;
+        isMagicActive = false;
+        isAiming = false;
+        controlArrow = true;
+        attackTimer = 0;
+        anim.SetBool(attackName, attackType);
+
+        StopAllCoroutines();
     }
 }
