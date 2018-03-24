@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private GameObject arrowPrefab;
     public int ammo;
+    public int maxAmmo = 10;
 
     private bool die;
 
@@ -55,11 +56,14 @@ public class PlayerMovement : MonoBehaviour
     private float rollTimer;
     private Vector2 curAxis = new Vector2();
 
+    private GameManager manager;
     // Use this for initialization
     void Start()
     {
+        manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
         /////////// SET VARIABLES OF SOME ACTIONS ///////////
-        ammo = 10;
+        ammo = maxAmmo;
         clawHUD.SetActive(false);
         rollEnergyConsum = 10;
         arrowVel = 15f;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class ItemHUD : MonoBehaviour {
     [SerializeField]
@@ -22,8 +23,11 @@ public class ItemHUD : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         itenAmount.text = "X" + plMove.ammo;
-
+    
         if (plMove.ammo == 0)
             itemBox.SetActive(false);
-	}
+
+        else
+            itemBox.SetActive(true);
+    }
 }

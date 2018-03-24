@@ -11,6 +11,7 @@ public class SmoothCamera2D : MonoBehaviour
     private void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").transform;
+        transform.position = new Vector3(target.transform.position.x, target.transform.position.y, transform.position.z);
     }
 
     // Update is called once per frame

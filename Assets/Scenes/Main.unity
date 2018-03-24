@@ -160,6 +160,34 @@ Transform:
   m_PrefabParentObject: {fileID: 4685960045148742, guid: 8a63714412bfd32409441a45236df491,
     type: 2}
   m_PrefabInternal: {fileID: 120929297}
+--- !u!1 &67279161
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 67279163}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &67279163
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 67279161}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.2801513, y: 2.401847, z: -0.042776532}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &78164741 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4677137526101370, guid: 3657228df6287cc48836493b5fdfd7b6,
@@ -340,6 +368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curEnergy: 0
+  maxEnergy: 0
   energyBar: {fileID: 880160191}
   energyBarCanvas: {fileID: 1825193658}
 --- !u!114 &268645578
@@ -20816,6 +20845,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a4dd802533efd44c84ddad43a84c99e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderers: []
 --- !u!212 &594483245
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -20921,6 +20951,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a4dd802533efd44c84ddad43a84c99e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderers: []
 --- !u!212 &732987261
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ using UnityEngine;
 public class ReOrderLayer : MonoBehaviour {
     private GameObject player;
     private SpriteRenderer spriteRenderer;
+    private Renderer[] renderers;
 	// Use this for initialization
 	void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -13,7 +14,7 @@ public class ReOrderLayer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        renderers = GetComponentsInChildren<Renderer>();
         foreach (var r in renderers)
         {
             r.sortingOrder = spriteRenderer.sortingOrder + 1;

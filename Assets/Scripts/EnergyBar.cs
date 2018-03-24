@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnergyBar : MonoBehaviour {
     public float curEnergy;
-    private float maxEnergy;
+    public float maxEnergy;
 
     [SerializeField]
     private GameObject energyBar;
