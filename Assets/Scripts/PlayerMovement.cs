@@ -81,6 +81,7 @@ public class PlayerMovement : MonoBehaviour
         isWalking = true;
         x = 0;
         y = -1;
+
         anim.SetBool("isWalking", isWalking);
         anim.SetFloat("x", x);
         anim.SetFloat("y", y);
@@ -112,24 +113,24 @@ public class PlayerMovement : MonoBehaviour
             run = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.V) && isMagicActive == false && isAiming == false && isAttacking == false && roll == false && run && die == false && isWalking && energy > rollEnergyConsum)
+        if (Input.GetKeyDown(KeyCode.V) && isMagicActive == false && isAiming == false && isAttacking == false && roll == false && die == false && isWalking && energy > rollEnergyConsum  && anim.GetBool("PickUp") == false)
             roll = true;
 
-        if (Input.GetKeyDown(KeyCode.C) && isMagicActive == false && isAiming == false && roll == false && die == false && isAttacking == false)
+        if (Input.GetKeyDown(KeyCode.C) && isMagicActive == false && isAiming == false && roll == false && die == false && isAttacking == false && anim.GetBool("PickUp") == false)
         {
             anim.speed = 1;
             isAttacking = true;
             controle = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.X) && isAttacking == false && isAiming == false && roll == false && die == false && isMagicActive == false)
+        if (Input.GetKeyDown(KeyCode.X) && isAttacking == false && isAiming == false && roll == false && die == false && isMagicActive == false && anim.GetBool("PickUp") == false)
         {
             anim.speed = 1;
             isMagicActive = true;
             controle = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.Z) && isAttacking == false && isMagicActive == false && roll == false && die == false && isAiming == false && ammo > 0)
+        if (Input.GetKeyDown(KeyCode.Z) && isAttacking == false && isMagicActive == false && roll == false && die == false && isAiming == false && ammo > 0 && anim.GetBool("PickUp") == false)
         {
             anim.speed = 1;
             isAiming = true;
@@ -137,11 +138,14 @@ public class PlayerMovement : MonoBehaviour
         }
 
         ///////////////////////// SET ANIMATIONS //////////////////////
-        if(roll)
-            isWalking = true;
+        if (anim.GetBool("PickUp") == false)
+        {
+            if (roll)
+                isWalking = true;
 
-        else
-            isWalking = (Mathf.Abs(x) + Mathf.Abs(y)) > 0;
+            else
+                isWalking = (Mathf.Abs(x) + Mathf.Abs(y)) > 0;
+        }
 
         anim.SetBool("isWalking", isWalking);
         anim.SetBool("Roll", roll);
@@ -174,6 +178,7 @@ public class PlayerMovement : MonoBehaviour
         //////////// PLAYER ROOL /////////////////
         if (roll)
         {
+            GetComponent<Collider2D>().enabled = false;
             run = true;
             if(rollTimer == 0)
             {
@@ -193,6 +198,7 @@ public class PlayerMovement : MonoBehaviour
                 roll = false;
                 rollTimer = 0;
                 anim.speed = 1f;
+                GetComponent<Collider2D>().enabled = true;
 
                 if (Input.GetKey(KeyCode.LeftShift))
                     run = true;
@@ -204,7 +210,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         ///////////////// WALK ///////////////
-        if (isWalking && isAttacking == false && isMagicActive == false && isAiming == false && die == false && roll == false)
+        if (isWalking && isAttacking == false && isMagicActive == false && isAiming == false && die == false && roll == false && anim.GetBool("PickUp") == false)
         {
             if (run)
             {
@@ -224,7 +230,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (colGO.transform.position.y > transform.position.y && anim.GetFloat("y") > 0 && anim.GetFloat("x") == 0 || colGO.transform.position.y < transform.position.y && anim.GetFloat("y") < 0 && anim.GetFloat("x") == 0 || colGO.transform.position.x > transform.position.x && anim.GetFloat("x") > 0 && anim.GetFloat("y") == 0 || colGO.transform.position.x < transform.position.x && anim.GetFloat("x") < 0 && anim.GetFloat("y") == 0)
             {
-                if (colGO.gameObject.tag == "Enemy" && isAttacking && controle && attackTimer >= (closeAttack.length / 5) * 4)
+                if (anim.GetBool("PickUp") == false && colGO.gameObject.tag == "Enemy" && isAttacking && controle && attackTimer >= (closeAttack.length / 5) * 4)
                 {
                        colGO.GetComponent<EnemyHealth>().TakeDamage(dmg["Close"]);
                        controle = false;
@@ -250,6 +256,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    //////////// DETECT COLLISIONS /////////////////
+    private void OnTriggerStay2D(Collider2D col)
+    {
+        colGO = col.gameObject;
+    }
+
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        colGO = null;
+    }
+
     //////////// SLOW THE PLAYER /////////////////
 
     public void SpeedDown(float slow, float time)
@@ -262,17 +279,6 @@ public class PlayerMovement : MonoBehaviour
             initialVel = vel;
             vel *= slow;
         }
-    }
-
-    //////////// DETECT COLLISIONS /////////////////
-    private void OnTriggerStay2D(Collider2D col)
-    {
-        colGO = col.gameObject;
-    }
-
-    private void OnTriggerExit2D(Collider2D col)
-    {
-        colGO = null;
     }
 
     private void Move(float speed)
@@ -330,7 +336,7 @@ public class PlayerMovement : MonoBehaviour
 
             else
                 arrow.GetComponent<SpriteRenderer>().sortingOrder = GetComponent<SpriteRenderer>().sortingOrder + 1;
-
+                
             above = false;
             controlArrow = false;
         }

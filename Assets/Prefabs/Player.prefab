@@ -25,6 +25,10 @@ GameObject:
   - component: {fileID: 50445781379245578}
   - component: {fileID: 70989791670878810}
   - component: {fileID: 114361206645174460}
+  - component: {fileID: 114519823627147032}
+  - component: {fileID: 114322373364344236}
+  - component: {fileID: 114264645274800930}
+  - component: {fileID: 114112209302461782}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -77,8 +81,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.005580205, y: -0.14451636}
-  m_Size: {x: 0.29143545, y: 0.18096912}
+  m_Offset: {x: -0.003363436, y: -0.14451636}
+  m_Size: {x: 0.32247075, y: 0.18096912}
   m_Direction: 1
 --- !u!95 &95640756014365682
 Animator:
@@ -97,6 +101,45 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114112209302461782
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1410459652791058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a4dd802533efd44c84ddad43a84c99e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: 0
+--- !u!114 &114264645274800930
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1410459652791058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77451474050b7aa43befc1d59eec7b13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickUpItemClip: {fileID: 7400000, guid: 2f44ed60d629fbf4da9610c866bd23a7, type: 2}
+  facingUp: {fileID: 21300000, guid: d57e0d72fb3cf6a409b18c3f2c8414dc, type: 3}
+--- !u!114 &114322373364344236
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1410459652791058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fae293800fc72fa44bc349eb8001f215, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemBox: {fileID: 0}
+  itemImg: {fileID: 0}
+  itenAmount: {fileID: 0}
 --- !u!114 &114355937860142454
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -113,9 +156,13 @@ MonoBehaviour:
   rangedAttack: {fileID: 7400000, guid: 25311443363b1664e8c51da8bc1e68c5, type: 2}
   arrowPrefab: {fileID: 1128258753864416, guid: c15f83d45d0830843927628150485402,
     type: 2}
+  ammo: 0
+  maxAmmo: 10
   colGO: {fileID: 0}
   controle: 0
+  clawHUD: {fileID: 0}
   rollClip: {fileID: 7400000, guid: 2f47b6f3649a068469202b6a5d724ef8, type: 2}
+  texture: {fileID: 2800000, guid: 47e53f9296a980b4abc32cddd1a627da, type: 3}
 --- !u!114 &114361206645174460
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -128,8 +175,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curHealth: 0
+  maxHealth: 0
   healthBar: {fileID: 0}
   healthBarCanvas: {fileID: 0}
+--- !u!114 &114519823627147032
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1410459652791058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe30675e661d24d4982c1e1e5745bf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curEnergy: 0
+  maxEnergy: 0
+  energyBar: {fileID: 0}
+  energyBarCanvas: {fileID: 0}
 --- !u!212 &212626286765551522
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -161,8 +224,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1479526557
+  m_SortingLayer: 1
   m_SortingOrder: 4
   m_Sprite: {fileID: 21300036, guid: d57e0d72fb3cf6a409b18c3f2c8414dc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

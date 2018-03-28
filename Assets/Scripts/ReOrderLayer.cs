@@ -6,6 +6,7 @@ public class ReOrderLayer : MonoBehaviour {
     private GameObject player;
     private SpriteRenderer spriteRenderer;
     private Renderer[] renderers;
+    public float offset;
 	// Use this for initialization
 	void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -15,19 +16,20 @@ public class ReOrderLayer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (player.transform.position.y > transform.position.y)
+        spriteRenderer.sortingOrder = Mathf.FloorToInt((transform.position.y - offset) * -1);
+        /*
+        if (this.gameObject.tag == "Enemy")
         {
-            spriteRenderer.sortingOrder = player.GetComponent<SpriteRenderer>().sortingOrder + 2;
-        }
+            if (player.transform.position.y > transform.position.y)
+            {
+                spriteRenderer.sortingOrder = player.GetComponent<SpriteRenderer>().sortingOrder + 2;
+            }
 
-        else
-        {
-            spriteRenderer.sortingOrder = player.GetComponent<SpriteRenderer>().sortingOrder - 2;
-        }
+            else
+            {
+                spriteRenderer.sortingOrder = player.GetComponent<SpriteRenderer>().sortingOrder - 2;
+            }
 
-        for (int i = 1; i < renderers.Length; i++)
-        {
-            renderers[i].sortingOrder = spriteRenderer.sortingOrder + 1;
-        }
+        }*/
     }
 }

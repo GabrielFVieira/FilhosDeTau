@@ -33,6 +33,7 @@ public class EnemyAI : MonoBehaviour {
         minDist = 1.1f;
         dmg = 10;
         colGO = null;
+        speed = 3.5f;
     }
 	
 	// Update is called once per frame

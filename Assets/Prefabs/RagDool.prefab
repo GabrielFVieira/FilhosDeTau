@@ -90,11 +90,11 @@ GameObject:
   - component: {fileID: 4264242018817568}
   - component: {fileID: 212294914464608766}
   - component: {fileID: 95386457618765956}
-  - component: {fileID: 61401251651899844}
   - component: {fileID: 114948352009883152}
   - component: {fileID: 61988696831565514}
   - component: {fileID: 114257163299866778}
   - component: {fileID: 114487442233829966}
+  - component: {fileID: 70136131805185592}
   m_Layer: 0
   m_Name: RagDool
   m_TagString: Enemy
@@ -109,38 +109,13 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1713502790096560}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 19.886969, y: -1.3671303, z: 0.171875}
+  m_LocalPosition: {x: 19.886969, y: -2.18, z: 0.171875}
   m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_Children:
   - {fileID: 224149702915946298}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &61401251651899844
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1713502790096560}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.0034585, y: -0.11763829}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.59, y: 0.55}
-    newSize: {x: 0.59, y: 0.55}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.5830829, y: 0.31472343}
-  m_EdgeRadius: 0
 --- !u!61 &61988696831565514
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -153,7 +128,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0008096993, y: -0.12913379}
+  m_Offset: {x: -0.001496017, y: -0.09974964}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -164,8 +139,23 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.79932445, y: 0.5274072}
+  m_Size: {x: 0.67481375, y: 0.43860725}
   m_EdgeRadius: 0
+--- !u!70 &70136131805185592
+CapsuleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1713502790096560}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.000000012810219, y: -0.10745992}
+  m_Size: {x: 0.5900001, y: 0.33508205}
+  m_Direction: 1
 --- !u!95 &95386457618765956
 Animator:
   serializedVersion: 3
@@ -246,6 +236,7 @@ MonoBehaviour:
   maxHealth: 100
   healthBar: {fileID: 1039185864383656}
   healthBarCanvas: {fileID: 1631954052792870}
+  maxDistInv: 0
   attacked: 0
   hurtAnim: {fileID: 7400000, guid: 4172e35567c14e6428c3aa40820b0637, type: 2}
 --- !u!114 &114487442233829966
@@ -314,6 +305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a4dd802533efd44c84ddad43a84c99e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  offset: 0
 --- !u!114 &114957488312895868
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -333,7 +325,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: db5e98aba969ffb4589a0331038a1599, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6215ef58f8931c3459f817a4c66b7645, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -372,8 +364,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1479526557
+  m_SortingLayer: 1
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 7bd21484a80c0234ea8071cf385a6420, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -420,8 +412,8 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 2
+  m_SortingLayerID: 1641847719
+  m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &224149702915946298
 RectTransform:
@@ -477,8 +469,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0.514, y: 0.131}
+  m_AnchoredPosition: {x: 0, y: -0.027}
+  m_SizeDelta: {x: 0.514, y: 0.0969}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224792287283239772
 RectTransform:

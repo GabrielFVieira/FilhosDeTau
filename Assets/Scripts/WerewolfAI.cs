@@ -41,7 +41,7 @@ public class WerewolfAI : MonoBehaviour {
             controle = true;
 
         ai.dmg = 20;
-        ai.speed = 4f;
+        ai.speed = 4.5f;
 
         timer += Time.deltaTime;
 

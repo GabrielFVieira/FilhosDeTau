@@ -22,7 +22,16 @@ public class Arrow : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Enemy" && controle)
         {
-            if (collision.gameObject.transform.position.y > transform.position.y - 0.2f && collision.gameObject.transform.position.y < transform.position.y + 0.4f)
+            if (transform.rotation.z == 90 || transform.rotation.z == -90)
+            {
+                if (collision.gameObject.transform.position.y < transform.position.y + 0.5f)
+                {
+                    collision.GetComponent<EnemyHealth>().TakeDamage(dmg);
+                    controle = false;
+                    Destroy(gameObject, 0.05f);
+                }
+            }
+            else
             {
                 collision.GetComponent<EnemyHealth>().TakeDamage(dmg);
                 controle = false;

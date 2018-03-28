@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4430741244480626}
   - component: {fileID: 212318859879101554}
   - component: {fileID: 58594627952399770}
+  - component: {fileID: 114421660483220034}
   m_Layer: 0
   m_Name: SmallRock
   m_TagString: Objects
@@ -56,6 +57,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -0.005343199}
   serializedVersion: 2
   m_Radius: 0.19016218
+--- !u!114 &114421660483220034
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1693414332146376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a4dd802533efd44c84ddad43a84c99e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: -1
 --- !u!212 &212318859879101554
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -87,8 +100,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1479526557
+  m_SortingLayer: 1
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300010, guid: f8d6c53887aed5d4cb132300ff79aba0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
