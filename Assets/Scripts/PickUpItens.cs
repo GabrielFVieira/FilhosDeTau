@@ -18,6 +18,9 @@ public class PickUpItens : MonoBehaviour {
 
     [SerializeField]
     private GameObject pressE;
+
+    [SerializeField]
+    private InvetoryManager invManager;
     // Use this for initialization
     void Start () {
         plMove = GetComponent<PlayerMovement>();
@@ -49,11 +52,13 @@ public class PickUpItens : MonoBehaviour {
         yield return new WaitForSeconds(pickUpItemClip.length);
 
         //Pick up the item here
-
+        invManager.inventory.SetActive(true);
+        colGO.GetComponent<Chest>().showItens = true;
+        colGO.GetComponent<Chest>().opened = true;
+        colGO.GetComponent<Chest>().recentlyOpened = true;
         col = false;
         pickUp = false;
         colGO = null;
-
         StopAllCoroutines();
     }
 
@@ -61,8 +66,17 @@ public class PickUpItens : MonoBehaviour {
     {
         if(collision.gameObject.tag == "Chest")
         {
-            col = true;
-            colGO = collision.gameObject;
+            if (collision.gameObject.GetComponent<Chest>().opened == false)
+            {
+                col = true;
+                colGO = collision.gameObject;
+            }
+
+            else
+            {
+                //invManager.inventory.SetActive(true);
+                collision.gameObject.GetComponent<Chest>().showItens = true;
+            }
         }
     }
 
@@ -70,6 +84,12 @@ public class PickUpItens : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Chest")
         {
+            if (collision.gameObject.GetComponent<Chest>().recentlyOpened)
+            {
+                invManager.inventory.SetActive(false);
+                collision.gameObject.GetComponent<Chest>().recentlyOpened = false;
+            }
+            collision.gameObject.GetComponent<Chest>().showItens = false;
             col = false;
             colGO = null;
         }

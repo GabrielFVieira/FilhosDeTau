@@ -7,6 +7,8 @@ TagManager:
   - Enemy
   - Objects
   - Chest
+  - Canvas
+  - ChestContainer
   layers:
   - Default
   - TransparentFX
