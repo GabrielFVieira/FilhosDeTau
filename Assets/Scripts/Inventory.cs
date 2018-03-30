@@ -30,6 +30,18 @@ public class Inventory : MonoBehaviour {
 
     public List<ItemScript> items = new List<ItemScript>();
 
+    public void Update()
+    {
+        if(arrows == 0 && items.Count > 0)
+        {
+            foreach (ItemScript i in items)
+            {
+                if (i.name == "Arrow")
+                    Remove(i);
+            }
+        }
+    }
+
     public bool Add(ItemScript item)
     {
         if (!item.isDefaultItem)
