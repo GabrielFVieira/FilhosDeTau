@@ -7,21 +7,16 @@ public class Chest : MonoBehaviour {
     public bool showItens;
     public bool recentlyOpened;
 
-    [SerializeField]
-    private GameObject itenContainer;
+    public GameObject itemContainer;
 
-    private List<GameObject> itens = new List<GameObject>();
-
-    [SerializeField]
-    private InvetoryManager invManager;
 	// Use this for initialization
 	void Start () {
-        itenContainer.SetActive(showItens);
-	}
+        itemContainer = transform.GetChild(0).gameObject;
+        itemContainer.SetActive(showItens);
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        itenContainer.SetActive(showItens);
-
+        itemContainer.SetActive(showItens);
     }
 }

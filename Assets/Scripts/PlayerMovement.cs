@@ -59,6 +59,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private Texture2D texture;
     private Sprite[] ranged;
+
+    public bool pursuit;
+    public Transform item;
+
+    [SerializeField]
+    private AnimationClip pickUPClip;
     // Use this for initialization
     void Start()
     {
@@ -66,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
         ranged = Resources.LoadAll<Sprite>(string.Format("Player/Sprites/PlayerLRA", texture.name));
 
         /////////// SET VARIABLES OF SOME ACTIONS ///////////
-        ammo = maxAmmo;
+        //ammo = maxAmmo;
         clawHUD.SetActive(false);
         rollEnergyConsum = 10;
         arrowVel = 15f;
@@ -100,9 +106,14 @@ public class PlayerMovement : MonoBehaviour
     {
         energy = GetComponent<EnergyBar>().curEnergy;
 
+        ammo = Inventory.instance.arrows;
+
         //////////// READ THE INPUTS //////////////////
         x = Input.GetAxis("Horizontal");
         y = Input.GetAxis("Vertical");
+
+        if (pursuit && item != null && anim.GetBool("PickUp") == false)
+            PursuitItem(item);
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && isMagicActive == false && isAiming == false && isAttacking == false && die == false && controlSlow == false && energy > 0)
             run = true;
@@ -147,7 +158,9 @@ public class PlayerMovement : MonoBehaviour
                 isWalking = (Mathf.Abs(x) + Mathf.Abs(y)) > 0;
         }
 
-        anim.SetBool("isWalking", isWalking);
+        if (pursuit == false)
+            anim.SetBool("isWalking", isWalking);
+
         anim.SetBool("Roll", roll);
         die = anim.GetBool("Died");
 
@@ -212,6 +225,9 @@ public class PlayerMovement : MonoBehaviour
         ///////////////// WALK ///////////////
         if (isWalking && isAttacking == false && isMagicActive == false && isAiming == false && die == false && roll == false && anim.GetBool("PickUp") == false)
         {
+            pursuit = false;
+            item = null;
+
             if (run)
             {
                 Move(runVel);
@@ -330,7 +346,7 @@ public class PlayerMovement : MonoBehaviour
             GameObject arrow = (GameObject)Instantiate(arrowPrefab, transform.position, rot);
             arrow.GetComponent<Arrow>().arrowVel = arrowVel;
             arrow.GetComponent<Arrow>().dmg = dmg["Range"];
-            ammo -= 1;
+            Inventory.instance.arrows -= 1;
             if(above)
                 arrow.GetComponent<SpriteRenderer>().sortingOrder = GetComponent<SpriteRenderer>().sortingOrder - 1;
 
@@ -352,5 +368,65 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool(attackName, attackType);
 
         StopAllCoroutines();
+    }
+
+    public void PursuitItem(Transform target)
+    {
+        float xP = 0;
+        float yP = 0;
+
+        if (target.position.x > transform.position.x && Mathf.Abs(target.transform.position.x - transform.position.x) > Mathf.Abs(target.transform.position.y - transform.position.y))
+        {
+            xP = 1;
+            yP = 0;
+        }
+
+        else if (target.position.x < transform.position.x && Mathf.Abs(target.transform.position.x - transform.position.x) > Mathf.Abs(target.transform.position.y - transform.position.y))
+        {
+            xP = -1;
+            yP = 0;
+        }
+
+        else if (target.position.y > transform.position.y && Mathf.Abs(target.transform.position.y - transform.position.y) > Mathf.Abs(target.transform.position.x - transform.position.x))
+        {
+            yP = 1;
+            xP = 0;
+        }
+
+        else if (target.position.y < transform.position.y && Mathf.Abs(target.transform.position.y - transform.position.y) > Mathf.Abs(target.transform.position.x - transform.position.x))
+        {
+            yP = -1;
+            xP = 0;
+        }
+
+        anim.SetFloat("x", xP);
+        anim.SetFloat("y", yP);
+
+        if (item.GetComponent<ItemPickUP>().range > 0.6f)
+        {
+
+            anim.SetBool("isWalking", true);
+            transform.position = Vector2.MoveTowards(transform.position, target.position, vel * Time.deltaTime);
+        }
+
+        else
+        {
+            anim.SetBool("isWalking", false);
+            StartCoroutine("PickUPWait");
+        }
+    }
+
+    IEnumerator PickUPWait()
+    {
+        if(anim.GetBool("PickUp") == false)
+            anim.SetBool("PickUp", true);
+
+        yield return new WaitForSeconds(pickUPClip.length);
+
+        if (item != null)
+            item.GetComponent<ItemPickUP>().picked = true;
+
+        anim.SetBool("PickUp", false);
+        StopAllCoroutines();  
     }
 }
