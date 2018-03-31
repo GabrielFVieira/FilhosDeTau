@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour {
 
@@ -27,6 +28,8 @@ public class Inventory : MonoBehaviour {
     public int space = 15;
 
     public int arrows;
+
+    public Text description;
 
     public List<ItemScript> items = new List<ItemScript>();
 
@@ -82,6 +85,20 @@ public class Inventory : MonoBehaviour {
 
         if (item.name == "Arrow")
             arrows = 0;
+
+        if (onIntemChangedCallback != null)
+            onIntemChangedCallback.Invoke();
+    }
+
+    public void RemoveAll()
+    {
+        int max = items.Count;
+
+        for (int i = 0; i < max; i++)
+        {
+            items.Remove(items[0]);
+        }
+        arrows = 0;
 
         if (onIntemChangedCallback != null)
             onIntemChangedCallback.Invoke();

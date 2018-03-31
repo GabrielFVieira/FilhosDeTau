@@ -30,7 +30,7 @@ public class EnemyAI : MonoBehaviour {
         transform.position = spawn.position;
         target = GameObject.FindGameObjectWithTag("Player").transform;
         maxDist = 7;
-        minDist = 1.1f;
+        minDist = 1f;
         dmg = 10;
         colGO = null;
         speed = 3.5f;

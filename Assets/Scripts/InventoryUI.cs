@@ -27,7 +27,10 @@ public class InventoryUI : MonoBehaviour {
         {
             inventoryUI.SetActive(!inventoryUI.activeSelf);
         }
-	}
+
+        if(inventoryUI.activeSelf == false)
+            inventory.description.text = "";
+    }
 
     void UpdateUI()
     {
@@ -50,5 +53,10 @@ public class InventoryUI : MonoBehaviour {
     public void CloseInventory()
     {
         inventoryUI.SetActive(false);
+    }
+
+    public void ClearDescription()
+    {
+        inventory.description.text = "";
     }
 }

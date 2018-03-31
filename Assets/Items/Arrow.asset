@@ -14,3 +14,4 @@ MonoBehaviour:
   name: Arrow
   icon: {fileID: 21300000, guid: 3f498c2cf2dff6e4399fce6d33550597, type: 3}
   isDefaultItem: 0
+  description: Arrow Description

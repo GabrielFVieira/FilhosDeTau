@@ -14,6 +14,7 @@ MonoBehaviour:
   name: Iron Weapon
   icon: {fileID: 21300000, guid: 59bfdaf5fb51c444baa0554499d1e34f, type: 3}
   isDefaultItem: 0
+  description: Iron Weapon Description
   equipSlot: 0
   armorModifier: 0
   damageModifier: 9

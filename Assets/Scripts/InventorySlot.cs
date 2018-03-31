@@ -5,7 +5,6 @@ public class InventorySlot : MonoBehaviour {
 
     public Image icon;
     public Button removeButton;
-
     ItemScript item;
 
     public void AddItem(ItemScript newItem)
@@ -38,6 +37,16 @@ public class InventorySlot : MonoBehaviour {
         if(item != null)
         {
             item.Use();
+            Inventory.instance.description.text = "";
         }
+    }
+
+    public void ShowDescription()
+    {
+        if (item != null)
+            Inventory.instance.description.text = item.description;
+
+        else
+            Inventory.instance.description.text = "";
     }
 }

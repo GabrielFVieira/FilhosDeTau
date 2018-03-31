@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class OpenChest : MonoBehaviour {
-    private PlayerMovement plMove;
     private Animator anim;
     private bool pickUp;
     private bool col;
@@ -23,7 +22,6 @@ public class OpenChest : MonoBehaviour {
     private GameObject inventoryUI;
     // Use this for initialization
     void Start () {
-        plMove = GetComponent<PlayerMovement>();
         anim = GetComponent<Animator>();
         pressE.SetActive(false);
 	}

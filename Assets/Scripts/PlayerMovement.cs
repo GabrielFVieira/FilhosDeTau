@@ -65,6 +65,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField]
     private AnimationClip pickUPClip;
+    private bool pickUPRunning;
     // Use this for initialization
     void Start()
     {
@@ -406,20 +407,21 @@ public class PlayerMovement : MonoBehaviour
         {
 
             anim.SetBool("isWalking", true);
+            pickUPRunning = false;
             transform.position = Vector2.MoveTowards(transform.position, target.position, vel * Time.deltaTime);
         }
 
-        else
+        else if(item.GetComponent<ItemPickUP>().range <= 0.6f && pickUPRunning == false)
         {
             anim.SetBool("isWalking", false);
+            pickUPRunning = true;
             StartCoroutine("PickUPWait");
         }
     }
 
     IEnumerator PickUPWait()
     {
-        if(anim.GetBool("PickUp") == false)
-            anim.SetBool("PickUp", true);
+        anim.SetBool("PickUp", true);
 
         yield return new WaitForSeconds(pickUPClip.length);
 
@@ -427,6 +429,7 @@ public class PlayerMovement : MonoBehaviour
             item.GetComponent<ItemPickUP>().picked = true;
 
         anim.SetBool("PickUp", false);
-        StopAllCoroutines();  
+        //pickUPRunning = false;
+        StopCoroutine("PickUPWait");
     }
 }
