@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: d8994b1de307f2d49991c61f5638f833
-timeCreated: 1522531360
+timeCreated: 1522582501
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -13,6 +13,8 @@ TextureImporter:
     21300012: ui_split 1_6
     21300014: ui_split 1_7
     21300016: ui_split 1_8
+    21300018: ui_split 1_9
+    21300020: ui_split 1_10
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -240,6 +242,34 @@ TextureImporter:
         height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ui_split 1_9
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 217
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ui_split 1_10
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 200
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

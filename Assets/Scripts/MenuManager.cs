@@ -11,13 +11,14 @@ public class MenuManager : MonoBehaviour {
     private AudioMixer audioMixer;
 
     [SerializeField]
-    private Dropdown resoltuionsDropdowm;
+    private Dropdown resolutionsDropDown;
 
     private Resolution[] resolutions;
 
     [SerializeField]
     private Toggle fullscreenToggle;
 
+    private int iter = 0;
 	// Use this for initialization
 	void Start () {
         if (Screen.fullScreen)
@@ -28,27 +29,29 @@ public class MenuManager : MonoBehaviour {
 
         resolutions = Screen.resolutions;
 
-        resoltuionsDropdowm.ClearOptions();
+        resolutionsDropDown.ClearOptions();
 
         List<string> options = new List<string>();
 
         int currentResolutionIndex = 0;
         for (int i = 0; i < resolutions.Length; i++)
         {
-            if (resolutions[i].refreshRate == 60)
-            {
-
             string option = resolutions[i].width + " x " + resolutions[i].height;
+
+            if (options.Contains(option.ToLower()))
+                continue;
+
             options.Add(option);
 
             if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
-                currentResolutionIndex = i;
-            }
+                currentResolutionIndex = iter;
+
+            iter++;
         }
 
-        resoltuionsDropdowm.AddOptions(options);
-        resoltuionsDropdowm.value = currentResolutionIndex;
-        resoltuionsDropdowm.RefreshShownValue();
+        resolutionsDropDown.AddOptions(options);
+        resolutionsDropDown.value = currentResolutionIndex;
+        resolutionsDropDown.RefreshShownValue();
 	}
 	
 	// Update is called once per frame
@@ -89,8 +92,9 @@ public class MenuManager : MonoBehaviour {
 
     public void SetResolution(int resolutionIndex)
     {
-        Resolution resolution = resolutions[resolutionIndex];
+        var width = int.Parse(resolutionsDropDown.options[resolutionIndex].text.Split(' ')[0]);
+        var height = int.Parse(resolutionsDropDown.options[resolutionIndex].text.Split(' ')[2]);
 
-        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        Screen.SetResolution(width, height, Screen.fullScreen);
     }
 }

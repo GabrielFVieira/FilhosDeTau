@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 61274197233702888}
   m_Layer: 0
   m_Name: Iron Ring
-  m_TagString: Untagged
+  m_TagString: Itens
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

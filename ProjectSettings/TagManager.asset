@@ -9,6 +9,7 @@ TagManager:
   - Chest
   - Canvas
   - ChestContainer
+  - Itens
   layers:
   - Default
   - TransparentFX
