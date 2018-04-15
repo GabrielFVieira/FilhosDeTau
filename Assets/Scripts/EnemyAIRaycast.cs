@@ -71,7 +71,7 @@ public class EnemyAIRaycast : MonoBehaviour {
             transform.position = Vector2.MoveTowards(transform.position, bestPath, speed * Time.deltaTime);
 
             #region Set Facing Correctly
-            if (target.position.x > transform.position.x && Mathf.Abs(target.transform.position.x - transform.position.x) > Mathf.Abs(target.transform.position.y - transform.position.y))
+            if (bestPath.x > transform.position.x && Mathf.Abs(bestPath.x - transform.position.x) > Mathf.Abs(bestPath.y - transform.position.y))
             {
                 Debug.Log("Right");
                 GetComponent<SpriteRenderer>().flipX = true; // Remove after put a new animation with all 4 way move
@@ -79,7 +79,7 @@ public class EnemyAIRaycast : MonoBehaviour {
                 y = 0;
             }
 
-            else if (target.position.x < transform.position.x && Mathf.Abs(target.transform.position.x - transform.position.x) > Mathf.Abs(target.transform.position.y - transform.position.y))
+            else if (bestPath.x < transform.position.x && Mathf.Abs(bestPath.x - transform.position.x) > Mathf.Abs(bestPath.y - transform.position.y))
             {
                 Debug.Log("Left");
                 GetComponent<SpriteRenderer>().flipX = false; // Remove after put a new animation with all 4 way move
@@ -87,14 +87,14 @@ public class EnemyAIRaycast : MonoBehaviour {
                 y = 0;
             }
 
-            else if (target.position.y > transform.position.y && Mathf.Abs(target.transform.position.y - transform.position.y) > Mathf.Abs(target.transform.position.x - transform.position.x))
+            else if (bestPath.y > transform.position.y && Mathf.Abs(bestPath.y - transform.position.y) > Mathf.Abs(bestPath.x - transform.position.x))
             {
                 Debug.Log("Up");
                 y = 1;
                 x = 0;
             }
 
-            else if (target.position.y < transform.position.y && Mathf.Abs(target.transform.position.y - transform.position.y) > Mathf.Abs(target.transform.position.x - transform.position.x))
+            else if (bestPath.y < transform.position.y && Mathf.Abs(bestPath.y - transform.position.y) > Mathf.Abs(bestPath.x - transform.position.x))
             {
                 Debug.Log("Down");
                 y = -1;
