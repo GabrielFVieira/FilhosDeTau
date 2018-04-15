@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour {
     private Animator anim;
-    private float maxDist;
-    private float minDist;
+    public float maxDist;
+    public float minDist;
     public bool isAttacking;
-    private bool isWalking;
-    private bool isDead;
+    public bool isWalking;
+    public bool isDead;
 
     public Transform spawn;
     public Transform target;
@@ -30,7 +30,7 @@ public class EnemyAI : MonoBehaviour {
         transform.position = spawn.position;
         target = GameObject.FindGameObjectWithTag("Player").transform;
         maxDist = 7;
-        minDist = 1f;
+        minDist = 1.1f;
         dmg = 10;
         colGO = null;
         speed = 3.5f;
@@ -81,6 +81,7 @@ public class EnemyAI : MonoBehaviour {
         if (GetComponent<EnemyHealth>().curHealth < GetComponent<EnemyHealth>().maxHealth)
         {
             maxDist = 15;
+            GetComponent<EnemyAIRaycast>().ChangeDistAndSpeed(maxDist, minDist, speed);
             GetComponent<EnemyHealth>().maxDistInv = 10;
         }
 
@@ -91,39 +92,6 @@ public class EnemyAI : MonoBehaviour {
 
         if (isWalking && isDead == false)
         {
-            if(target.position.x > transform.position.x && Mathf.Abs(target.transform.position.x - transform.position.x) > Mathf.Abs(target.transform.position.y - transform.position.y))
-            {
-                //Debug.Log("Right");
-                GetComponent<SpriteRenderer>().flipX = true; // Remove after put a new animation with all 4 way move
-                x = 1;
-                y = 0;
-            }
-
-            else if (target.position.x < transform.position.x && Mathf.Abs(target.transform.position.x - transform.position.x) > Mathf.Abs(target.transform.position.y - transform.position.y))
-            {
-                //Debug.Log("Left");
-                GetComponent<SpriteRenderer>().flipX = false; // Remove after put a new animation with all 4 way move
-                x = -1;
-                y = 0;
-            }
-
-            else if (target.position.y > transform.position.y && Mathf.Abs(target.transform.position.y - transform.position.y) > Mathf.Abs(target.transform.position.x - transform.position.x))
-            {
-                //Debug.Log("Up");
-                y = 1;
-                x = 0;
-            }
-
-            else if (target.position.y < transform.position.y && Mathf.Abs(target.transform.position.y - transform.position.y) > Mathf.Abs(target.transform.position.x - transform.position.x))
-            {
-                //Debug.Log("Down");
-                y = -1;
-                x = 0;
-            }
-
-            if (range > minDist && isAttacking == false)
-                transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
-
             if (range <= minDist && isAttacking == false && timer == 0 && GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>().curHealth > 0)
             {
                 isAttacking = true;
@@ -133,8 +101,10 @@ public class EnemyAI : MonoBehaviour {
             if (GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>().curHealth <= 0)
             {
                 target = spawn;
+                GetComponent<EnemyAIRaycast>().SetNewTarget(spawn);
                 isWalking = true;
                 minDist = 0;
+                GetComponent<EnemyAIRaycast>().ChangeDistAndSpeed(maxDist, minDist, speed);
             }
         }
     }

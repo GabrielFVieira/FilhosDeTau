@@ -167,6 +167,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (die)
         {
+            GetComponent<CapsuleCollider2D>().isTrigger = true;
             anim.speed = 1;
             clawHUD.SetActive(false);
         }

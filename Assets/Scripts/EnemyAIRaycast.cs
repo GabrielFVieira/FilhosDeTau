@@ -4,21 +4,22 @@ using UnityEngine;
 
 public class EnemyAIRaycast : MonoBehaviour {
     #region Public Variables
-    public Transform target;
     public Transform raySpawn;
-    public float speed;
-    public float minRange = 1.5f;
-    public float maxRange = 6;
     public float maxDistRay;
     public int lastPath = 10;
     #endregion
 
     #region Private Variables
+    private EnemyAI ai;
     private Rigidbody2D rb2D;
+    private Transform target;
     private Vector2[] directions = new Vector2[8];
     private Vector3 bestPath;
     private RaycastHit2D[] hits = new RaycastHit2D[8];
     private Vector2[] safePaths = new Vector2[8];
+    private float speed;
+    private float minRange = 1.5f;
+    private float maxRange = 6;
     public float offset;
     private float[] ranges = new float[8];
     private bool check;
@@ -33,9 +34,15 @@ public class EnemyAIRaycast : MonoBehaviour {
 
     private void Start()
     {
+        ai = GetComponent<EnemyAI>();
         rb2D = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         SetDirection();
+
+        target = ai.target;
+        speed = ai.speed;
+        maxRange = ai.maxDist;
+        minRange = ai.minDist;
 
         alternadPaths[0] = 4;
         alternadPaths[1] = 5;
@@ -48,19 +55,14 @@ public class EnemyAIRaycast : MonoBehaviour {
 
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         anim.SetFloat("x", x);
         anim.SetFloat("y", y);
 
-        for (int i = 0; i < directions.Length; i++)
-        {
-            Debug.DrawRay(raySpawn.position, directions[i], Color.red);
-        }
-
         float range = Vector2.Distance(transform.position, target.position);
 
-        if(range < maxRange && range > minRange)
+        if (range < maxRange && range > minRange && !ai.isAttacking && ai.isWalking)
         {
             if (coroutineStarted == false)
             {
@@ -69,44 +71,33 @@ public class EnemyAIRaycast : MonoBehaviour {
             }
             GetComponent<Animator>().SetBool("isWalking", true);
             transform.position = Vector2.MoveTowards(transform.position, bestPath, speed * Time.deltaTime);
-
-            #region Set Facing Correctly
-            if (bestPath.x > transform.position.x && Mathf.Abs(bestPath.x - transform.position.x) > Mathf.Abs(bestPath.y - transform.position.y))
-            {
-                Debug.Log("Right");
-                GetComponent<SpriteRenderer>().flipX = true; // Remove after put a new animation with all 4 way move
-                x = 1;
-                y = 0;
-            }
-
-            else if (bestPath.x < transform.position.x && Mathf.Abs(bestPath.x - transform.position.x) > Mathf.Abs(bestPath.y - transform.position.y))
-            {
-                Debug.Log("Left");
-                GetComponent<SpriteRenderer>().flipX = false; // Remove after put a new animation with all 4 way move
-                x = -1;
-                y = 0;
-            }
-
-            else if (bestPath.y > transform.position.y && Mathf.Abs(bestPath.y - transform.position.y) > Mathf.Abs(bestPath.x - transform.position.x))
-            {
-                Debug.Log("Up");
-                y = 1;
-                x = 0;
-            }
-
-            else if (bestPath.y < transform.position.y && Mathf.Abs(bestPath.y - transform.position.y) > Mathf.Abs(bestPath.x - transform.position.x))
-            {
-                Debug.Log("Down");
-                y = -1;
-                x = 0;
-            }
-            #endregion
         }
 
-        else
+        if (!ai.isAttacking && range < maxRange)
         {
-            GetComponent<Animator>().SetBool("isWalking", false);
-        }     
+            CheckBestPath();
+            SetFacingToPlayer();
+        }
+
+        if(target.tag != "Player" && range > minRange && !ai.isDead)
+        {
+            if (range > minRange)
+            {
+                if (coroutineStarted == false)
+                {
+                    StartCoroutine("CheckBestPath");
+                    coroutineStarted = true;
+                }
+                GetComponent<Animator>().SetBool("isWalking", true);
+                transform.position = Vector2.MoveTowards(transform.position, bestPath, speed * Time.deltaTime);
+            }
+
+            else
+            {
+                GetComponent<Animator>().SetBool("isWalking", true);
+                coroutineStarted = true;
+            }
+        }
     }
 
     private IEnumerator CheckBestPath()
@@ -196,5 +187,50 @@ public class EnemyAIRaycast : MonoBehaviour {
         }
 
         return true;
+    }
+
+    private void SetFacingToPlayer()
+    {
+        if (bestPath.x > transform.position.x && Mathf.Abs(bestPath.x - transform.position.x) > Mathf.Abs(bestPath.y - transform.position.y))
+        {
+            Debug.Log("Right");
+            GetComponent<SpriteRenderer>().flipX = true; // Remove after put a new animation with all 4 way move
+            x = 1;
+            y = 0;
+        }
+
+        else if (bestPath.x < transform.position.x && Mathf.Abs(bestPath.x - transform.position.x) > Mathf.Abs(bestPath.y - transform.position.y))
+        {
+            Debug.Log("Left");
+            GetComponent<SpriteRenderer>().flipX = false; // Remove after put a new animation with all 4 way move
+            x = -1;
+            y = 0;
+        }
+
+        else if (bestPath.y > transform.position.y && Mathf.Abs(bestPath.y - transform.position.y) > Mathf.Abs(bestPath.x - transform.position.x))
+        {
+            Debug.Log("Up");
+            y = 1;
+            x = 0;
+        }
+
+        else if (bestPath.y < transform.position.y && Mathf.Abs(bestPath.y - transform.position.y) > Mathf.Abs(bestPath.x - transform.position.x))
+        {
+            Debug.Log("Down");
+            y = -1;
+            x = 0;
+        }
+    }
+
+    public void SetNewTarget(Transform newTarget)
+    {
+        target = newTarget;
+    }
+
+    public void ChangeDistAndSpeed(float newMaxDist, float newMinDist, float newSpeed)
+    {
+        speed = newSpeed;
+        maxRange = newMaxDist;
+        minRange = newMinDist;
     }
 }
