@@ -4,27 +4,32 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    #region Public Variables
+    public int ammo;
+    public int maxAmmo = 10;
+    public GameObject colGO;
+    public bool controle;
+    public bool pursuit;
+    public Transform item;
+    public GameObject aim;
+    #endregion
+
+    #region Private Variables
     private Animator anim;
     private float vel;
-
     private bool isWalking;
     private float x;
     private float y;
-
     private bool run;
     private float runVel;
     private float energy;
-
     private float attackTimer;
-
     private bool isAttacking;
     [SerializeField]
     private AnimationClip closeAttack;
-
     private bool isMagicActive;
     [SerializeField]
     private AnimationClip magicAttack;
-
     private bool isAiming;
     private bool controlArrow;
     [SerializeField]
@@ -32,46 +37,31 @@ public class PlayerMovement : MonoBehaviour
     private float arrowVel;
     [SerializeField]
     private GameObject arrowPrefab;
-    public int ammo;
-    public int maxAmmo = 10;
-
     private bool die;
-
-    public GameObject colGO;
-
     private Dictionary<string, int> dmg = new Dictionary<string, int>();
-
     private float slowTimer;
     private float maxSlowTime;
     private float initialVel;
     private bool controlSlow;
-    public bool controle;
     [SerializeField]
     private GameObject clawHUD;
-
     private bool roll;
     private float rollEnergyConsum;
     [SerializeField]
     private AnimationClip rollClip;
     private float rollTimer;
     private Vector2 curAxis = new Vector2();
-
-    [SerializeField]
-    private Texture2D texture;
-    private Sprite[] ranged;
-
-    public bool pursuit;
-    public Transform item;
-
     [SerializeField]
     private AnimationClip pickUPClip;
     private bool pickUPRunning;
+    private Vector3 mousePos;
+    #endregion
+
+
+
     // Use this for initialization
     void Start()
     {
-        /////////// PICK UO ALL THE LONG RANGE ATTACK ANIMATION FRAMES //////////////
-        ranged = Resources.LoadAll<Sprite>(string.Format("Player/Sprites/PlayerLRA", texture.name));
-
         /////////// SET VARIABLES OF SOME ACTIONS ///////////
         //ammo = maxAmmo;
         clawHUD.SetActive(false);
@@ -83,11 +73,6 @@ public class PlayerMovement : MonoBehaviour
         ////// GET THE ANIMATOR COMPONENT AND SET THE PLAYER VELOCITY ///////
         anim = GetComponent<Animator>();
         vel = 3f;
-
-        //////// SET THE PLAYER FACING DOWN /////////////////
-        isWalking = true;
-        x = 0;
-        y = -1;
 
         anim.SetBool("isWalking", isWalking);
         anim.SetFloat("x", x);
@@ -109,57 +94,77 @@ public class PlayerMovement : MonoBehaviour
 
         ammo = Inventory.instance.arrows;
 
+        mousePos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        bool mouseLook = true;
         //////////// READ THE INPUTS //////////////////
-        x = Input.GetAxis("Horizontal");
-        y = Input.GetAxis("Vertical");
+
+
+        if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0 && anim.GetBool("isAttacking") == false && anim.GetBool("isAiming") == false && anim.GetBool("isMagicActive") == false && !roll && anim.GetBool("PickUp") == false)
+        {
+            isWalking = false;
+            mouseLook = true;
+            x = (mousePos.x * 2) - 1;
+            y = (mousePos.y * 2) - 1;
+            anim.SetFloat("x", x);
+            anim.SetFloat("y", y);
+        }
+
+        else
+        {
+            x = Input.GetAxis("Horizontal");
+            y = Input.GetAxis("Vertical");
+            mouseLook = false;
+        }
 
         if (pursuit && item != null && anim.GetBool("PickUp") == false)
             PursuitItem(item);
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && isMagicActive == false && isAiming == false && isAttacking == false && die == false && controlSlow == false && energy > 0)
-            run = true;
-
-        if (Input.GetKeyUp(KeyCode.LeftShift) || energy <= 0)
+        if (!pursuit)
         {
-            anim.speed = 1;
-            run = false;
+            if (Input.GetKeyDown(KeyCode.LeftShift) && !isMagicActive && !isAiming && !isAttacking && !die && !controlSlow && energy > 0)
+                run = true;
+
+            if (Input.GetKeyUp(KeyCode.LeftShift) || energy <= 0)
+            {
+                anim.speed = 1;
+                run = false;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space) && !isMagicActive && !isAiming && !isAttacking && !roll && !die && isWalking && energy > rollEnergyConsum && anim.GetBool("PickUp") == false)
+                roll = true;
+
+            if (Input.GetMouseButtonDown(0) && !isMagicActive && !isAiming && !roll && !die && !isAttacking && anim.GetBool("PickUp") == false)
+            {
+                anim.speed = 1;
+                isAttacking = true;
+                controle = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.V) && !isAttacking && !isAiming && !roll && !die && !isMagicActive && anim.GetBool("PickUp") == false)
+            {
+                anim.speed = 1;
+                isMagicActive = true;
+                controle = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Z) && !isAttacking && !isMagicActive && !roll && !die && !isAiming && ammo > 0 && anim.GetBool("PickUp") == false)
+            {
+                anim.speed = 1;
+                isAiming = true;
+                controle = true;
+            }
         }
-
-        if (Input.GetKeyDown(KeyCode.V) && isMagicActive == false && isAiming == false && isAttacking == false && roll == false && die == false && isWalking && energy > rollEnergyConsum  && anim.GetBool("PickUp") == false)
-            roll = true;
-
-        if (Input.GetKeyDown(KeyCode.C) && isMagicActive == false && isAiming == false && roll == false && die == false && isAttacking == false && anim.GetBool("PickUp") == false)
-        {
-            anim.speed = 1;
-            isAttacking = true;
-            controle = true;
-        }
-
-        if (Input.GetKeyDown(KeyCode.X) && isAttacking == false && isAiming == false && roll == false && die == false && isMagicActive == false && anim.GetBool("PickUp") == false)
-        {
-            anim.speed = 1;
-            isMagicActive = true;
-            controle = true;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Z) && isAttacking == false && isMagicActive == false && roll == false && die == false && isAiming == false && ammo > 0 && anim.GetBool("PickUp") == false)
-        {
-            anim.speed = 1;
-            isAiming = true;
-            controle = true;
-        }
-
         ///////////////////////// SET ANIMATIONS //////////////////////
         if (anim.GetBool("PickUp") == false)
         {
             if (roll)
                 isWalking = true;
 
-            else
+            else if(!roll && !mouseLook)
                 isWalking = (Mathf.Abs(x) + Mathf.Abs(y)) > 0;
         }
 
-        if (pursuit == false)
+        if (!pursuit)
             anim.SetBool("isWalking", isWalking);
 
         anim.SetBool("Roll", roll);
@@ -225,7 +230,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         ///////////////// WALK ///////////////
-        if (isWalking && isAttacking == false && isMagicActive == false && isAiming == false && die == false && roll == false && anim.GetBool("PickUp") == false)
+        if (isWalking && !isAttacking && !isMagicActive && !isAiming && !die && !roll && anim.GetBool("PickUp") == false)
         {
             pursuit = false;
             item = null;
@@ -246,7 +251,12 @@ public class PlayerMovement : MonoBehaviour
         //////////// ATTACK DETECTION WHILE COLLIDING //////////////////
         if (colGO != null)
         {
-            if (colGO.transform.position.y > transform.position.y && anim.GetFloat("y") > 0 && anim.GetFloat("x") == 0 || colGO.transform.position.y < transform.position.y && anim.GetFloat("y") < 0 && anim.GetFloat("x") == 0 || colGO.transform.position.x > transform.position.x && anim.GetFloat("x") > 0 && anim.GetFloat("y") == 0 || colGO.transform.position.x < transform.position.x && anim.GetFloat("x") < 0 && anim.GetFloat("y") == 0)
+            float bigger = Mathf.Max(Mathf.Abs(anim.GetFloat("y")), Mathf.Abs(anim.GetFloat("x")));
+
+            if (colGO.transform.position.y > transform.position.y && anim.GetFloat("y") > 0 && Mathf.Abs(anim.GetFloat("y")) == bigger ||
+                colGO.transform.position.y < transform.position.y && anim.GetFloat("y") < 0 && Mathf.Abs(anim.GetFloat("y")) == bigger ||
+                colGO.transform.position.x > transform.position.x && anim.GetFloat("x") > 0 && Mathf.Abs(anim.GetFloat("x")) == bigger ||
+                colGO.transform.position.x < transform.position.x && anim.GetFloat("x") < 0 && Mathf.Abs(anim.GetFloat("x")) == bigger)
             {
                 if (anim.GetBool("PickUp") == false && colGO.gameObject.tag == "Enemy" && isAttacking && controle && attackTimer >= (closeAttack.length / 5) * 4)
                 {
@@ -258,7 +268,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //////////// SLOW-PLAYER CONTROLLER /////////////////
-
         if (controlSlow)
         {
             slowTimer += Time.deltaTime;
@@ -289,7 +298,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void SpeedDown(float slow, float time)
     {
-        if (controlSlow == false)
+        if (!controlSlow)
         {
             clawHUD.SetActive(true);
             controlSlow = true;
@@ -312,40 +321,21 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator Attacks(string attackName, bool attackType, float attackClipLenght)
     {
+        if (attackTimer == 0)
+        {
+            aim.GetComponent<Aim>().canAim = false;
+            x = (mousePos.x * 2) - 1;
+            y = (mousePos.y * 2) - 1;
+            anim.SetFloat("x", x);
+            anim.SetFloat("y", y);
+        }
         anim.SetBool(attackName, attackType);
         attackTimer += Time.deltaTime;
         bool above = false;
 
-        Quaternion rot = Quaternion.Euler(0, 0, 0);
-
-        for(int i = 0; i < ranged.Length; i++)
-        {
-            if(GetComponent<SpriteRenderer>().sprite == ranged[i])
-            {
-                if(i <= 12) // FACING TOP
-                {
-                    rot = Quaternion.Euler(0, 0, 90);
-                    above = true;
-                }
-
-                else if (i > 12 && i <= 25) // FACING LEFT
-                {
-                    rot = Quaternion.Euler(0, 0, 180);
-                }
-
-                else if (i > 26 && i <= 38) // FACING BOTTOM
-                {
-                    rot = Quaternion.Euler(0, 0, -90);
-                }
-
-                else
-                    rot = Quaternion.Euler(0, 0, 0); // FACING RIGHT
-            }
-        }
-
         if (attackName == "isAiming" && attackTimer >= attackClipLenght - 0.2f && controlArrow)
         {
-            GameObject arrow = (GameObject)Instantiate(arrowPrefab, transform.position, rot);
+            GameObject arrow = (GameObject)Instantiate(arrowPrefab, transform.position, aim.transform.rotation);
             arrow.GetComponent<Arrow>().arrowVel = arrowVel;
             arrow.GetComponent<Arrow>().dmg = dmg["Range"];
             Inventory.instance.arrows -= 1;
@@ -368,7 +358,7 @@ public class PlayerMovement : MonoBehaviour
         controlArrow = true;
         attackTimer = 0;
         anim.SetBool(attackName, attackType);
-
+        aim.GetComponent<Aim>().canAim = true;
         StopAllCoroutines();
     }
 
@@ -412,7 +402,7 @@ public class PlayerMovement : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, target.position, vel * Time.deltaTime);
         }
 
-        else if(item.GetComponent<ItemPickUP>().range <= 0.6f && pickUPRunning == false)
+        else if(item.GetComponent<ItemPickUP>().range <= 0.6f && !pickUPRunning)
         {
             anim.SetBool("isWalking", false);
             pickUPRunning = true;
