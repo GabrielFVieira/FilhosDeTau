@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAIRaycast : MonoBehaviour {
+public class EnemyAIRaycast : MonoBehaviour
+{
     #region Public Variables
     public Transform raySpawn;
     public float maxDistRay;
@@ -11,15 +12,15 @@ public class EnemyAIRaycast : MonoBehaviour {
 
     #region Private Variables
     private EnemyAI ai;
-    private Rigidbody2D rb2D;
+    //private Rigidbody2D rb2D;
     private Transform target;
     private Vector2[] directions = new Vector2[8];
     private Vector3 bestPath;
     private RaycastHit2D[] hits = new RaycastHit2D[8];
     private Vector2[] safePaths = new Vector2[8];
     private float speed;
-    private float minRange = 1.5f;
-    private float maxRange = 6;
+    //private float minRange = 1.5f;
+    //private float maxRange = 6;
     public float offset;
     private float[] ranges = new float[8];
     private bool check;
@@ -35,14 +36,12 @@ public class EnemyAIRaycast : MonoBehaviour {
     private void Start()
     {
         ai = GetComponent<EnemyAI>();
-        rb2D = GetComponent<Rigidbody2D>();
+        //rb2D = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         SetDirection();
 
         target = ai.target;
         speed = ai.speed;
-        maxRange = ai.maxDist;
-        minRange = ai.minDist;
 
         alternadPaths[0] = 4;
         alternadPaths[1] = 5;
@@ -62,7 +61,7 @@ public class EnemyAIRaycast : MonoBehaviour {
 
         float range = Vector2.Distance(transform.position, target.position);
 
-        if (range < maxRange && range > minRange && !ai.isAttacking && ai.isWalking)
+        if (range < ai.maxDist && range > ai.minDist && !ai.isAttacking && ai.isWalking && !ai.isDead)
         {
             if (coroutineStarted == false)
             {
@@ -73,15 +72,15 @@ public class EnemyAIRaycast : MonoBehaviour {
             transform.position = Vector2.MoveTowards(transform.position, bestPath, speed * Time.deltaTime);
         }
 
-        if (!ai.isAttacking && range < maxRange)
+        if (!ai.isAttacking && range < ai.maxDist)
         {
             CheckBestPath();
             SetFacingToPlayer();
         }
 
-        if(target.tag != "Player" && range > minRange && !ai.isDead)
+        if (target.tag != "Player" && range > ai.minDist && !ai.isDead)
         {
-            if (range > minRange)
+            if (range > ai.minDist)
             {
                 if (coroutineStarted == false)
                 {
@@ -142,7 +141,7 @@ public class EnemyAIRaycast : MonoBehaviour {
             StopCoroutine("CheckBestPath");
             yield return null;
         }
-        
+
 
         float calcMin = Mathf.Min(ranges[0], ranges[1], ranges[2], ranges[3], ranges[4], ranges[5], ranges[6], ranges[7]);
 
@@ -172,10 +171,10 @@ public class EnemyAIRaycast : MonoBehaviour {
         directions[3] = new Vector2(-offset, offset);
         directions[4] = new Vector2(-offset, 0);
         directions[5] = new Vector2(-offset, -offset);
-        directions[6] = new Vector2(0,-offset);
+        directions[6] = new Vector2(0, -offset);
         directions[7] = new Vector2(offset, -offset);
     }
-    
+
     private bool IsAllDirectionsSafe()
     {
         for (int i = 0; i < hits.Length; i++)
@@ -193,7 +192,7 @@ public class EnemyAIRaycast : MonoBehaviour {
     {
         if (bestPath.x > transform.position.x && Mathf.Abs(bestPath.x - transform.position.x) > Mathf.Abs(bestPath.y - transform.position.y))
         {
-            Debug.Log("Right");
+            //Debug.Log("Right");
             GetComponent<SpriteRenderer>().flipX = true; // Remove after put a new animation with all 4 way move
             x = 1;
             y = 0;
@@ -201,7 +200,7 @@ public class EnemyAIRaycast : MonoBehaviour {
 
         else if (bestPath.x < transform.position.x && Mathf.Abs(bestPath.x - transform.position.x) > Mathf.Abs(bestPath.y - transform.position.y))
         {
-            Debug.Log("Left");
+            //Debug.Log("Left");
             GetComponent<SpriteRenderer>().flipX = false; // Remove after put a new animation with all 4 way move
             x = -1;
             y = 0;
@@ -209,14 +208,14 @@ public class EnemyAIRaycast : MonoBehaviour {
 
         else if (bestPath.y > transform.position.y && Mathf.Abs(bestPath.y - transform.position.y) > Mathf.Abs(bestPath.x - transform.position.x))
         {
-            Debug.Log("Up");
+            //Debug.Log("Up");
             y = 1;
             x = 0;
         }
 
         else if (bestPath.y < transform.position.y && Mathf.Abs(bestPath.y - transform.position.y) > Mathf.Abs(bestPath.x - transform.position.x))
         {
-            Debug.Log("Down");
+            //Debug.Log("Down");
             y = -1;
             x = 0;
         }
@@ -227,10 +226,8 @@ public class EnemyAIRaycast : MonoBehaviour {
         target = newTarget;
     }
 
-    public void ChangeDistAndSpeed(float newMaxDist, float newMinDist, float newSpeed)
+    public void ChangeDistAndSpeed(float newSpeed)
     {
         speed = newSpeed;
-        maxRange = newMaxDist;
-        minRange = newMinDist;
     }
 }

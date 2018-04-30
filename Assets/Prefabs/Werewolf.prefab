@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 224447766165722556}
   - component: {fileID: 222345306193096654}
   - component: {fileID: 114653784156958138}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 224015170331702332}
   - component: {fileID: 222895699177323230}
   - component: {fileID: 114311234888841814}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,9 +62,25 @@ GameObject:
   - component: {fileID: 61450830221879106}
   - component: {fileID: 114050550958038344}
   - component: {fileID: 50112620629135110}
-  m_Layer: 0
+  - component: {fileID: 114979536764497966}
+  m_Layer: 8
   m_Name: Werewolf
   m_TagString: Enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1510451821781314
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4820444802358276}
+  m_Layer: 0
+  m_Name: RaySpawn
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -79,7 +95,7 @@ GameObject:
   - component: {fileID: 224624892744131498}
   - component: {fileID: 222912250057296726}
   - component: {fileID: 114080961849733518}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +113,7 @@ GameObject:
   - component: {fileID: 223159629059932330}
   - component: {fileID: 114358465086211798}
   - component: {fileID: 114425909671087970}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,12 +127,26 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1414377439488890}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.6183414, y: -1.4836046, z: 0.171875}
+  m_LocalPosition: {x: 5.461646, y: -1.5295542, z: 0.171875}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224252099727499356}
+  - {fileID: 4820444802358276}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4820444802358276
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1510451821781314}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.084, y: -0.643, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4685960045148742}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &50112620629135110
 Rigidbody2D:
@@ -175,8 +205,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.052733604, y: -0.49247718}
-  m_Size: {x: 1.1284986, y: 0.91844463}
+  m_Offset: {x: -0.03647643, y: -0.4437045}
+  m_Size: {x: 0.97676635, y: 0.7341959}
   m_Direction: 1
 --- !u!95 &95708350233561824
 Animator:
@@ -323,7 +353,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 484e2ee0f51af834bba02a3b4b9feb82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxDist: 0
+  minDist: 0
   isAttacking: 0
+  isWalking: 0
+  isDead: 0
   spawn: {fileID: 0}
   target: {fileID: 0}
   speed: 3.5
@@ -375,6 +409,21 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114979536764497966
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1414377439488890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 062f59f7c099f1045a86455a91ed23e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raySpawn: {fileID: 4820444802358276}
+  maxDistRay: 2
+  lastPath: 10
+  offset: 2
 --- !u!212 &212629596811267384
 SpriteRenderer:
   m_ObjectHideFlags: 1

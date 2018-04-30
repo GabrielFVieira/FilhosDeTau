@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAI : MonoBehaviour {
+public class EnemyAI : MonoBehaviour
+{
     private Animator anim;
     public float maxDist;
     public float minDist;
@@ -25,7 +26,8 @@ public class EnemyAI : MonoBehaviour {
 
     public AnimationClip attackAnim;
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         anim = GetComponent<Animator>();
         transform.position = spawn.position;
         target = GameObject.FindGameObjectWithTag("Player").transform;
@@ -35,9 +37,10 @@ public class EnemyAI : MonoBehaviour {
         colGO = null;
         speed = 3.5f;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         anim.SetBool("isWalking", isWalking);
         anim.SetBool("isAttacking", isAttacking);
         anim.SetFloat("x", x);
@@ -54,7 +57,7 @@ public class EnemyAI : MonoBehaviour {
         else if (range > minDist && target == spawn)
             isWalking = true;
 
-        if(anim.GetBool("Hurt") || anim.GetBool("isFurious"))
+        if (anim.GetBool("Hurt") || anim.GetBool("isFurious"))
         {
             isAttacking = false;
             isWalking = false;
@@ -65,7 +68,7 @@ public class EnemyAI : MonoBehaviour {
 
         if (timer >= attackAnim.length)
         {
-            if(colGO != null && isAttacking && isDead == false)
+            if (colGO != null && isAttacking && isDead == false)
                 colGO.GetComponent<PlayerHealth>().TakeDamage(dmg);
 
             isAttacking = false;
@@ -81,7 +84,7 @@ public class EnemyAI : MonoBehaviour {
         if (GetComponent<EnemyHealth>().curHealth < GetComponent<EnemyHealth>().maxHealth)
         {
             maxDist = 15;
-            GetComponent<EnemyAIRaycast>().ChangeDistAndSpeed(maxDist, minDist, speed);
+            GetComponent<EnemyAIRaycast>().ChangeDistAndSpeed(speed);
             GetComponent<EnemyHealth>().maxDistInv = 10;
         }
 
@@ -104,7 +107,7 @@ public class EnemyAI : MonoBehaviour {
                 GetComponent<EnemyAIRaycast>().SetNewTarget(spawn);
                 isWalking = true;
                 minDist = 0;
-                GetComponent<EnemyAIRaycast>().ChangeDistAndSpeed(maxDist, minDist, speed);
+                GetComponent<EnemyAIRaycast>().ChangeDistAndSpeed(speed);
             }
         }
     }

@@ -11,8 +11,9 @@ public class ItemPickUP : MonoBehaviour {
     public bool picked;
 
     public bool OnChest;
-	// Use this for initialization
-	void Start () {
+
+    // Use this for initialization
+    void Start () {
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 	}
 	
@@ -43,7 +44,7 @@ public class ItemPickUP : MonoBehaviour {
 
     private void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown(target.gameObject.GetComponent<PlayerMovement>().pursuitButton))
         {
             if (OnChest)
                 PickUP();

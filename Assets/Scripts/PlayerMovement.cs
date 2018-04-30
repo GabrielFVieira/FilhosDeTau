@@ -12,6 +12,15 @@ public class PlayerMovement : MonoBehaviour
     public bool pursuit;
     public Transform item;
     public GameObject aim;
+    public GameObject hit;
+    public string activeWeapon;
+    public GameObject inventory;
+
+    public KeyCode attackButton;
+    public KeyCode pursuitButton;
+    public KeyCode rollButton;
+    public KeyCode runButton;
+    public KeyCode magicButton;
     #endregion
 
     #region Private Variables
@@ -57,8 +66,6 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 mousePos;
     #endregion
 
-
-
     // Use this for initialization
     void Start()
     {
@@ -96,9 +103,8 @@ public class PlayerMovement : MonoBehaviour
 
         mousePos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
         bool mouseLook = true;
-        //////////// READ THE INPUTS //////////////////
 
-
+        #region Read The Inputs
         if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0 && anim.GetBool("isAttacking") == false && anim.GetBool("isAiming") == false && anim.GetBool("isMagicActive") == false && !roll && anim.GetBool("PickUp") == false)
         {
             isWalking = false;
@@ -116,45 +122,55 @@ public class PlayerMovement : MonoBehaviour
             mouseLook = false;
         }
 
+        //Read Pursuit Item Input
         if (pursuit && item != null && anim.GetBool("PickUp") == false)
             PursuitItem(item);
 
         if (!pursuit)
         {
-            if (Input.GetKeyDown(KeyCode.LeftShift) && !isMagicActive && !isAiming && !isAttacking && !die && !controlSlow && energy > 0)
+            //Read Run Input True
+            if (Input.GetKeyDown(runButton) && !isMagicActive && 
+                !isAiming && !isAttacking && !die && !controlSlow && energy > 0)
                 run = true;
 
-            if (Input.GetKeyUp(KeyCode.LeftShift) || energy <= 0)
+            //Read Run Input False
+            if (Input.GetKeyUp(runButton) || energy <= 0)
             {
                 anim.speed = 1;
                 run = false;
             }
 
-            if (Input.GetKeyDown(KeyCode.Space) && !isMagicActive && !isAiming && !isAttacking && !roll && !die && isWalking && energy > rollEnergyConsum && anim.GetBool("PickUp") == false)
+            //Read Roll Input
+            if (Input.GetKeyDown(rollButton) && !isMagicActive && !isAiming &&
+                !isAttacking && !roll && !die && isWalking && energy > rollEnergyConsum && anim.GetBool("PickUp") == false)
                 roll = true;
 
-            if (Input.GetMouseButtonDown(0) && !isMagicActive && !isAiming && !roll && !die && !isAttacking && anim.GetBool("PickUp") == false)
+            //Read Attack Input
+            if (Input.GetKeyDown(attackButton) && !isMagicActive && !isAiming && !roll &&
+                !die && !isAttacking && anim.GetBool("PickUp") == false && inventory.activeSelf == false)
             {
                 anim.speed = 1;
-                isAttacking = true;
                 controle = true;
+
+                if(activeWeapon == "PokeBall")
+                    isAttacking = true;
+
+                else if (activeWeapon == "Arrow" && ammo > 0)
+                    isAiming = true;
             }
 
-            if (Input.GetKeyDown(KeyCode.V) && !isAttacking && !isAiming && !roll && !die && !isMagicActive && anim.GetBool("PickUp") == false)
+            //Read Magic Input
+            if (Input.GetKeyDown(magicButton) && !isAttacking && !isAiming && !roll &&
+                !die && !isMagicActive && anim.GetBool("PickUp") == false)
             {
                 anim.speed = 1;
                 isMagicActive = true;
                 controle = true;
             }
-
-            if (Input.GetKeyDown(KeyCode.Z) && !isAttacking && !isMagicActive && !roll && !die && !isAiming && ammo > 0 && anim.GetBool("PickUp") == false)
-            {
-                anim.speed = 1;
-                isAiming = true;
-                controle = true;
-            }
         }
-        ///////////////////////// SET ANIMATIONS //////////////////////
+        #endregion
+
+        #region Set Animations
         if (anim.GetBool("PickUp") == false)
         {
             if (roll)
@@ -176,7 +192,9 @@ public class PlayerMovement : MonoBehaviour
             anim.speed = 1;
             clawHUD.SetActive(false);
         }
+        #endregion
 
+        #region Set Movements Mechanics
         ///////////////// CLOSE ATTACK ////////////////
         if (isAttacking)
         {
@@ -198,11 +216,35 @@ public class PlayerMovement : MonoBehaviour
         //////////// PLAYER ROOL /////////////////
         if (roll)
         {
-            GetComponent<Collider2D>().enabled = false;
-            run = true;
-            if(rollTimer == 0)
+            //GetComponent<Collider2D>().enabled = false;
+
+            #region Define Roll Direction
+            int rolX;
+            int rolY;
+
+            if (x > 0)
+                rolX = 1;
+
+            else if (x < 0)
+                rolX = -1;
+
+            else
+                rolX = 0;
+
+            if (y > 0)
+                rolY = 1;
+
+            else if (y < 0)
+                rolY = -1;
+
+            else
+                rolY = 0;
+
+            #endregion
+
+            if (rollTimer == 0)
             {
-                curAxis = new Vector2(x, y);
+                curAxis = new Vector2(rolX, rolY);
                 GetComponent<EnergyBar>().curEnergy -= rollEnergyConsum;
             }
 
@@ -211,22 +253,15 @@ public class PlayerMovement : MonoBehaviour
             rollTimer += Time.deltaTime;
             transform.Translate(curAxis.x * vel * 3f * Time.deltaTime, curAxis.y * vel * 3f * Time.deltaTime, 0);
 
-            if (rollTimer >= rollClip.length * 0.5f)
+            if (rollTimer >= rollClip.length * (1/anim.speed))
             {
                 anim.SetFloat("x", curAxis.x);
                 anim.SetFloat("y", curAxis.y);
                 roll = false;
                 rollTimer = 0;
                 anim.speed = 1f;
-                GetComponent<Collider2D>().enabled = true;
-
-                if (Input.GetKey(KeyCode.LeftShift))
-                    run = true;
-
-                else
-                    run = false;
+                //GetComponent<Collider2D>().enabled = true;
             }
-
         }
 
         ///////////////// WALK ///////////////
@@ -251,20 +286,14 @@ public class PlayerMovement : MonoBehaviour
         //////////// ATTACK DETECTION WHILE COLLIDING //////////////////
         if (colGO != null)
         {
-            float bigger = Mathf.Max(Mathf.Abs(anim.GetFloat("y")), Mathf.Abs(anim.GetFloat("x")));
-
-            if (colGO.transform.position.y > transform.position.y && anim.GetFloat("y") > 0 && Mathf.Abs(anim.GetFloat("y")) == bigger ||
-                colGO.transform.position.y < transform.position.y && anim.GetFloat("y") < 0 && Mathf.Abs(anim.GetFloat("y")) == bigger ||
-                colGO.transform.position.x > transform.position.x && anim.GetFloat("x") > 0 && Mathf.Abs(anim.GetFloat("x")) == bigger ||
-                colGO.transform.position.x < transform.position.x && anim.GetFloat("x") < 0 && Mathf.Abs(anim.GetFloat("x")) == bigger)
-            {
-                if (anim.GetBool("PickUp") == false && colGO.gameObject.tag == "Enemy" && isAttacking && controle && attackTimer >= (closeAttack.length / 5) * 4)
+                if (anim.GetBool("PickUp") == false && colGO.gameObject.tag == "Enemy" &&
+                    isAttacking && controle && attackTimer >= (closeAttack.length / 5) * 4)
                 {
                        colGO.GetComponent<EnemyHealth>().TakeDamage(dmg["Close"]);
                        controle = false;
-
+                       colGO = null;
                 }
-            }
+            
         }
 
         //////////// SLOW-PLAYER CONTROLLER /////////////////
@@ -281,21 +310,11 @@ public class PlayerMovement : MonoBehaviour
                 slowTimer = 0;
             }
         }
-    }
 
-    //////////// DETECT COLLISIONS /////////////////
-    private void OnTriggerStay2D(Collider2D col)
-    {
-        colGO = col.gameObject;
-    }
-
-    private void OnTriggerExit2D(Collider2D col)
-    {
-        colGO = null;
+        #endregion
     }
 
     //////////// SLOW THE PLAYER /////////////////
-
     public void SpeedDown(float slow, float time)
     {
         if (!controlSlow)
@@ -323,6 +342,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (attackTimer == 0)
         {
+            hit.transform.rotation = aim.transform.rotation;
+
+            if (attackName != "isAiming")
+                hit.GetComponent<BoxCollider2D>().enabled = true;
+
             aim.GetComponent<Aim>().canAim = false;
             x = (mousePos.x * 2) - 1;
             y = (mousePos.y * 2) - 1;
@@ -335,17 +359,20 @@ public class PlayerMovement : MonoBehaviour
 
         if (attackName == "isAiming" && attackTimer >= attackClipLenght - 0.2f && controlArrow)
         {
+            if (y > 0)
+                above = true;
+
             GameObject arrow = (GameObject)Instantiate(arrowPrefab, transform.position, aim.transform.rotation);
-            arrow.GetComponent<Arrow>().arrowVel = arrowVel;
-            arrow.GetComponent<Arrow>().dmg = dmg["Range"];
-            Inventory.instance.arrows -= 1;
-            if(above)
+
+            if (above)
                 arrow.GetComponent<SpriteRenderer>().sortingOrder = GetComponent<SpriteRenderer>().sortingOrder - 1;
 
             else
                 arrow.GetComponent<SpriteRenderer>().sortingOrder = GetComponent<SpriteRenderer>().sortingOrder + 1;
-                
-            above = false;
+
+            arrow.GetComponent<Arrow>().arrowVel = arrowVel;
+            arrow.GetComponent<Arrow>().dmg = dmg["Range"];
+            Inventory.instance.arrows -= 1;
             controlArrow = false;
         }
 
@@ -359,6 +386,8 @@ public class PlayerMovement : MonoBehaviour
         attackTimer = 0;
         anim.SetBool(attackName, attackType);
         aim.GetComponent<Aim>().canAim = true;
+        hit.GetComponent<BoxCollider2D>().enabled = false;
+        hit.GetComponent<HitCollider>().colliding = false;
         StopAllCoroutines();
     }
 
@@ -367,25 +396,28 @@ public class PlayerMovement : MonoBehaviour
         float xP = 0;
         float yP = 0;
 
-        if (target.position.x > transform.position.x && Mathf.Abs(target.transform.position.x - transform.position.x) > Mathf.Abs(target.transform.position.y - transform.position.y))
+        float offsetX = Mathf.Abs(target.transform.position.x - transform.position.x);
+        float offsetY = Mathf.Abs(target.transform.position.y - transform.position.y);
+
+        if (target.position.x > transform.position.x && offsetX > offsetY)
         {
             xP = 1;
             yP = 0;
         }
 
-        else if (target.position.x < transform.position.x && Mathf.Abs(target.transform.position.x - transform.position.x) > Mathf.Abs(target.transform.position.y - transform.position.y))
+        else if (target.position.x < transform.position.x && offsetX > offsetY)
         {
             xP = -1;
             yP = 0;
         }
 
-        else if (target.position.y > transform.position.y && Mathf.Abs(target.transform.position.y - transform.position.y) > Mathf.Abs(target.transform.position.x - transform.position.x))
+        else if (target.position.y > transform.position.y && offsetY > offsetX)
         {
             yP = 1;
             xP = 0;
         }
 
-        else if (target.position.y < transform.position.y && Mathf.Abs(target.transform.position.y - transform.position.y) > Mathf.Abs(target.transform.position.x - transform.position.x))
+        else if (target.position.y < transform.position.y && offsetY > offsetX)
         {
             yP = -1;
             xP = 0;
@@ -420,7 +452,6 @@ public class PlayerMovement : MonoBehaviour
             item.GetComponent<ItemPickUP>().picked = true;
 
         anim.SetBool("PickUp", false);
-        //pickUPRunning = false;
         StopCoroutine("PickUPWait");
     }
 }
