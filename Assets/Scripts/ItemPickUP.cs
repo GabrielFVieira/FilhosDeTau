@@ -12,6 +12,7 @@ public class ItemPickUP : MonoBehaviour {
 
     public bool OnChest;
 
+    public bool clicked;
     // Use this for initialization
     void Start () {
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
@@ -31,14 +32,34 @@ public class ItemPickUP : MonoBehaviour {
 
     void PickUP()
     {
+        if(item.name == "Arrow")
+        {
+            for(int i = 0; i < Inventory.instance.items.Count; i++)
+            {
+                if(Inventory.instance.items[i].name == "Arrow")
+                {
+                    Inventory.instance.arrows += 1;
+                    i = Inventory.instance.items.Count;
+                    Destroy(gameObject);
+                    return;
+                }
+            }
+
+        }
+
         //Debug.Log("Picking up " + item.name);
         bool wasPickedUp = Inventory.instance.Add(item);
 
         if (wasPickedUp)
         {
-            FindObjectOfType<InventoryUI>().inventoryUI.SetActive(true);
+            if(item.name != "Arrow")
+                FindObjectOfType<InventoryUI>().inventoryUI.SetActive(true);
+
             Destroy(gameObject);
         }
+
+        else
+            FindObjectOfType<InventoryUI>().inventoryUI.SetActive(true);
 
     }
 

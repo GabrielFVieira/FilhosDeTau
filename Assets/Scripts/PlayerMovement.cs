@@ -426,6 +426,15 @@ public class PlayerMovement : MonoBehaviour
         anim.SetFloat("x", xP);
         anim.SetFloat("y", yP);
 
+        // ITEM BELOW PLAYER
+        if (item.GetComponent<ItemPickUP>().range == 0 && item.GetComponent<ItemPickUP>().clicked == false)
+        {
+            pickUPRunning = false;
+            item.GetComponent<ItemPickUP>().clicked = true;
+            anim.SetFloat("x", 0);
+            anim.SetFloat("y", 1);
+        }
+
         if (item.GetComponent<ItemPickUP>().range > 0.6f)
         {
 

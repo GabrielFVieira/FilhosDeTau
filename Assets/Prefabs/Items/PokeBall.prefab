@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4205635553637826}
   - component: {fileID: 212333835744127298}
   - component: {fileID: 114114975729944766}
+  - component: {fileID: 114763494950439874}
   - component: {fileID: 58798554780989220}
   m_Layer: 0
   m_Name: PokeBall
@@ -72,6 +73,18 @@ MonoBehaviour:
   item: {fileID: 11400000, guid: 04142543a62659349af5f5ccd58d2253, type: 2}
   picked: 0
   OnChest: 0
+--- !u!114 &114763494950439874
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1155539933341086}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a4dd802533efd44c84ddad43a84c99e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: 0
 --- !u!212 &212333835744127298
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -103,9 +116,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1479526557
-  m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: e1863266f5ca75b46971f072f1746af4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

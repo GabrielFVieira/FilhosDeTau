@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4788853958776578}
   - component: {fileID: 212706707660264278}
   - component: {fileID: 114163601474571572}
+  - component: {fileID: 114487027366051466}
   - component: {fileID: 61746628496332480}
   m_Layer: 0
   m_Name: Gold Ring
@@ -82,6 +83,18 @@ MonoBehaviour:
   item: {fileID: 11400000, guid: 880d9a15e740e584b8a32a038c3e6ace, type: 2}
   picked: 0
   OnChest: 0
+--- !u!114 &114487027366051466
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1835990890019110}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a4dd802533efd44c84ddad43a84c99e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: 0
 --- !u!212 &212706707660264278
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -115,7 +128,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 322b11fc6ae40ef489c9d78b4ece0a85, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

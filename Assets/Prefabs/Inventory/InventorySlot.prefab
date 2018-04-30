@@ -173,6 +173,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 114735610254902978}
   removeButton: {fileID: 114472287871923084}
+  itens:
+  - {fileID: 1719293004496776, guid: 9d5c26fccd21ab24da270dd9cf6561e9, type: 2}
+  - {fileID: 1232796916467530, guid: f8d8424a2bc53914ca96ef9bd7e734a4, type: 2}
+  - {fileID: 1708781618436458, guid: 266afdbd86bc5c0459d3100103033fac, type: 2}
+  - {fileID: 1835990890019110, guid: 52f35f3e14b9dec428d79467872dba90, type: 2}
+  - {fileID: 1611412117644512, guid: 2bd07aec0b283ce4fa30ea42fa275800, type: 2}
+  - {fileID: 1085573200402902, guid: 864122db635d8ad42b53a94c57b42c5c, type: 2}
+  - {fileID: 1462835214336016, guid: f5637e5eff9d87a4faf1d7f99788b210, type: 2}
+  - {fileID: 1911936086119440, guid: 59a3f9ac20a69c54bbcee948e6b690df, type: 2}
+  - {fileID: 1092934010151924, guid: 84ad8193f08cee046af8c1283fccda30, type: 2}
+  - {fileID: 1890395170745270, guid: e31fbc2617636e44b9792978b0a8b724, type: 2}
+  - {fileID: 1155539933341086, guid: cadb2e767b14d714a870e0e389bc6405, type: 2}
+  - {fileID: 1263629867373990, guid: 5db63fb3016872443b6bd403f03fe816, type: 2}
 --- !u!114 &114731182180911948
 MonoBehaviour:
   m_ObjectHideFlags: 1

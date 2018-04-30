@@ -75,10 +75,14 @@ public class EquipmentManager : MonoBehaviour {
 
     public void UnequipAll()
     {
-        for(int i = 0; i < currentEquipment.Length; i++)
-        {
-            Unequip(i);
-        }
+
+            for (int i = 0; i < currentEquipment.Length; i++)
+            {
+                if (Inventory.instance.space - Inventory.instance.items.Count > 0)
+                {
+                    Unequip(i);
+                }
+            }
     }
 
     private void Update()

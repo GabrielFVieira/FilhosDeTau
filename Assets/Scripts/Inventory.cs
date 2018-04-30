@@ -29,19 +29,30 @@ public class Inventory : MonoBehaviour {
 
     public int arrows;
 
+    public bool removeAll;
+
     public Text description;
 
     public List<ItemScript> items = new List<ItemScript>();
 
     public void Update()
     {
-        if(arrows == 0 && items.Count > 0)
+        if(arrows == 0 && items.Count > 0 && !removeAll)
         {
-            foreach (ItemScript i in items)
+            for(int i = 0; i < items.Count; i++)
             {
-                if (i.name == "Arrow")
-                    Remove(i);
+                if (items[i].name == "Arrow")
+                {
+                    Remove(items[i]);
+                    i = items.Count;
+                }
             }
+        }
+
+        if (items.Count == 0)
+        {
+            removeAll = false;
+            arrows = 0;
         }
     }
 
@@ -91,14 +102,17 @@ public class Inventory : MonoBehaviour {
     }
 
     public void RemoveAll()
-    {
+    {/*
         int max = items.Count;
 
         for (int i = 0; i < max; i++)
         {
             items.Remove(items[0]);
-        }
-        arrows = 0;
+        }*/
+
+        removeAll = true;
+
+        //arrows = 0;
 
         if (onIntemChangedCallback != null)
             onIntemChangedCallback.Invoke();
