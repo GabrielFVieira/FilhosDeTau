@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
@@ -10,8 +11,18 @@ public class GameManager : MonoBehaviour {
     public GameObject player;
 
     public SaveGame save;
+
+    public List<KeyCode> buttons = new List<KeyCode>();
+    public Button[] keyButtons;
+    public Text[] keyButtonsText;
+
+    public bool changeActive;
+    public int i;
+    public GameObject buttonWarning;
     // Use this for initialization
     void Start () {
+
+        buttonWarning.SetActive(false);
         if (GameObject.FindObjectsOfType<GameManager>().Length > 1)
             Destroy(gameObject);
 
@@ -45,6 +56,44 @@ public class GameManager : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.R) && player != null)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        if(changeActive)
+        {
+            foreach (KeyCode key in System.Enum.GetValues(typeof(KeyCode)))
+            {
+                if (Input.GetKeyUp(key))
+                {
+                    if (buttons.Contains(key) == false || buttons[i] == key)
+                    {
+                        buttons[i] = key;
+                        keyButtonsText[i].text = key.ToString();
+                        foreach (Button b in keyButtons)
+                            b.interactable = true;
+                        changeActive = false;
+
+                        buttonWarning.SetActive(false);
+                    }
+
+                    else
+                        buttonWarning.SetActive(true);
+                }
+            }
+        }
+    }
+    public void ChangeButton(int buttonIndex)
+    {
+        if (keyButtons[buttonIndex].interactable)
+        {
+            if (!changeActive)
+            {
+                foreach (Button b in keyButtons)
+                    b.interactable = false;
+
+                i = buttonIndex;
+                keyButtonsText[i].text = "Press any button";
+                changeActive = true;
+            }
         }
     }
 
