@@ -20,8 +20,8 @@ public class MenuManager : MonoBehaviour {
 
     private int iter = 0;
 
-
     public List<KeyCode> buttons = new List<KeyCode>();
+    public List<KeyCode> defaultButtons = new List<KeyCode>();
     public Button[] keyButtons;
     public Text[] keyButtonsText;
 
@@ -74,8 +74,7 @@ public class MenuManager : MonoBehaviour {
             manager = GameObject.Find("MenuManager").GetComponent<GameManager>();
 
         loadButton.interactable = manager.haveSave;
-
-
+        
         #region Change Controller
         if (changeActive)
         {
@@ -96,6 +95,7 @@ public class MenuManager : MonoBehaviour {
                                 b.interactable = true;
                             changeActive = false;
                             timer = 0;
+                            GetComponent<SaveConfigs>().SetNewControls();
                             buttonWarning.SetActive(false);
                         }
 
@@ -113,6 +113,16 @@ public class MenuManager : MonoBehaviour {
         {
             keyButtonsText[i].text = buttons[i].ToString();
         }
+    }
+
+    public void ResetControls()
+    {
+        for (int i = 0; i < buttons.Count; i++)
+        {
+            buttons[i] = defaultButtons[i];
+        }
+        RefreshButtonNames();
+        GetComponent<SaveConfigs>().SetNewControls();
     }
 
     public void LoadSave()

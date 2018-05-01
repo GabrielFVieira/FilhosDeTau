@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         menu = GameObject.FindObjectOfType<MenuManager>();
-        menu.buttons = buttons;
+        //menu.buttons = buttons;
 
         if (GameObject.FindObjectsOfType<GameManager>().Length > 1)
             Destroy(gameObject);
@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
         if (menu == null && SceneManager.GetActiveScene().name == "Menu")
         {
             menu = GameObject.FindObjectOfType<MenuManager>();
-            menu.buttons = buttons;
+            //menu.buttons = buttons;
             menu.RefreshButtonNames();
         }
 

@@ -12,8 +12,8 @@ public class SaveGame {
     public int ammo;
     public float playerHealth;
     public float playerEnergy;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
