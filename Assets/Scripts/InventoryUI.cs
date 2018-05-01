@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class InventoryUI : MonoBehaviour {
 
+    [HideInInspector]
+    public bool canOpenInv;
+
     public Transform itemsParent;
     public GameObject inventoryUI;
 
@@ -11,8 +14,17 @@ public class InventoryUI : MonoBehaviour {
 
     InventorySlot[] slots;
 
+    private GameManager manager;
+    [SerializeField]
+    private KeyCode invButton;
 	// Use this for initialization
 	void Start () {
+        if (FindObjectOfType<GameManager>() != null)
+        {
+            manager = FindObjectOfType<GameManager>();
+            invButton = manager.buttons[8];
+        }
+
         inventory = Inventory.instance;
         inventory.onIntemChangedCallback += UpdateUI;
 
@@ -23,7 +35,7 @@ public class InventoryUI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetButtonDown("Inventory"))
+		if(Input.GetKeyDown(invButton) && canOpenInv)
         {
             inventoryUI.SetActive(!inventoryUI.activeSelf);
         }

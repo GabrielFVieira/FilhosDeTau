@@ -1095,7 +1095,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1112,7 +1112,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 253590655}
+      - m_Target: {fileID: 309467527}
         m_MethodName: ChangeButton
         m_Mode: 3
         m_Arguments:
@@ -1447,35 +1447,13 @@ MonoBehaviour:
   player: {fileID: 0}
   save:
     playerPos: {x: 0, y: 0, z: 0}
+    camPos: {x: 0, y: 0, z: 0}
     ammo: 0
     playerHealth: 0
     playerEnergy: 0
   buttons: 7700000073000000610000006400000030010000430100004401000020000000690000006d000000
-  keyButtons:
-  - {fileID: 153862595}
-  - {fileID: 1211753231}
-  - {fileID: 519857565}
-  - {fileID: 1014753109}
-  - {fileID: 981898350}
-  - {fileID: 692715256}
-  - {fileID: 1279062296}
-  - {fileID: 1846293939}
-  - {fileID: 937661158}
-  - {fileID: 866484802}
-  keyButtonsText:
-  - {fileID: 354675916}
-  - {fileID: 1121866401}
-  - {fileID: 1112085645}
-  - {fileID: 107692109}
-  - {fileID: 2145585788}
-  - {fileID: 409633206}
-  - {fileID: 803462711}
-  - {fileID: 361678413}
-  - {fileID: 616294495}
-  - {fileID: 770164111}
-  changeActive: 0
-  i: 0
-  buttonWarning: {fileID: 1278068920}
+  menu: {fileID: 0}
+  haveSave: 0
 --- !u!1 &285654000
 GameObject:
   m_ObjectHideFlags: 0
@@ -1748,6 +1726,34 @@ MonoBehaviour:
   audioMixer: {fileID: 24100000, guid: aa59cfd91523b9546be3747f8e81783c, type: 2}
   resolutionsDropDown: {fileID: 1993052570}
   fullscreenToggle: {fileID: 2011214784}
+  buttons: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  keyButtons:
+  - {fileID: 153862595}
+  - {fileID: 1211753231}
+  - {fileID: 519857565}
+  - {fileID: 1014753109}
+  - {fileID: 981898350}
+  - {fileID: 692715256}
+  - {fileID: 1279062296}
+  - {fileID: 1846293939}
+  - {fileID: 937661158}
+  - {fileID: 866484802}
+  keyButtonsText:
+  - {fileID: 354675916}
+  - {fileID: 1121866401}
+  - {fileID: 1112085645}
+  - {fileID: 107692109}
+  - {fileID: 2145585788}
+  - {fileID: 409633206}
+  - {fileID: 803462711}
+  - {fileID: 361678413}
+  - {fileID: 616294495}
+  - {fileID: 770164111}
+  changeActive: 0
+  i: 0
+  buttonWarning: {fileID: 1278068920}
+  timer: 0
+  loadButton: {fileID: 368606278}
 --- !u!1 &333690666
 GameObject:
   m_ObjectHideFlags: 0
@@ -2652,7 +2658,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -2669,7 +2675,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 253590655}
+      - m_Target: {fileID: 309467527}
         m_MethodName: ChangeButton
         m_Mode: 3
         m_Arguments:
@@ -3320,7 +3326,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -3337,7 +3343,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 253590655}
+      - m_Target: {fileID: 309467527}
         m_MethodName: ChangeButton
         m_Mode: 3
         m_Arguments:
@@ -4077,7 +4083,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -4094,7 +4100,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 253590655}
+      - m_Target: {fileID: 309467527}
         m_MethodName: ChangeButton
         m_Mode: 3
         m_Arguments:
@@ -4552,7 +4558,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -4569,7 +4575,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 253590655}
+      - m_Target: {fileID: 309467527}
         m_MethodName: ChangeButton
         m_Mode: 3
         m_Arguments:
@@ -4816,7 +4822,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -4833,7 +4839,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 253590655}
+      - m_Target: {fileID: 309467527}
         m_MethodName: ChangeButton
         m_Mode: 3
         m_Arguments:
@@ -5109,7 +5115,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -5126,7 +5132,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 253590655}
+      - m_Target: {fileID: 309467527}
         m_MethodName: ChangeButton
         m_Mode: 3
         m_Arguments:
@@ -6115,7 +6121,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -6132,7 +6138,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 253590655}
+      - m_Target: {fileID: 309467527}
         m_MethodName: ChangeButton
         m_Mode: 3
         m_Arguments:
@@ -6312,7 +6318,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -6329,7 +6335,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 253590655}
+      - m_Target: {fileID: 309467527}
         m_MethodName: ChangeButton
         m_Mode: 3
         m_Arguments:
@@ -6930,7 +6936,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -126.01434, y: 0}
+  m_AnchoredPosition: {x: -126.01367, y: 0}
   m_SizeDelta: {x: 322.90002, y: 80.944}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1489540398
@@ -8619,7 +8625,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -8636,7 +8642,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 253590655}
+      - m_Target: {fileID: 309467527}
         m_MethodName: ChangeButton
         m_Mode: 3
         m_Arguments:

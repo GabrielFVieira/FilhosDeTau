@@ -16,9 +16,6 @@ public class EnemyAI : MonoBehaviour
     public float speed = 2f;
     private float range;
 
-    private float x;
-    private float y;
-
     public int dmg;
     private GameObject colGO;
     private float timer;
@@ -43,9 +40,6 @@ public class EnemyAI : MonoBehaviour
     {
         anim.SetBool("isWalking", isWalking);
         anim.SetBool("isAttacking", isAttacking);
-        anim.SetFloat("x", x);
-        anim.SetFloat("y", y);
-
         isDead = anim.GetBool("Died");
 
         if (Vector2.Distance(transform.position, target.position) > maxDist)

@@ -5,6 +5,19 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     #region Public Variables
+    [HideInInspector]
+    public bool canWalk;
+    [HideInInspector]
+    public bool canRun;
+    [HideInInspector]
+    public bool canAttack;
+    [HideInInspector]
+    public bool canRoll;
+    [HideInInspector]
+    public bool canUseMagic;
+    [HideInInspector]
+    public bool canPursuit;
+
     public int ammo;
     public int maxAmmo = 10;
     public GameObject colGO;
@@ -16,11 +29,8 @@ public class PlayerMovement : MonoBehaviour
     public string activeWeapon;
     public GameObject inventory;
 
-    public KeyCode attackButton;
     public KeyCode pursuitButton;
-    public KeyCode rollButton;
     public KeyCode runButton;
-    public KeyCode magicButton;
     #endregion
 
     #region Private Variables
@@ -64,11 +74,42 @@ public class PlayerMovement : MonoBehaviour
     private AnimationClip pickUPClip;
     private bool pickUPRunning;
     private Vector3 mousePos;
+
+    private GameManager manager;
+    [SerializeField]
+    private KeyCode upButton;
+    [SerializeField]
+    private KeyCode downButton;
+    [SerializeField]
+    private KeyCode leftButton;
+    [SerializeField]
+    private KeyCode rightButton;
+    [SerializeField]
+    private KeyCode attackButton;
+    [SerializeField]
+    private KeyCode rollButton;
+    [SerializeField]
+    private KeyCode magicButton;
     #endregion
 
+    #region Main Functions
     // Use this for initialization
     void Start()
     {
+        if (FindObjectOfType<GameManager>() != null)
+        {
+            manager = GameObject.FindObjectOfType<GameManager>();
+
+            upButton = manager.buttons[0];
+            downButton = manager.buttons[1];
+            leftButton = manager.buttons[2];
+            rightButton = manager.buttons[3];
+            runButton = manager.buttons[4];
+            attackButton = manager.buttons[5];
+            pursuitButton = manager.buttons[6];
+            rollButton = manager.buttons[7];
+            magicButton = manager.buttons[9];
+        }
         /////////// SET VARIABLES OF SOME ACTIONS ///////////
         //ammo = maxAmmo;
         clawHUD.SetActive(false);
@@ -99,75 +140,108 @@ public class PlayerMovement : MonoBehaviour
     {
         energy = GetComponent<EnergyBar>().curEnergy;
 
-        ammo = Inventory.instance.arrows;
-
         mousePos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
         bool mouseLook = true;
 
         #region Read The Inputs
-        if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0 && anim.GetBool("isAttacking") == false && anim.GetBool("isAiming") == false && anim.GetBool("isMagicActive") == false && !roll && anim.GetBool("PickUp") == false)
-        {
-            isWalking = false;
-            mouseLook = true;
-            x = (mousePos.x * 2) - 1;
-            y = (mousePos.y * 2) - 1;
-            anim.SetFloat("x", x);
-            anim.SetFloat("y", y);
-        }
 
-        else
-        {
-            x = Input.GetAxis("Horizontal");
-            y = Input.GetAxis("Vertical");
-            mouseLook = false;
-        }
+            if (Input.GetKey(leftButton) == false && Input.GetKey(rightButton) == false && Input.GetKey(upButton) == false && Input.GetKey(downButton) == false && anim.GetBool("isAttacking") == false && anim.GetBool("isAiming") == false && anim.GetBool("isMagicActive") == false && !roll && anim.GetBool("PickUp") == false)
+            {
+                isWalking = false;
+                mouseLook = true;
+                x = (mousePos.x * 2) - 1;
+                y = (mousePos.y * 2) - 1;
+                anim.SetFloat("x", x);
+                anim.SetFloat("y", y);
+            }
 
+            else
+            {
+                if (canWalk)
+                {
+                    // Up - Down
+                    if (Input.GetKey(leftButton) || Input.GetKey(rightButton))
+                    {
+                        if (Input.GetKey(leftButton) && Input.GetKey(rightButton) == false)
+                        {
+                            x = -1;
+                        }
+
+                        if (Input.GetKey(rightButton) && Input.GetKey(leftButton) == false)
+                        {
+                            x = 1;
+                        }
+                    }
+                    else
+                        x = 0;
+
+                    // Left - Right
+                    if (Input.GetKey(upButton) || Input.GetKey(downButton))
+                    {
+                        if (Input.GetKey(upButton) && Input.GetKey(downButton) == false)
+                        {
+                            y = 1;
+                        }
+
+                        if (Input.GetKey(downButton) && Input.GetKey(upButton) == false)
+                        {
+                            y = -1;
+                        }
+                    }
+                    else
+                        y = 0;
+
+                    //x = Input.GetAxis("Horizontal");
+                    //y = Input.GetAxis("Vertical");
+                    mouseLook = false;
+                }
+            }
         //Read Pursuit Item Input
-        if (pursuit && item != null && anim.GetBool("PickUp") == false)
-            PursuitItem(item);
+            if (pursuit && item != null && anim.GetBool("PickUp") == false && canPursuit)
+                PursuitItem(item);
 
-        if (!pursuit)
-        {
-            //Read Run Input True
-            if (Input.GetKeyDown(runButton) && !isMagicActive && 
-                !isAiming && !isAttacking && !die && !controlSlow && energy > 0)
-                run = true;
-
-            //Read Run Input False
-            if (Input.GetKeyUp(runButton) || energy <= 0)
+            if (!pursuit)
             {
-                anim.speed = 1;
-                run = false;
+                //Read Run Input True
+                if (Input.GetKeyDown(runButton) && !isMagicActive &&
+                    !isAiming && !isAttacking && !die && !controlSlow && energy > 0 && canRun)
+                    run = true;
+
+                //Read Run Input False
+                if (Input.GetKeyUp(runButton) || energy <= 0)
+                {
+                    anim.speed = 1;
+                    run = false;
+                }
+
+                //Read Roll Input
+                if (Input.GetKeyDown(rollButton) && !isMagicActive && !isAiming &&
+                    !isAttacking && !roll && !die && isWalking && energy > rollEnergyConsum && anim.GetBool("PickUp") == false && canRoll)
+                    roll = true;
+
+                //Read Attack Input
+                if (Input.GetKeyDown(attackButton) && !isMagicActive && !isAiming && !roll &&
+                    !die && !isAttacking && anim.GetBool("PickUp") == false && inventory.activeSelf == false && canAttack)
+                {
+                    anim.speed = 1;
+                    controle = true;
+
+                    if (activeWeapon == "PokeBall")
+                        isAttacking = true;
+
+                    else if (activeWeapon == "Arrow" && ammo > 0)
+                        isAiming = true;
+                }
+
+                //Read Magic Input
+                if (Input.GetKeyDown(magicButton) && !isAttacking && !isAiming && !roll &&
+                    !die && !isMagicActive && anim.GetBool("PickUp") == false && canUseMagic)
+                {
+                    anim.speed = 1;
+                    isMagicActive = true;
+                    controle = true;
+                }
             }
-
-            //Read Roll Input
-            if (Input.GetKeyDown(rollButton) && !isMagicActive && !isAiming &&
-                !isAttacking && !roll && !die && isWalking && energy > rollEnergyConsum && anim.GetBool("PickUp") == false)
-                roll = true;
-
-            //Read Attack Input
-            if (Input.GetKeyDown(attackButton) && !isMagicActive && !isAiming && !roll &&
-                !die && !isAttacking && anim.GetBool("PickUp") == false && inventory.activeSelf == false)
-            {
-                anim.speed = 1;
-                controle = true;
-
-                if(activeWeapon == "PokeBall")
-                    isAttacking = true;
-
-                else if (activeWeapon == "Arrow" && ammo > 0)
-                    isAiming = true;
-            }
-
-            //Read Magic Input
-            if (Input.GetKeyDown(magicButton) && !isAttacking && !isAiming && !roll &&
-                !die && !isMagicActive && anim.GetBool("PickUp") == false)
-            {
-                anim.speed = 1;
-                isMagicActive = true;
-                controle = true;
-            }
-        }
         #endregion
 
         #region Set Animations
@@ -313,7 +387,9 @@ public class PlayerMovement : MonoBehaviour
 
         #endregion
     }
+    #endregion
 
+    #region Other Functions
     //////////// SLOW THE PLAYER /////////////////
     public void SpeedDown(float slow, float time)
     {
@@ -372,7 +448,7 @@ public class PlayerMovement : MonoBehaviour
 
             arrow.GetComponent<Arrow>().arrowVel = arrowVel;
             arrow.GetComponent<Arrow>().dmg = dmg["Range"];
-            Inventory.instance.arrows -= 1;
+            ammo -= 1;
             controlArrow = false;
         }
 
@@ -469,4 +545,5 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool("PickUp", false);
         StopCoroutine("PickUPWait");
     }
+    #endregion
 }

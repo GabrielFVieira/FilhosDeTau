@@ -8,6 +8,7 @@ using System.IO;
 public class SaveGame {
     //public int playerAmmo;
     public Vector3 playerPos;
+    public Vector3 camPos;
     public int ammo;
     public float playerHealth;
     public float playerEnergy;

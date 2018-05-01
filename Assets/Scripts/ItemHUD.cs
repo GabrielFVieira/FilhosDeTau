@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using System;
 
 public class ItemHUD : MonoBehaviour {
+    [HideInInspector]
+    public bool canChangeWeapon;
+
     [SerializeField]
     private GameObject itemBox;
 
@@ -19,7 +22,7 @@ public class ItemHUD : MonoBehaviour {
 
     private PlayerMovement plMove;
 
-    public int curWeapon;
+    private int curWeapon;
 
 	// Use this for initialization
 	void Start () {
@@ -47,10 +50,18 @@ public class ItemHUD : MonoBehaviour {
     void Update () {
         itenAmount.text = "X" + plMove.ammo;
 
-        if (Input.GetAxis("Mouse ScrollWheel") > 0 && curWeapon < curItem.Length - 1)
-            curWeapon += 1;
+        if (canChangeWeapon)
+        {
+            itemBox.SetActive(true);
 
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0 && curWeapon > 0)
-            curWeapon -= 1;
+            if (Input.GetAxis("Mouse ScrollWheel") > 0 && curWeapon < curItem.Length - 1 || Input.GetKeyDown(KeyCode.Alpha2) && curWeapon < curItem.Length - 1)
+                curWeapon += 1;
+
+            else if (Input.GetAxis("Mouse ScrollWheel") < 0 && curWeapon > 0 || Input.GetKeyDown(KeyCode.Alpha1) && curWeapon > 0)
+                curWeapon -= 1;
+        }
+
+        else
+            itemBox.SetActive(false);
     }
 }

@@ -170,8 +170,9 @@ GameObject:
   - component: {fileID: 67279163}
   - component: {fileID: 67279162}
   - component: {fileID: 67279164}
+  - component: {fileID: 67279165}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: LevelManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -192,6 +193,7 @@ MonoBehaviour:
   arrows: 0
   removeAll: 0
   description: {fileID: 1811371466}
+  arrowItem: {fileID: 11400000, guid: 0e023537c625fb44fa92c44a25c1b001, type: 2}
   items: []
 --- !u!4 &67279163
 Transform:
@@ -218,6 +220,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipsParent: {fileID: 1360803480}
+--- !u!114 &67279165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 67279161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12d61d73246d90342b0b972c0b3ee022, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canWalk: 1
+  canRun: 1
+  canAttack: 1
+  canRoll: 1
+  canUseMagic: 1
+  canPursuit: 1
+  canChangeWeapon: 1
+  canOpenInv: 1
 --- !u!4 &78164741 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4677137526101370, guid: 3657228df6287cc48836493b5fdfd7b6,
@@ -26835,6 +26856,81 @@ Prefab:
       propertyPath: inventory
       value: 
       objectReference: {fileID: 1241181573}
+    - target: {fileID: 114355937860142454, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: upButton
+      value: 119
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355937860142454, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: downButton
+      value: 115
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355937860142454, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: leftButton
+      value: 97
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355937860142454, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: rightButton
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355937860142454, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: attackButton
+      value: 323
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355937860142454, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: rollButton
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355937860142454, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: runButton
+      value: 304
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355937860142454, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: magicButton
+      value: 109
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355937860142454, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: canPursuit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355937860142454, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: canUseMagic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355937860142454, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: canRoll
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355937860142454, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: canAttack
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355937860142454, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: canRun
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355937860142454, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: canWalk
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114322373364344236, guid: 288721ad577de204b9ecccbfb61c2209,
+        type: 2}
+      propertyPath: canChangeWeapon
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 288721ad577de204b9ecccbfb61c2209, type: 2}
   m_IsPrefabParent: 0
@@ -27839,8 +27935,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9774a8c418281a242abc72e6bbc11eb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canOpenInv: 1
   itemsParent: {fileID: 2141277844}
   inventoryUI: {fileID: 1241181573}
+  invButton: 105
 --- !u!1001 &2039246904
 Prefab:
   m_ObjectHideFlags: 0

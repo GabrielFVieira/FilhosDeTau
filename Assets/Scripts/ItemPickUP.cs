@@ -34,17 +34,9 @@ public class ItemPickUP : MonoBehaviour {
     {
         if(item.name == "Arrow")
         {
-            for(int i = 0; i < Inventory.instance.items.Count; i++)
-            {
-                if(Inventory.instance.items[i].name == "Arrow")
-                {
-                    Inventory.instance.arrows += 1;
-                    i = Inventory.instance.items.Count;
-                    Destroy(gameObject);
-                    return;
-                }
-            }
-
+            target.GetComponent<PlayerMovement>().ammo += 1;
+            Destroy(gameObject);
+            return;
         }
 
         //Debug.Log("Picking up " + item.name);

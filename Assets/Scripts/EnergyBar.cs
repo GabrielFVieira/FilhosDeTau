@@ -62,7 +62,7 @@ public class EnergyBar : MonoBehaviour {
             }
         }
 
-        if(Input.GetKey(KeyCode.LeftShift) && GetComponent<Animator>().GetBool("isWalking") || GetComponent<Animator>().GetBool("Roll"))
+        if(Input.GetKey(GetComponent<PlayerMovement>().runButton) && GetComponent<PlayerMovement>().canRun && GetComponent<Animator>().GetBool("isWalking") || GetComponent<Animator>().GetBool("Roll"))
         {
             rechargeTimer = 0;
         }

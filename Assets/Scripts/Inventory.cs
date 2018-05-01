@@ -27,8 +27,6 @@ public class Inventory : MonoBehaviour {
 
     public int space = 15;
 
-    public int arrows;
-
     public bool removeAll;
 
     public Text description;
@@ -37,7 +35,7 @@ public class Inventory : MonoBehaviour {
 
     public void Update()
     {
-        if(arrows == 0 && items.Count > 0 && !removeAll)
+        if(items.Count > 0 && !removeAll)
         {
             for(int i = 0; i < items.Count; i++)
             {
@@ -48,12 +46,12 @@ public class Inventory : MonoBehaviour {
                 }
             }
         }
-
+        /*
         if (items.Count == 0)
         {
             removeAll = false;
             arrows = 0;
-        }
+        }*/
     }
 
     public bool Add(ItemScript item)
@@ -64,20 +62,6 @@ public class Inventory : MonoBehaviour {
             {
                 Debug.Log("Not enough room.");
                 return false;
-            }
-
-            if (item.name == "Arrow")
-            {
-                if (arrows > 0)
-                {
-                    arrows += 1;
-                }
-
-                else
-                {
-                    arrows += 1;
-                    items.Add(item);
-                }
             }
 
             else
@@ -93,9 +77,6 @@ public class Inventory : MonoBehaviour {
     public void Remove(ItemScript item)
     {
         items.Remove(item);
-
-        if (item.name == "Arrow")
-            arrows = 0;
 
         if (onIntemChangedCallback != null)
             onIntemChangedCallback.Invoke();

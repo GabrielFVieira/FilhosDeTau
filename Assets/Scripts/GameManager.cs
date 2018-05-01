@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
     public string objetosalvo;
     public string caminho;
     public GameObject player;
@@ -13,16 +14,15 @@ public class GameManager : MonoBehaviour {
     public SaveGame save;
 
     public List<KeyCode> buttons = new List<KeyCode>();
-    public Button[] keyButtons;
-    public Text[] keyButtonsText;
+    public MenuManager menu;
 
-    public bool changeActive;
-    public int i;
-    public GameObject buttonWarning;
+    public bool haveSave;
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
+        menu = GameObject.FindObjectOfType<MenuManager>();
+        menu.buttons = buttons;
 
-        buttonWarning.SetActive(false);
         if (GameObject.FindObjectsOfType<GameManager>().Length > 1)
             Destroy(gameObject);
 
@@ -39,76 +39,59 @@ public class GameManager : MonoBehaviour {
             player = null;
         }
 
-        LoadState();
+        if (System.IO.File.Exists(Path.Combine(Application.persistentDataPath, "savegame.dat")))
+        {
+            LoadState();
+            haveSave = true;
+        }
+
+        else
+            haveSave = false;
     }
-	
-	// Update is called once per frame
-	void Update () {
-        if(player == null && GameObject.FindGameObjectWithTag("Player") != null)
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (player == null && GameObject.FindGameObjectWithTag("Player") != null)
             player = GameObject.FindGameObjectWithTag("Player");
+
+        if (menu == null && SceneManager.GetActiveScene().name == "Menu")
+        {
+            menu = GameObject.FindObjectOfType<MenuManager>();
+            menu.buttons = buttons;
+            menu.RefreshButtonNames();
+        }
+
+        if (menu != null)
+            buttons = menu.buttons;
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-                SaveState(false);
-                player = null;
-                SceneManager.LoadScene("Menu");
+            SaveState(false);
+            player = null;
+            haveSave = true;
+            SceneManager.LoadScene("Menu");
         }
+        /*
         if (Input.GetKeyDown(KeyCode.R) && player != null)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
-
-        if(changeActive)
-        {
-            foreach (KeyCode key in System.Enum.GetValues(typeof(KeyCode)))
-            {
-                if (Input.GetKeyUp(key))
-                {
-                    if (buttons.Contains(key) == false || buttons[i] == key)
-                    {
-                        buttons[i] = key;
-                        keyButtonsText[i].text = key.ToString();
-                        foreach (Button b in keyButtons)
-                            b.interactable = true;
-                        changeActive = false;
-
-                        buttonWarning.SetActive(false);
-                    }
-
-                    else
-                        buttonWarning.SetActive(true);
-                }
-            }
-        }
+        }*/
     }
-    public void ChangeButton(int buttonIndex)
-    {
-        if (keyButtons[buttonIndex].interactable)
-        {
-            if (!changeActive)
-            {
-                foreach (Button b in keyButtons)
-                    b.interactable = false;
-
-                i = buttonIndex;
-                keyButtonsText[i].text = "Press any button";
-                changeActive = true;
-            }
-        }
-    }
-
     public void SaveState(bool start)
     {
         save = new SaveGame();
         if (start == true) // Reset variables
         {
-            player.GetComponent<PlayerMovement>().ammo = player.GetComponent<PlayerMovement>().maxAmmo;       
+            player.GetComponent<PlayerMovement>().ammo = 0;
             player.transform.position = new Vector3();
+            GameObject.FindGameObjectWithTag("MainCamera").transform.position = new Vector3(0, 0, -10);
             player.GetComponent<PlayerHealth>().curHealth = player.GetComponent<PlayerHealth>().maxHealth;
             player.GetComponent<EnergyBar>().curEnergy = player.GetComponent<EnergyBar>().maxEnergy;
         }
         save.ammo = player.GetComponent<PlayerMovement>().ammo;
         save.playerPos = player.transform.position;
+        save.camPos = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
         save.playerHealth = player.GetComponent<PlayerHealth>().curHealth;
         save.playerEnergy = player.GetComponent<EnergyBar>().curEnergy;
 
@@ -119,8 +102,8 @@ public class GameManager : MonoBehaviour {
 
     public void LoadGame()
     {
-         SceneManager.LoadScene("Main");
-         StartCoroutine(WaitLoadScene(false));
+        SceneManager.LoadScene("Main");
+        StartCoroutine(WaitLoadScene(false));
     }
 
     public void LoadState()
@@ -144,16 +127,16 @@ public class GameManager : MonoBehaviour {
         {
             yield return null;
         }
-        if(newG == true) // Reset
+        if (newG == true) // Reset
             SaveState(true);
 
-        if(newG == false) // Load
+        if (newG == false) // Load
         {
             player.GetComponent<PlayerMovement>().ammo = save.ammo;
             player.transform.position = save.playerPos;
             player.GetComponent<PlayerHealth>().curHealth = save.playerHealth;
             player.GetComponent<EnergyBar>().curEnergy = save.playerEnergy;
-            GameObject.FindGameObjectWithTag("MainCamera").transform.position = new Vector3(save.playerPos.x, save.playerPos.y, GameObject.FindGameObjectWithTag("MainCamera").transform.position.z);
+            GameObject.FindGameObjectWithTag("MainCamera").transform.position = save.camPos;
         }
     }
 }
