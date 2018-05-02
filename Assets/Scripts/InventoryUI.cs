@@ -14,15 +14,22 @@ public class InventoryUI : MonoBehaviour {
 
     InventorySlot[] slots;
 
+    public bool hover;
     private GameManager manager;
     [SerializeField]
     private KeyCode invButton;
-	// Use this for initialization
-	void Start () {
+    [SerializeField]
+    private KeyCode selectButton;
+    [SerializeField]
+    private KeyCode rollButton;
+    // Use this for initialization
+    void Start () {
         if (FindObjectOfType<GameManager>() != null)
         {
             manager = FindObjectOfType<GameManager>();
             invButton = manager.buttons[8];
+            selectButton = manager.buttons[5];
+            rollButton = manager.buttons[7];
         }
 
         inventory = Inventory.instance;
@@ -40,8 +47,14 @@ public class InventoryUI : MonoBehaviour {
             inventoryUI.SetActive(!inventoryUI.activeSelf);
         }
 
-        if(inventoryUI.activeSelf == false)
+        if (Input.GetKeyDown(selectButton) && !hover || Input.GetKeyDown(rollButton))
+            inventoryUI.SetActive(false);
+
+        if (inventoryUI.activeSelf == false)
+        {
             inventory.description.text = "";
+            hover = false;
+        }
     }
 
     void UpdateUI()
@@ -70,5 +83,10 @@ public class InventoryUI : MonoBehaviour {
     public void ClearDescription()
     {
         inventory.description.text = "";
+    }
+
+    public void Selected(bool state)
+    {
+        hover = state;
     }
 }
