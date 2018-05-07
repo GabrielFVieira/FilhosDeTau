@@ -1727,8 +1727,8 @@ MonoBehaviour:
   audioMixer: {fileID: 24100000, guid: aa59cfd91523b9546be3747f8e81783c, type: 2}
   resolutionsDropDown: {fileID: 1993052570}
   fullscreenToggle: {fileID: 2011214784}
-  buttons: 7700000073000000610000006400000030010000430100004401000020000000690000006d000000
-  defaultButtons: 7700000073000000610000006400000030010000430100004401000020000000690000006d000000
+  buttons: 77000000730000006100000064000000300100004301000065000000200000006900000044010000
+  defaultButtons: 77000000730000006100000064000000300100004301000065000000200000006900000044010000
   keyButtons:
   - {fileID: 153862595}
   - {fileID: 1211753231}
@@ -3647,7 +3647,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: M
+  m_Text: Mouse1
 --- !u!1 &803462708
 GameObject:
   m_ObjectHideFlags: 0
@@ -3721,7 +3721,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: mouse1
+  m_Text: E
 --- !u!1 &831704839
 GameObject:
   m_ObjectHideFlags: 0

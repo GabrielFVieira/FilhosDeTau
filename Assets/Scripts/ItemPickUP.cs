@@ -11,8 +11,6 @@ public class ItemPickUP : MonoBehaviour {
     public bool picked;
 
     public bool OnChest;
-
-    public bool clicked;
     // Use this for initialization
     void Start () {
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
@@ -21,16 +19,9 @@ public class ItemPickUP : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         range = Vector2.Distance(transform.position, target.position);
-
-        if(target.GetComponent<PlayerMovement>().pursuit && range < 0.6f && target.GetComponent<PlayerMovement>().item == GetComponent<Transform>() && picked)
-        {
-            target.GetComponent<PlayerMovement>().pursuit = false;
-            target.GetComponent<PlayerMovement>().item = null;
-            PickUP();
-        }
     }
 
-    void PickUP()
+    public void PickUP()
     {
         if(item.name == "Arrow")
         {
@@ -53,20 +44,5 @@ public class ItemPickUP : MonoBehaviour {
         else
             FindObjectOfType<InventoryUI>().inventoryUI.SetActive(true);
 
-    }
-
-    private void OnMouseOver()
-    {
-        if (Input.GetKeyDown(target.gameObject.GetComponent<PlayerMovement>().pursuitButton))
-        {
-            if (OnChest)
-                PickUP();
-
-            else if (OnChest == false && target.GetComponent<Animator>().GetBool("PickUp") == false)
-            {
-                target.GetComponent<PlayerMovement>().pursuit = true;
-                target.GetComponent<PlayerMovement>().item = GetComponent<Transform>();
-            }
-        }
     }
 }

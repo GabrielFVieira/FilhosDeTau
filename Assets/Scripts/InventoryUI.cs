@@ -22,6 +22,8 @@ public class InventoryUI : MonoBehaviour {
     private KeyCode selectButton;
     [SerializeField]
     private KeyCode rollButton;
+    [SerializeField]
+    private KeyCode specialButton;
     // Use this for initialization
     void Start () {
         if (FindObjectOfType<GameManager>() != null)
@@ -30,6 +32,7 @@ public class InventoryUI : MonoBehaviour {
             invButton = manager.buttons[8];
             selectButton = manager.buttons[5];
             rollButton = manager.buttons[7];
+            specialButton = manager.buttons[9];
         }
 
         inventory = Inventory.instance;
@@ -47,7 +50,7 @@ public class InventoryUI : MonoBehaviour {
             inventoryUI.SetActive(!inventoryUI.activeSelf);
         }
 
-        if (Input.GetKeyDown(selectButton) && !hover || Input.GetKeyDown(rollButton))
+        if (Input.GetKeyDown(selectButton) && !hover || Input.GetKeyDown(rollButton) || Input.GetKeyDown(specialButton) && !hover)
             inventoryUI.SetActive(false);
 
         if (inventoryUI.activeSelf == false)
