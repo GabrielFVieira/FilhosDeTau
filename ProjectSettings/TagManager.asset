@@ -10,6 +10,7 @@ TagManager:
   - Canvas
   - ChestContainer
   - Itens
+  - ColTag
   layers:
   - Default
   - TransparentFX
