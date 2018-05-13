@@ -31,6 +31,8 @@ public class PlayerMovement : MonoBehaviour
 
     public KeyCode pursuitButton;
     public KeyCode runButton;
+
+    public float objectiveDist;
     #endregion
 
     #region Private Variables
@@ -93,12 +95,24 @@ public class PlayerMovement : MonoBehaviour
     private KeyCode rollButton;
     [SerializeField]
     private KeyCode magicButton;
+
+    private Vector2 velocity;
+    private Rigidbody2D rb2D;
+    private bool move;
+    private float moveModifier = 1;
+    private Vector2 velPos;
+    private Transform objective;
+    private bool walkToObjective;
     #endregion
 
     #region Main Functions
     // Use this for initialization
     void Start()
     {
+        objectiveDist = 10;
+        velocity = new Vector2(1.75f, 1.1f);
+        rb2D = gameObject.GetComponent<Rigidbody2D>();
+
         if (FindObjectOfType<GameManager>() != null)
         {
             manager = GameObject.FindObjectOfType<GameManager>();
@@ -164,7 +178,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (anim.GetBool("PickUp") == false)
         {
-            if (Input.GetKey(leftButton) == false && Input.GetKey(rightButton) == false && Input.GetKey(upButton) == false && Input.GetKey(downButton) == false && anim.GetBool("isAttacking") == false && anim.GetBool("isAiming") == false && anim.GetBool("isMagicActive") == false && !roll && anim.GetBool("PickUp") == false)
+            if (Input.GetKey(leftButton) == false && Input.GetKey(rightButton) == false && Input.GetKey(upButton) == false && Input.GetKey(downButton) == false && anim.GetBool("isAttacking") == false && anim.GetBool("isAiming") == false && anim.GetBool("isMagicActive") == false && !roll && anim.GetBool("PickUp") == false && walkToObjective == false)
             {
                 isWalking = false;
                 mouseLook = true;
@@ -308,73 +322,35 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(Attacks("isAiming", isAiming, rangedAttack.length));
         }
 
-        //////////// PLAYER ROOL /////////////////
-        if (roll)
-        {
-            //GetComponent<Collider2D>().enabled = false;
-
-            #region Define Roll Direction
-            int rolX;
-            int rolY;
-
-            if (x > 0)
-                rolX = 1;
-
-            else if (x < 0)
-                rolX = -1;
-
-            else
-                rolX = 0;
-
-            if (y > 0)
-                rolY = 1;
-
-            else if (y < 0)
-                rolY = -1;
-
-            else
-                rolY = 0;
-
-            #endregion
-
-            if (rollTimer == 0)
-            {
-                curAxis = new Vector2(rolX, rolY);
-                GetComponent<EnergyBar>().curEnergy -= rollEnergyConsum;
-            }
-
-            anim.speed = 2f;
-
-            rollTimer += Time.deltaTime;
-            transform.Translate(curAxis.x * vel * 3f * Time.deltaTime, curAxis.y * vel * 3f * Time.deltaTime, 0);
-
-            if (rollTimer >= rollClip.length * (1/anim.speed))
-            {
-                anim.SetFloat("x", curAxis.x);
-                anim.SetFloat("y", curAxis.y);
-                roll = false;
-                rollTimer = 0;
-                anim.speed = 1f;
-                //GetComponent<Collider2D>().enabled = true;
-            }
-        }
 
         ///////////////// WALK ///////////////
         if (isWalking && !isAttacking && !isMagicActive && !isAiming && !die && !roll && anim.GetBool("PickUp") == false)
         {
             if (run)
             {
-                Move(runVel);
-
+                //Move(runVel);
+                move = true;
+                moveModifier = runVel;
                 GetComponent<EnergyBar>().curEnergy -= 10 * Time.deltaTime;
             }
 
             else
             {
-                Move(1);
+                //Move(1);
+                move = true;
+                moveModifier = 1;
             }
+
+            anim.speed = moveModifier;
+            anim.SetFloat("x", x);
+            anim.SetFloat("y", y);
+
         }
 
+        else
+        {
+            move = false;
+        }
         //////////// ATTACK DETECTION WHILE COLLIDING //////////////////
         if (colGO != null)
         {
@@ -415,6 +391,118 @@ public class PlayerMovement : MonoBehaviour
         }
 
         #endregion
+
+        if(walkToObjective)
+        {
+            objectiveDist = Vector2.Distance(transform.position, objective.position);
+
+            if (objectiveDist > 0)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, objective.position, vel * Time.deltaTime);
+
+                int xObj = 0;
+                int yObj = 0;
+
+                if (objective.position.x > transform.position.x && Mathf.Abs(objective.position.x - transform.position.x) > Mathf.Abs(objective.position.y - transform.position.y))
+                {
+                    //Debug.Log("Right");
+                    xObj = 1;
+                    yObj = 0;
+                }
+
+                else if (objective.position.x < transform.position.x && Mathf.Abs(objective.position.x - transform.position.x) > Mathf.Abs(objective.position.y - transform.position.y))
+                {
+                    //Debug.Log("Left");
+                    xObj = -1;
+                    yObj = 0;
+                }
+
+                else if (objective.position.y > transform.position.y && Mathf.Abs(objective.position.y - transform.position.y) > Mathf.Abs(objective.position.x - transform.position.x))
+                {
+                    //Debug.Log("Up");
+                    yObj = 1;
+                    xObj = 0;
+                }
+
+                else if (objective.position.y < transform.position.y && Mathf.Abs(objective.position.y - transform.position.y) > Mathf.Abs(objective.position.x - transform.position.x))
+                {
+                    //Debug.Log("Down");
+                    yObj = -1;
+                    xObj = 0;
+                }
+                anim.speed = 1;
+                anim.SetFloat("x", xObj);
+                anim.SetFloat("y", yObj);
+
+            }
+
+            else
+                walkToObjective = false;
+        }
+    }
+
+
+    void FixedUpdate()
+    {
+        if (move)
+        {
+            velPos = new Vector2(x * vel * moveModifier, y * vel * moveModifier);
+            rb2D.MovePosition(rb2D.position + velPos * Time.fixedDeltaTime);
+        }
+
+        //////////// PLAYER ROOL /////////////////
+        if (roll)
+        {
+            //GetComponent<Collider2D>().enabled = false;
+
+            #region Define Roll Direction
+            int rolX;
+            int rolY;
+
+            if (x > 0)
+                rolX = 1;
+
+            else if (x < 0)
+                rolX = -1;
+
+            else
+                rolX = 0;
+
+            if (y > 0)
+                rolY = 1;
+
+            else if (y < 0)
+                rolY = -1;
+
+            else
+                rolY = 0;
+
+            #endregion
+
+            if (rollTimer == 0)
+            {
+                curAxis = new Vector2(rolX, rolY);
+                GetComponent<EnergyBar>().curEnergy -= rollEnergyConsum;
+            }
+
+            anim.speed = 2f;
+
+            rollTimer += Time.deltaTime;
+            //transform.Translate(curAxis.x * vel * 3f * Time.deltaTime, curAxis.y * vel * 3f * Time.deltaTime, 0);
+
+            Vector2 rolPos = new Vector2(curAxis.x * vel * 3f, curAxis.y * vel * 3f);
+            rb2D.MovePosition(rb2D.position + rolPos * Time.fixedDeltaTime);
+
+            if (rollTimer >= rollClip.length * (1 / anim.speed))
+            {
+                anim.SetFloat("x", curAxis.x);
+                anim.SetFloat("y", curAxis.y);
+                roll = false;
+                rollTimer = 0;
+                anim.speed = 1f;
+                //GetComponent<Collider2D>().enabled = true;
+            }
+        }
     }
     #endregion
 
@@ -434,6 +522,12 @@ public class PlayerMovement : MonoBehaviour
         {
             item = null;
         }
+    }
+
+    public void FollowObjective(Transform target)
+    {
+        objective = target;
+        walkToObjective = true;
     }
 
     public void SpeedDown(float slow, float time)
