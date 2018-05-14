@@ -131,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
         //ammo = maxAmmo;
         noArrows.SetActive(false);
         clawHUD.SetActive(false);
-        rollEnergyConsum = 10;
+        rollEnergyConsum = 12.5f;
         arrowVel = 15f;
         runVel = 1.8f;
         controlArrow = true;
@@ -245,7 +245,7 @@ public class PlayerMovement : MonoBehaviour
 
             //Read Roll Input
             if (Input.GetKeyDown(rollButton) && !isMagicActive && !isAiming &&
-                !isAttacking && !roll && !die && isWalking && energy > rollEnergyConsum && anim.GetBool("PickUp") == false && canRoll)
+                !isAttacking && !roll && !die && isWalking && energy >= rollEnergyConsum && anim.GetBool("PickUp") == false && canRoll)
                 roll = true;
 
             //Read Attack Input
