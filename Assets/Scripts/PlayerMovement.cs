@@ -394,6 +394,7 @@ public class PlayerMovement : MonoBehaviour
 
         if(walkToObjective)
         {
+            move = false;
             objectiveDist = Vector2.Distance(transform.position, objective.position);
 
             if (objectiveDist > 0)

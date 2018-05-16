@@ -22,6 +22,8 @@ public class EnemyHealth : MonoBehaviour {
 
     [SerializeField]
     private AnimationClip hurtAnim;
+
+    public bool isDoll;
     // Use this for initialization
     void Start () {
         curHealth = maxHealth;
@@ -40,7 +42,7 @@ public class EnemyHealth : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if(curHealth < maxHealth)
+        if(curHealth < maxHealth && !isDoll)
             healthBarCanvas.SetActive(true);
 
         if(attacked)
@@ -49,7 +51,9 @@ public class EnemyHealth : MonoBehaviour {
 
             if(timer >= hurtAnim.length * 2 && hurtAnim != null)
             {
-                GetComponent<Animator>().SetBool("Hurt", false);
+                if(!isDoll)
+                    GetComponent<Animator>().SetBool("Hurt", false);
+
                 attacked = false;
                 timer = 0;
             }
@@ -57,7 +61,7 @@ public class EnemyHealth : MonoBehaviour {
 
         if (curHealth <= 0)
         {
-            if (gameObject.name != "RagDool")
+            if (!isDoll)
             {
                 GetComponent<Animator>().SetBool("Died", true);
                 Destroy(gameObject, 1);
@@ -77,7 +81,8 @@ public class EnemyHealth : MonoBehaviour {
 
             else
             {
-                healthBarCanvas.SetActive(true);
+                if(!isDoll)
+                    healthBarCanvas.SetActive(true);
             }
         }
 
@@ -87,7 +92,7 @@ public class EnemyHealth : MonoBehaviour {
 
     public void TakeDamage(int dano)
     {
-        if (gameObject.name != "RagDool")
+        if (!isDoll)
         {
             if (GetComponent<Animator>().GetBool("isFurious") == false)
             {
@@ -101,6 +106,9 @@ public class EnemyHealth : MonoBehaviour {
         }
 
         else
+        {
             curHealth -= dano;
+            GetComponent<RagDool>().attack = true;
+        }
     }
 }

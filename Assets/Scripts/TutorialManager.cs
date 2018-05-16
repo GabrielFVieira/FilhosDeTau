@@ -27,6 +27,11 @@ public class TutorialManager : MonoBehaviour {
     public GameObject wallCol;
     public GameObject topGround;
 
+    public int levelPart;
+    public bool[] partCompleted;
+    public Transform[] areaMiddle;
+    public float range;
+    public bool walkBack;
     // Use this for initialization
     void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -35,7 +40,33 @@ public class TutorialManager : MonoBehaviour {
 
     private void Update()
     {
-        if(startBossFight)
+        if(partCompleted[levelPart] == false)
+        {
+            FollowObjective(areaMiddle[levelPart - 1]);
+            levelPart -= 1;
+            walkBack = true;
+        }
+
+        if (walkBack)
+        {
+            range = Vector2.Distance(player.transform.position, areaMiddle[levelPart].position);
+
+            if(range == 0)
+            {
+                canWalk = true;
+                canRun = true;
+                canAttack = true;
+                canRoll = true;
+                canUseMagic = true;
+                canPursuit = true;
+                canChangeWeapon = true;
+
+                walkBack = false;
+            }
+
+        }
+
+        if (startBossFight)
         {
             if (player.GetComponent<PlayerMovement>().objectiveDist < 10)
             {
@@ -76,6 +107,18 @@ public class TutorialManager : MonoBehaviour {
         player.GetComponent<PlayerMovement>().FollowObjective(bossArenaMiddle);
         startBossFightCol.SetActive(false);
         startBossFight = true;
+        canWalk = false;
+        canRun = false;
+        canAttack = false;
+        canRoll = false;
+        canUseMagic = false;
+        canPursuit = false;
+        canChangeWeapon = false;
+    }
+
+    public void FollowObjective(Transform t)
+    {
+        player.GetComponent<PlayerMovement>().FollowObjective(t);
         canWalk = false;
         canRun = false;
         canAttack = false;

@@ -9,6 +9,9 @@ public class RagDool : MonoBehaviour {
 
     [SerializeField]
     AnimationClip attackedClip;
+
+    public bool attack;
+    public bool controle;
     // Use this for initialization
     void Start () {
         health = GetComponent<EnemyHealth>();
