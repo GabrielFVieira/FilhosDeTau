@@ -69,7 +69,7 @@ public class SmoothCamera2D : MonoBehaviour
         float bottonSide = camY - Camera.main.orthographicSize;
         float topSide = camY + Camera.main.orthographicSize;
 
-        if (topSide < bg.transform.position.y + bgTilemap.size.y / 2 && bottonSide > bg.transform.position.y - bgTilemap.size.y / 2)
+        if (topSide < bg.transform.position.y + bgTilemap.size.y / 2 - 1 && bottonSide > bg.transform.position.y - bgTilemap.size.y / 2 + 1)
         {
             freezeY = false;
         }
@@ -77,7 +77,7 @@ public class SmoothCamera2D : MonoBehaviour
         else
             freezeY = true;
 
-        if (leftSide > bg.transform.position.x - bgTilemap.size.x / 2 && rightSide < bg.transform.position.x + bgTilemap.size.x / 2)
+        if (leftSide > bg.transform.position.x - bgTilemap.size.x / 2 + 1 && rightSide < bg.transform.position.x + bgTilemap.size.x / 2 - 1)
         {
             freezeX = false;
         }

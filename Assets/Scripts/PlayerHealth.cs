@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour {
     public float curHealth;
@@ -24,7 +25,7 @@ public class PlayerHealth : MonoBehaviour {
     private void FixedUpdate()
     {
         calcHealth = curHealth / maxHealth;
-        healthBar.transform.localScale = new Vector3(calcHealth, healthBar.transform.localScale.y, healthBar.transform.localScale.z);
+        healthBar.GetComponent<Image>().fillAmount = calcHealth;
     }
 
 	// Update is called once per frame

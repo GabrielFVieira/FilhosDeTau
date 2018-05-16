@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnergyBar : MonoBehaviour {
     public float curEnergy;
@@ -8,9 +9,6 @@ public class EnergyBar : MonoBehaviour {
 
     [SerializeField]
     private GameObject energyBar;
-
-    [SerializeField]
-    private GameObject energyBarCanvas;
 
     private float calcEnergy;
 
@@ -23,13 +21,13 @@ public class EnergyBar : MonoBehaviour {
         maxEnergy = 50;
         curEnergy = maxEnergy;
 
-        rechargeMaxTimer = 3;
+        rechargeMaxTimer = 1.5f;
     }
 
     private void FixedUpdate()
     {
         calcEnergy = curEnergy / maxEnergy;
-        energyBar.transform.localScale = new Vector3(calcEnergy, energyBar.transform.localScale.y, energyBar.transform.localScale.z);
+        energyBar.GetComponent<Image>().fillAmount = 1 - calcEnergy;
     }
 
     // Update is called once per frame
@@ -58,7 +56,7 @@ public class EnergyBar : MonoBehaviour {
 
             if(rechargeTimer >= rechargeMaxTimer && curEnergy < maxEnergy)
             {
-                curEnergy += 5 * Time.deltaTime;
+                curEnergy += 8 * Time.deltaTime;
             }
         }
 
