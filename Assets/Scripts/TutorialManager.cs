@@ -31,6 +31,6 @@ public class TutorialManager : MonoBehaviour {
         player.GetComponent<PlayerMovement>().canUseMagic = canUseMagic;
         player.GetComponent<PlayerMovement>().canPursuit = canPursuit;
         player.GetComponent<ItemHUD>().canChangeWeapon = canChangeWeapon;
-        inventoryUI.canOpenInv = canOpenInv;
+        //inventoryUI.canOpenInv = canOpenInv;
     }
 }
