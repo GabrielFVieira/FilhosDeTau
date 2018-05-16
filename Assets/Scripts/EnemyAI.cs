@@ -26,7 +26,7 @@ public class EnemyAI : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-        this.transform.position = spawn.position;
+        transform.position = spawn.position;
         target = GameObject.FindGameObjectWithTag("Player").transform;
         maxDist = 7;
         minDist = 1.1f;
@@ -80,11 +80,9 @@ public class EnemyAI : MonoBehaviour
             maxDist = 15;
             GetComponent<EnemyAIRaycast>().ChangeDistAndSpeed(speed);
             GetComponent<EnemyHealth>().maxDistInv = 10;
-            Debug.Log("andaaaaaaaaaaaaaaa");
         }
 
         range = Vector2.Distance(transform.position, target.position);
-        
 
         if (range < maxDist && anim.GetBool("isFurious") == false && anim.GetBool("Hurt") == false && range != 0)
             isWalking = true;
@@ -101,8 +99,6 @@ public class EnemyAI : MonoBehaviour
             {
                 target = spawn;
                 GetComponent<EnemyAIRaycast>().SetNewTarget(spawn);
-
-                Debug.Log("aaaaaaaaaaaaaah");
                 isWalking = true;
                 minDist = 0;
                 GetComponent<EnemyAIRaycast>().ChangeDistAndSpeed(speed);

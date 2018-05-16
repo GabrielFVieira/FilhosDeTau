@@ -24,6 +24,8 @@ public class EnemyHealth : MonoBehaviour {
     private AnimationClip hurtAnim;
 
     public bool isDoll;
+
+    public RhythmBar rhythm;
     // Use this for initialization
     void Start () {
         curHealth = maxHealth;
@@ -96,7 +98,8 @@ public class EnemyHealth : MonoBehaviour {
         {
             if (GetComponent<Animator>().GetBool("isFurious") == false)
             {
-                curHealth -= dano;
+                curHealth -= dano * rhythm.GetComponent<RhythmBar>().intensity;
+                rhythm.GetComponent<RhythmBar>().freeze = true;
                 if (Random.Range(1, 6) != 2 && attacked == false)
                 {
                     attacked = true;

@@ -84,8 +84,8 @@ public class GameManager : MonoBehaviour
         if (start == true) // Reset variables
         {
             player.GetComponent<PlayerMovement>().ammo = 0;
-            player.transform.position = new Vector3();
-            GameObject.FindGameObjectWithTag("MainCamera").transform.position = new Vector3(0, 0, -10);
+            player.transform.position = new Vector3(-49.8f, 30.5f, 0);
+            GameObject.FindGameObjectWithTag("MainCamera").transform.position = new Vector3(-49.8f, 30.5f, -10);
             player.GetComponent<PlayerHealth>().curHealth = player.GetComponent<PlayerHealth>().maxHealth;
             player.GetComponent<EnergyBar>().curEnergy = player.GetComponent<EnergyBar>().maxEnergy;
         }

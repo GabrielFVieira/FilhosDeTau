@@ -26,6 +26,7 @@ public class TutorialManager : MonoBehaviour {
     public GameObject normalCol;
     public GameObject wallCol;
     public GameObject topGround;
+    public GameObject hud;
 
     public int levelPart;
     public bool[] partCompleted;
@@ -60,7 +61,7 @@ public class TutorialManager : MonoBehaviour {
                 canUseMagic = true;
                 canPursuit = true;
                 canChangeWeapon = true;
-
+                hud.SetActive(true);
                 walkBack = false;
             }
 
@@ -84,6 +85,7 @@ public class TutorialManager : MonoBehaviour {
                 canUseMagic = true;
                 canPursuit = true;
                 canChangeWeapon = true;
+                hud.SetActive(true);
                 bossArenaCol.SetActive(true);
             }
 
@@ -99,7 +101,7 @@ public class TutorialManager : MonoBehaviour {
         player.GetComponent<PlayerMovement>().canUseMagic = canUseMagic;
         player.GetComponent<PlayerMovement>().canPursuit = canPursuit;
         player.GetComponent<ItemHUD>().canChangeWeapon = canChangeWeapon;
-        //inventoryUI.canOpenInv = canOpenInv;
+        inventoryUI.canOpenInv = canOpenInv;
     }
 
     public void StartBossFight()
@@ -113,6 +115,7 @@ public class TutorialManager : MonoBehaviour {
         canRoll = false;
         canUseMagic = false;
         canPursuit = false;
+        hud.SetActive(false);
         canChangeWeapon = false;
     }
 
@@ -125,6 +128,7 @@ public class TutorialManager : MonoBehaviour {
         canRoll = false;
         canUseMagic = false;
         canPursuit = false;
+        hud.SetActive(false);
         canChangeWeapon = false;
     }
 }

@@ -41,6 +41,7 @@ public class Area2 : MonoBehaviour {
             if (!ragdolls[order[index]].controle)
             {
                 index = -1;
+                Debug.Log("Errou");
                 foreach (RagDool r in ragdolls)
                 {
                     r.controle = false;
@@ -49,21 +50,10 @@ public class Area2 : MonoBehaviour {
             }
         }
 
-        if (index >= 5)
+        if (index >= 5 && !tutorial.partCompleted[2])
+        {
             tutorial.partCompleted[2] = true;
-        /*
-        if(index > 0)
-            for(int i = 0; i < index; i++)
-            {
-                if(!ragdolls[order[i]].controle)
-                {
-                    index = 0;
-                    foreach (RagDool r in ragdolls)
-                    {
-                        r.controle = false;
-                        r.attack = false;
-                    }
-                }
-            }*/
+            Debug.Log("Passou");
+        }
 	}
 }

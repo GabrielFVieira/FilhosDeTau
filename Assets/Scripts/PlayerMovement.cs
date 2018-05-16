@@ -255,10 +255,10 @@ public class PlayerMovement : MonoBehaviour
                 anim.speed = 1;
                 controle = true;
 
-                if (activeWeapon == "PokeBall")
+                if (activeWeapon == "FdT Axe")
                     isAttacking = true;
 
-                else if (activeWeapon == "Arrow")
+                else if (activeWeapon == "FdT Arrow")
                 {
                     if (ammo > 0)
                         isAiming = true;
