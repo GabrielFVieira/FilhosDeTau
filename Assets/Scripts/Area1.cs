@@ -7,12 +7,14 @@ public class Area1 : MonoBehaviour {
     public TutorialManager tutorial;
 	// Use this for initialization
 	void Start () {
-		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (firstRagdoll.attack)
+        if (firstRagdoll.attack && !tutorial.partCompleted[1])
+        {
             tutorial.partCompleted[1] = true;
+            tutorial.StartDialogue(1);
+        }
 	}
 }

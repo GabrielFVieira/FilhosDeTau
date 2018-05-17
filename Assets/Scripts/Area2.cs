@@ -53,6 +53,7 @@ public class Area2 : MonoBehaviour {
         if (index >= 5 && !tutorial.partCompleted[2])
         {
             tutorial.partCompleted[2] = true;
+            tutorial.StartDialogue(2);
             Debug.Log("Passou");
         }
 	}

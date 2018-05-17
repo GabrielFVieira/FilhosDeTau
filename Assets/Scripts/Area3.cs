@@ -12,7 +12,10 @@ public class Area3 : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(targets[0].hit && targets[1].hit && targets[2].hit && targets[3].hit && targets[4].hit && targets[5].hit && targets[6].hit)
+		if(targets[0].hit && targets[1].hit && targets[2].hit && targets[3].hit && targets[4].hit && targets[5].hit && targets[6].hit && !tutorial.partCompleted[3])
+        {
             tutorial.partCompleted[3] = true;
+            tutorial.StartDialogue(3);
+        }
     }
 }

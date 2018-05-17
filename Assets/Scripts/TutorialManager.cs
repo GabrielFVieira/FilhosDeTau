@@ -33,10 +33,15 @@ public class TutorialManager : MonoBehaviour {
     public Transform[] areaMiddle;
     public float range;
     public bool walkBack;
+
+    public Dialogue[] dialogues;
+    private DialogueManager dManager;
     // Use this for initialization
     void Start () {
+        dManager = GetComponent<DialogueManager>();
         player = GameObject.FindGameObjectWithTag("Player");
         inventoryUI = GameObject.FindObjectOfType<InventoryUI>();
+        StartDialogue(0);
 	}
 
     private void Update()
@@ -130,5 +135,10 @@ public class TutorialManager : MonoBehaviour {
         canPursuit = false;
         hud.SetActive(false);
         canChangeWeapon = false;
+    }
+
+    public void StartDialogue(int i)
+    {
+        dManager.StartDialogue(dialogues[i]);
     }
 }
