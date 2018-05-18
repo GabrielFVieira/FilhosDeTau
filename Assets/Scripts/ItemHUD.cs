@@ -50,15 +50,18 @@ public class ItemHUD : MonoBehaviour {
     void Update () {
         itenAmount.text = "X" + plMove.ammo;
 
-        if (canChangeWeapon)
+        if (FindObjectOfType<TutorialManager>().canAttack)
         {
             itemBox.SetActive(true);
 
-            if (Input.GetAxis("Mouse ScrollWheel") > 0 && curWeapon < curItem.Length - 1 || Input.GetKeyDown(KeyCode.Alpha2) && curWeapon < curItem.Length - 1)
-                curWeapon += 1;
+            if (canChangeWeapon)
+            {
+                if (Input.GetAxis("Mouse ScrollWheel") > 0 && curWeapon < curItem.Length - 1 || Input.GetKeyDown(KeyCode.Alpha2) && curWeapon < curItem.Length - 1)
+                    curWeapon += 1;
 
-            else if (Input.GetAxis("Mouse ScrollWheel") < 0 && curWeapon > 0 || Input.GetKeyDown(KeyCode.Alpha1) && curWeapon > 0)
-                curWeapon -= 1;
+                else if (Input.GetAxis("Mouse ScrollWheel") < 0 && curWeapon > 0 || Input.GetKeyDown(KeyCode.Alpha1) && curWeapon > 0)
+                    curWeapon -= 1;
+            }
         }
 
         else

@@ -14,7 +14,7 @@ public class Area1 : MonoBehaviour {
         if (firstRagdoll.attack && !tutorial.partCompleted[1])
         {
             tutorial.partCompleted[1] = true;
-            tutorial.StartDialogue(1);
+            tutorial.StartTutorialDialogue(1);
         }
 	}
 }

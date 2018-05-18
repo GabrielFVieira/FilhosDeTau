@@ -8,22 +8,43 @@ public class DialogueManager : MonoBehaviour {
     private Queue<string> sentences = new Queue<string>();
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI dialogueText;
+    public TextMeshProUGUI tutorialText;
     public GameObject textBox;
-    public bool first = true;
+    public GameObject tutorialBox;
+    public float timer;
+    public bool startTimer;
+    public bool finishWrite;
+    public float waitTime;
 	// Use this for initialization
 	void Start () {
-		
+        tutorialBox.SetActive(false);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+        if (finishWrite)
+        {
+            startTimer = true;
+        }
+
+        if (startTimer)
+        {
+            timer += Time.deltaTime;
+
+            if(timer > waitTime)
+            {
+                DisplayNextSentenceTutorial();
+                finishWrite = false;
+                startTimer = false;
+                timer = 0;
+            }
+        }
 	}
 
     public void StartDialogue(Dialogue dialogue)
     {
         nameText.text = dialogue.name;
-
+        GetComponent<TutorialManager>().canWalk = false;
         sentences.Clear();
 
         foreach(string sentence in dialogue.senteces)
@@ -55,15 +76,61 @@ public class DialogueManager : MonoBehaviour {
             dialogueText.text += letter;
             yield return null;
         }
-        if (first)
-        {
-            DisplayNextSentence();
-            first = false;
-        }
     }
 
     void EndDialogue()
     {
         textBox.SetActive(false);
+        GetComponent<TutorialManager>().canWalk = true;
+    }
+
+    public void StartTutorialDialogue(Dialogue dialogue)
+    {
+        timer = 0;
+        finishWrite = false;
+        startTimer = false;
+        nameText.text = dialogue.name;
+
+        sentences.Clear();
+
+        foreach (string sentence in dialogue.senteces)
+        {
+            sentences.Enqueue(sentence);
+        }
+
+        DisplayNextSentenceTutorial();
+    }
+
+    public void DisplayNextSentenceTutorial()
+    {
+        if (sentences.Count == 0)
+        {
+            EndDialogueTutorial();
+            return;
+        }
+        tutorialBox.SetActive(true);
+        string sentence = sentences.Dequeue();
+        StopAllCoroutines();
+        StartCoroutine(TypeSentenceTutorial(sentence));
+    }
+
+    IEnumerator TypeSentenceTutorial(string sentence)
+    {
+        tutorialText.text = "";
+        foreach (char letter in sentence.ToCharArray())
+        {
+            tutorialText.text += letter;
+            yield return null;
+        }
+
+        if(tutorialText.text == sentence)
+        {
+            finishWrite = true;
+        }
+    }
+
+    void EndDialogueTutorial()
+    {
+        tutorialBox.SetActive(false);
     }
 }

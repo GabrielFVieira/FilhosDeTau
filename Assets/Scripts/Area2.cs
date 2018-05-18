@@ -18,8 +18,7 @@ public class Area2 : MonoBehaviour {
             order[i] = validChoices[x];
             validChoices.RemoveAt(x);
         }
-
-        Debug.Log("Ordem: " + colors[order[0]] + ", " + colors[order[1]] + ", " + colors[order[2]] + ", " + colors[order[3]] + ", " + colors[order[4]] + ", " + colors[order[5]]);
+        tutorial.tutorialDialogues[2].senteces[0] = "Agora bata nos bonecos nessa ordem: " + colors[order[0]] + ", " + colors[order[1]] + ", " + colors[order[2]] + ", " + colors[order[3]] + ", " + colors[order[4]] + ".";
 	}
 	
 	// Update is called once per frame
@@ -41,7 +40,8 @@ public class Area2 : MonoBehaviour {
             if (!ragdolls[order[index]].controle)
             {
                 index = -1;
-                Debug.Log("Errou");
+                tutorial.tutorialDialogues[2].senteces[0] = "Você errou, o correto é: " + colors[order[0]] + ", " + colors[order[1]] + ", " + colors[order[2]] + ", " + colors[order[3]] + ", " + colors[order[4]] + ".";
+                tutorial.StartTutorialDialogue(2);
                 foreach (RagDool r in ragdolls)
                 {
                     r.controle = false;
@@ -50,11 +50,11 @@ public class Area2 : MonoBehaviour {
             }
         }
 
-        if (index >= 5 && !tutorial.partCompleted[2])
+        if (index >= ragdolls.Length - 1 && !tutorial.partCompleted[2])
         {
             tutorial.partCompleted[2] = true;
-            tutorial.StartDialogue(2);
-            Debug.Log("Passou");
+            tutorial.StartTutorialDialogue(3);
+            tutorial.gameObject.GetComponent<DialogueManager>().waitTime = 0.8f;
         }
 	}
 }

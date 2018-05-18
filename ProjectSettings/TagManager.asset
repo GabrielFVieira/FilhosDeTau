@@ -13,6 +13,8 @@ TagManager:
   - ColTag
   - ArrowTarget
   - Arrow
+  - FirstItens
+  - Cols
   layers:
   - Default
   - TransparentFX

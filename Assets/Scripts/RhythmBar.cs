@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RhythmBar : MonoBehaviour {
     public Transform cursor;
+    public Transform cursor2;
     public float intensity;
     public float cursorSpeed;
     private float x;
@@ -39,11 +40,17 @@ public class RhythmBar : MonoBehaviour {
 
     void MoveCursor()
     {
-        if (x < 1 && cursorSpeed > 0 || x > -1 && cursorSpeed < 0)
+        if (x < 0.01f)
+        {
             cursor.transform.Translate(cursorSpeed * Time.deltaTime, 0, 0);
+            cursor2.transform.Translate(-cursorSpeed * Time.deltaTime, 0, 0);
+        }
 
-        if (x >= 1 && cursorSpeed > 0 || x <= -1 && cursorSpeed < 0)
-            cursorSpeed *= -1;
+        else
+        {
+            cursor.transform.localPosition = new Vector3(-1, 0, 0);
+            cursor2.transform.localPosition = new Vector3(1, 0, 0);
+        }
     }
 
     void SetIntensity()
@@ -63,7 +70,12 @@ public class RhythmBar : MonoBehaviour {
             intensity = dmgMultipliers[2];
         }
 
-        else
+        else if (x > -0.15f && x <= -0.1f || x < 0.15f && x >= 0.1f)
+        {
             intensity = dmgMultipliers[3];
+        }
+
+        else
+            intensity = dmgMultipliers[4];
     }
 }

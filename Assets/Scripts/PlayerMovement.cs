@@ -511,7 +511,7 @@ public class PlayerMovement : MonoBehaviour
     //////////// SLOW THE PLAYER /////////////////
     public void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Itens")
+        if (collision.gameObject.tag == "Itens" || collision.gameObject.tag == "FirstItens")
         {
             item = collision.gameObject;
         }
@@ -519,7 +519,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Itens")
+        if (collision.gameObject.tag == "Itens" || collision.gameObject.tag == "FirstItens")
         {
             item = null;
         }
@@ -645,9 +645,14 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool("PickUp", true);
         yield return new WaitForSeconds(pickUPClip.length);
 
-        if (item != null)
+        if (item != null && item.tag != "FirstItens")
         {
             item.GetComponent<ItemPickUP>().PickUP();
+        }
+
+        else
+        {
+            item.GetComponent<ActiveBool>().Change();
         }
         anim.SetBool("PickUp", false);
         pickingUp = false;

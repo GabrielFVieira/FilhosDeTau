@@ -35,6 +35,7 @@ public class TutorialManager : MonoBehaviour {
     public bool walkBack;
 
     public Dialogue[] dialogues;
+    public Dialogue[] tutorialDialogues;
     private DialogueManager dManager;
     // Use this for initialization
     void Start () {
@@ -48,6 +49,12 @@ public class TutorialManager : MonoBehaviour {
     {
         if(partCompleted[levelPart] == false)
         {
+            if (!dManager.tutorialBox.activeSelf && !walkBack)
+            {
+                StartTutorialDialogue(4);
+                dManager.waitTime = 0.8f;
+            }
+
             FollowObjective(areaMiddle[levelPart - 1]);
             levelPart -= 1;
             walkBack = true;
@@ -140,5 +147,10 @@ public class TutorialManager : MonoBehaviour {
     public void StartDialogue(int i)
     {
         dManager.StartDialogue(dialogues[i]);
+    }
+
+    public void StartTutorialDialogue(int i)
+    {
+        dManager.StartTutorialDialogue(tutorialDialogues[i]);
     }
 }
