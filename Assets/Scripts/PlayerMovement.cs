@@ -455,7 +455,7 @@ public class PlayerMovement : MonoBehaviour
         if (roll)
         {
             //GetComponent<Collider2D>().enabled = false;
-
+            gameObject.layer = 11;
             #region Define Roll Direction
             int rolX;
             int rolY;
@@ -501,6 +501,7 @@ public class PlayerMovement : MonoBehaviour
                 roll = false;
                 rollTimer = 0;
                 anim.speed = 1f;
+                gameObject.layer = 8;
                 //GetComponent<Collider2D>().enabled = true;
             }
         }

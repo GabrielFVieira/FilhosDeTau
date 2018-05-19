@@ -7,7 +7,7 @@ public class SmoothCamera2D : MonoBehaviour
 
     private float dampTime = 0.15f;
     private Vector3 velocity = Vector3.zero;
-    private Transform target;
+    public Transform target;
     [SerializeField]
     private GameObject bg;
     [SerializeField]

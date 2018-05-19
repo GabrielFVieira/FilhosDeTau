@@ -21,6 +21,7 @@ public class EnemyAI : MonoBehaviour
     private float timer;
     public bool controle;
 
+    public bool canWalk;
     public AnimationClip attackAnim;
     // Use this for initialization
     void Start()
@@ -38,70 +39,73 @@ public class EnemyAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        anim.SetBool("isWalking", isWalking);
-        anim.SetBool("isAttacking", isAttacking);
-        isDead = anim.GetBool("Died");
-
-        if (Vector2.Distance(transform.position, target.position) > maxDist)
-            isWalking = false;
-
-        if (range <= minDist && target == spawn)
-            isWalking = false;
-
-        else if (range > minDist && target == spawn)
-            isWalking = true;
-
-        if (anim.GetBool("Hurt") || anim.GetBool("isFurious"))
+        if (canWalk)
         {
-            isAttacking = false;
-            isWalking = false;
-        }
+            anim.SetBool("isWalking", isWalking);
+            anim.SetBool("isAttacking", isAttacking);
+            isDead = anim.GetBool("Died");
 
-        if (controle)
-            timer += Time.deltaTime;
+            if (Vector2.Distance(transform.position, target.position) > maxDist)
+                isWalking = false;
 
-        if (timer >= attackAnim.length)
-        {
-            if (colGO != null && isAttacking && isDead == false)
-                colGO.GetComponent<PlayerHealth>().TakeDamage(dmg);
+            if (range <= minDist && target == spawn)
+                isWalking = false;
 
-            isAttacking = false;
-            isWalking = false;
-
-            if (timer >= attackAnim.length * Random.Range(1.3f, 1.8f))
-            {
-                controle = false;
-                timer = 0;
-            }
-        }
-
-        if (GetComponent<EnemyHealth>().curHealth < GetComponent<EnemyHealth>().maxHealth)
-        {
-            maxDist = 15;
-            GetComponent<EnemyAIRaycast>().ChangeDistAndSpeed(speed);
-            GetComponent<EnemyHealth>().maxDistInv = 10;
-        }
-
-        range = Vector2.Distance(transform.position, target.position);
-
-        if (range < maxDist && anim.GetBool("isFurious") == false && anim.GetBool("Hurt") == false && range != 0)
-            isWalking = true;
-
-        if (isWalking && isDead == false)
-        {
-            if (range <= minDist && isAttacking == false && timer == 0 && GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>().curHealth > 0)
-            {
-                isAttacking = true;
-                controle = true;
-            }
-
-            if (GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>().curHealth <= 0)
-            {
-                target = spawn;
-                GetComponent<EnemyAIRaycast>().SetNewTarget(spawn);
+            else if (range > minDist && target == spawn)
                 isWalking = true;
-                minDist = 0;
+
+            if (anim.GetBool("Hurt") || anim.GetBool("isFurious"))
+            {
+                isAttacking = false;
+                isWalking = false;
+            }
+
+            if (controle)
+                timer += Time.deltaTime;
+
+            if (timer >= attackAnim.length)
+            {
+                if (colGO != null && isAttacking && isDead == false)
+                    colGO.GetComponent<PlayerHealth>().TakeDamage(dmg);
+
+                isAttacking = false;
+                isWalking = false;
+
+                if (timer >= attackAnim.length * Random.Range(1.3f, 1.8f))
+                {
+                    controle = false;
+                    timer = 0;
+                }
+            }
+
+            if (GetComponent<EnemyHealth>().curHealth < GetComponent<EnemyHealth>().maxHealth)
+            {
+                maxDist = 15;
                 GetComponent<EnemyAIRaycast>().ChangeDistAndSpeed(speed);
+                GetComponent<EnemyHealth>().maxDistInv = 10;
+            }
+
+            range = Vector2.Distance(transform.position, target.position);
+
+            if (range < maxDist && anim.GetBool("isFurious") == false && anim.GetBool("Hurt") == false && range != 0)
+                isWalking = true;
+
+            if (isWalking && isDead == false)
+            {
+                if (range <= minDist && isAttacking == false && timer == 0 && GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>().curHealth > 0)
+                {
+                    isAttacking = true;
+                    controle = true;
+                }
+
+                if (GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>().curHealth <= 0)
+                {
+                    target = spawn;
+                    GetComponent<EnemyAIRaycast>().SetNewTarget(spawn);
+                    isWalking = true;
+                    minDist = 0;
+                    GetComponent<EnemyAIRaycast>().ChangeDistAndSpeed(speed);
+                }
             }
         }
     }
