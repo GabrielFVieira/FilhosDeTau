@@ -37,6 +37,23 @@ public class TutorialManager : MonoBehaviour {
     public Dialogue[] dialogues;
     public Dialogue[] tutorialDialogues;
     private DialogueManager dManager;
+
+    [HideInInspector]
+    public bool lastCanWalk;
+    [HideInInspector]
+    public bool lastCanRun;
+    [HideInInspector]
+    public bool lastCanAttack;
+    [HideInInspector]
+    public bool lastCanRoll;
+    [HideInInspector]
+    public bool lastCanUseMagic;
+    [HideInInspector]
+    public bool lastCanPursuit;
+    [HideInInspector]
+    public bool lastCanChangeWeapon;
+    [HideInInspector]
+    public bool lastCanOpenInv;
     // Use this for initialization
     void Start () {
         dManager = GetComponent<DialogueManager>();
@@ -66,13 +83,14 @@ public class TutorialManager : MonoBehaviour {
 
             if(range == 0)
             {
-                canWalk = true;
-                canRun = true;
-                canAttack = true;
-                canRoll = true;
-                canUseMagic = true;
-                canPursuit = true;
-                canChangeWeapon = true;
+                canWalk = lastCanWalk;
+                canRun = lastCanRun;
+                canAttack = lastCanAttack;
+                canRoll = lastCanRoll;
+                canUseMagic = lastCanUseMagic;
+                canPursuit = lastCanPursuit;
+                canChangeWeapon = lastCanChangeWeapon;
+                canOpenInv = lastCanChangeWeapon;
                 hud.SetActive(true);
                 walkBack = false;
             }
@@ -90,13 +108,14 @@ public class TutorialManager : MonoBehaviour {
             }
                 if (player.GetComponent<PlayerMovement>().objectiveDist == 0)
             {
-                canWalk = true;
-                canRun = true;
-                canAttack = true;
-                canRoll = true;
-                canUseMagic = true;
-                canPursuit = true;
-                canChangeWeapon = true;
+                canWalk = lastCanWalk;
+                canRun = lastCanRun;
+                canAttack = lastCanAttack;
+                canRoll = lastCanRoll;
+                canUseMagic = lastCanUseMagic;
+                canPursuit = lastCanPursuit;
+                canChangeWeapon = lastCanChangeWeapon;
+                canOpenInv = lastCanChangeWeapon;
                 hud.SetActive(true);
                 bossArenaCol.SetActive(true);
             }
@@ -118,7 +137,16 @@ public class TutorialManager : MonoBehaviour {
 
     public void StartBossFight()
     {
-        player.GetComponent<PlayerMovement>().FollowObjective(bossArenaMiddle);
+        lastCanWalk = canWalk;
+        lastCanRun = canRun;
+        lastCanAttack = canAttack;
+        lastCanRoll = canRoll;
+        lastCanUseMagic = canUseMagic;
+        lastCanPursuit = canUseMagic;
+        lastCanChangeWeapon = canChangeWeapon;
+        lastCanOpenInv = canOpenInv;
+
+    player.GetComponent<PlayerMovement>().FollowObjective(bossArenaMiddle);
         startBossFightCol.SetActive(false);
         startBossFight = true;
         canWalk = false;
@@ -133,6 +161,15 @@ public class TutorialManager : MonoBehaviour {
 
     public void FollowObjective(Transform t)
     {
+        lastCanWalk = canWalk;
+        lastCanRun = canRun;
+        lastCanAttack = canAttack;
+        lastCanRoll = canRoll;
+        lastCanUseMagic = canUseMagic;
+        lastCanPursuit = canUseMagic;
+        lastCanChangeWeapon = canChangeWeapon;
+        lastCanOpenInv = canOpenInv;
+
         player.GetComponent<PlayerMovement>().FollowObjective(t);
         canWalk = false;
         canRun = false;

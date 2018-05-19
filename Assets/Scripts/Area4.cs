@@ -98,11 +98,15 @@ public class Area4 : MonoBehaviour {
 
         else if (zoomOut && cam.gameObject.GetComponent<Camera>().orthographicSize >= 5)
         {
-            tutorial.canAttack = true;
-            tutorial.canChangeWeapon = true;
-            tutorial.canWalk = true;
+            tutorial.canWalk = tutorial.lastCanWalk;
+            tutorial.canRun = tutorial.lastCanRun;
+            tutorial.canAttack = tutorial.lastCanAttack;
+            tutorial.canRoll = tutorial.lastCanRoll;
+            tutorial.canUseMagic = tutorial.lastCanUseMagic;
+            tutorial.canUseMagic = tutorial.lastCanPursuit;
+            tutorial.canChangeWeapon = tutorial.lastCanChangeWeapon;
+            tutorial.canOpenInv = tutorial.lastCanOpenInv;
             tutorial.hud.SetActive(true);
-            tutorial.canUseMagic = true;
 
             for(int i = 0; i < enemies.Length; i++)
             {
@@ -123,11 +127,15 @@ public class Area4 : MonoBehaviour {
 
             tutorial.StartTutorialDialogue(10);
             tutorial.gameObject.GetComponent<DialogueManager>().waitTime = 2f;
-            tutorial.canAttack = false;
-            tutorial.canWalk = false;
-            tutorial.canChangeWeapon = false;
+            tutorial.lastCanWalk = tutorial.canWalk;
+            tutorial.lastCanRun = tutorial.canRun;
+            tutorial.lastCanAttack = tutorial.canAttack;
+            tutorial.lastCanRoll = tutorial.canRoll;
+            tutorial.lastCanUseMagic = tutorial.canUseMagic;
+            tutorial.lastCanPursuit = tutorial.canUseMagic;
+            tutorial.lastCanChangeWeapon = tutorial.canChangeWeapon;
+            tutorial.lastCanOpenInv = tutorial.canOpenInv;
             tutorial.hud.SetActive(false);
-            tutorial.canUseMagic = false;
             startWave = true;
         }
     }

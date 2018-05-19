@@ -16,6 +16,6 @@ public class ActiveBool : MonoBehaviour {
 	public void Change () {
             tutorial.canAttack = canAttack;
             tutorial.canChangeWeapon = changeWeapon;
-        Destroy(gameObject);
+            Destroy(gameObject);
     }
 }

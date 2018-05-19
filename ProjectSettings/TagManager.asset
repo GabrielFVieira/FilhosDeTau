@@ -15,6 +15,7 @@ TagManager:
   - Arrow
   - FirstItens
   - Cols
+  - AddArrow
   layers:
   - Default
   - TransparentFX
