@@ -45,6 +45,7 @@ public class DialogueManager : MonoBehaviour {
     {
         nameText.text = dialogue.name;
         GetComponent<TutorialManager>().canWalk = false;
+        GameObject.FindObjectOfType<GuideAi>().startMove = false;
         sentences.Clear();
 
         foreach(string sentence in dialogue.senteces)
@@ -82,6 +83,7 @@ public class DialogueManager : MonoBehaviour {
     {
         textBox.SetActive(false);
         GetComponent<TutorialManager>().canWalk = true;
+        GameObject.FindObjectOfType<GuideAi>().startMove = true;
     }
 
     public void StartTutorialDialogue(Dialogue dialogue)
