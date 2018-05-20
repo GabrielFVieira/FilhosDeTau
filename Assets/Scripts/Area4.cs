@@ -136,6 +136,16 @@ public class Area4 : MonoBehaviour {
             tutorial.lastCanChangeWeapon = tutorial.canChangeWeapon;
             tutorial.lastCanOpenInv = tutorial.canOpenInv;
             tutorial.hud.SetActive(false);
+
+            tutorial.canWalk = false;
+            tutorial.canRun = false;
+            tutorial.canAttack = false;
+            tutorial.canRoll = false;
+            tutorial.canUseMagic = false;
+            tutorial.canUseMagic = false;
+            tutorial.canChangeWeapon = false;
+            tutorial.canOpenInv = false;
+
             startWave = true;
         }
     }

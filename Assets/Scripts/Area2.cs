@@ -8,10 +8,12 @@ public class Area2 : MonoBehaviour {
     public int index;
     public List<int> validChoices = new List<int>();
     public int[] order;
-
+    private GuideAi guide;
     public TutorialManager tutorial;
 	// Use this for initialization
 	void Start () {
+        guide = FindObjectOfType<GuideAi>();
+
         for (int i = 0; i < order.Length; i++)
         {
             int x = Random.Range(0, validChoices.Count);
@@ -57,4 +59,13 @@ public class Area2 : MonoBehaviour {
             tutorial.gameObject.GetComponent<DialogueManager>().waitTime = 0.8f;
         }
 	}
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player" && tutorial.partCompleted[2])
+        {
+            guide.ChangeWaypoints(2);
+            GetComponent<BoxCollider2D>().enabled = false;
+        }
+    }
 }
