@@ -6,6 +6,8 @@ public class ArrowTarget : MonoBehaviour {
     public bool hit;
     public int hits;
     public Sprite wasHit;
+    public Sprite wasHitL;
+    public Sprite wasHitR;
     public GameObject target;
 	// Use this for initialization
 	void Start () {
@@ -23,7 +25,21 @@ public class ArrowTarget : MonoBehaviour {
         {
             hits++;
             hit = true;
-            target.GetComponent<SpriteRenderer>().sprite = wasHit;
+            Debug.Log(collision.gameObject.transform.rotation.eulerAngles.z);
+            if (collision.gameObject.transform.rotation.eulerAngles.z >= 0 && collision.gameObject.transform.rotation.eulerAngles.z < 45)
+            {
+                target.GetComponent<SpriteRenderer>().sprite = wasHitL;
+            }
+
+            else if (collision.gameObject.transform.rotation.eulerAngles.z > 135 && collision.gameObject.transform.rotation.eulerAngles.z <= 179)
+            {
+                target.GetComponent<SpriteRenderer>().sprite = wasHitR;
+            }
+
+            else
+            {
+                target.GetComponent<SpriteRenderer>().sprite = wasHit;
+            }
             Destroy(collision.gameObject);
         }
     }

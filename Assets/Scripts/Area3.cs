@@ -19,7 +19,7 @@ public class Area3 : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(targets[0].hit && targets[1].hit && targets[2].hit && targets[3].hit && targets[4].hit && targets[5].hit && targets[6].hit && !tutorial.partCompleted[3])
+		if(targets[0].hit && targets[1].hit && targets[2].hit && targets[3].hit && targets[4].hit && targets[5].hit && !tutorial.partCompleted[3])
         {
             guide.ChangeWaypoints(0);
             tutorial.partCompleted[3] = true;
@@ -44,7 +44,7 @@ public class Area3 : MonoBehaviour {
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player" && tutorial.partCompleted[2])
+        if (collision.gameObject.tag == "Player" && tutorial.partCompleted[3])
         {
             guide.ChangeWaypoints(3);
             GetComponent<BoxCollider2D>().enabled = false;

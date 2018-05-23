@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: b5ac1a127f9210045a73ecbca7391ac1
-timeCreated: 1526499286
+timeCreated: 1527031571
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -51,7 +51,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 336
+  spritePixelsToUnits: 150
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -98,10 +98,10 @@ TextureImporter:
       name: RhythmBar_0
       rect:
         serializedVersion: 2
-        x: 18
-        y: 750
-        width: 684
-        height: 120
+        x: 24
+        y: 375
+        width: 312
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -112,10 +112,10 @@ TextureImporter:
       name: RhythmBar_1
       rect:
         serializedVersion: 2
-        x: 18
-        y: 570
-        width: 684
-        height: 120
+        x: 24
+        y: 294
+        width: 312
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -126,10 +126,10 @@ TextureImporter:
       name: RhythmBar_2
       rect:
         serializedVersion: 2
-        x: 18
-        y: 390
-        width: 684
-        height: 120
+        x: 24
+        y: 213
+        width: 312
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,10 +140,10 @@ TextureImporter:
       name: RhythmBar_3
       rect:
         serializedVersion: 2
-        x: 18
-        y: 210
-        width: 684
-        height: 120
+        x: 24
+        y: 129
+        width: 312
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,10 +154,10 @@ TextureImporter:
       name: RhythmBar_4
       rect:
         serializedVersion: 2
-        x: 18
-        y: 30
-        width: 684
-        height: 120
+        x: 24
+        y: 42
+        width: 312
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

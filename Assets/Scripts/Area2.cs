@@ -37,7 +37,7 @@ public class Area2 : MonoBehaviour {
                 }
             }
         }
-        if (index >= 0)
+        if (index >= 0 && index != 5)
         {
             if (!ragdolls[order[index]].controle)
             {
@@ -56,6 +56,7 @@ public class Area2 : MonoBehaviour {
         {
             tutorial.partCompleted[2] = true;
             tutorial.StartTutorialDialogue(3);
+            GameObject.FindObjectOfType<GuideAi>().ChangeWaypoints(4);
             tutorial.gameObject.GetComponent<DialogueManager>().waitTime = 0.8f;
         }
 	}

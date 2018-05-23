@@ -12,14 +12,16 @@ public class GuideAi : MonoBehaviour {
     public float vel;
     public bool startMove;
     public Transform[] area1WayP;
+    public Transform[] area1_1WayP;
     public Transform[] area2WayP;
     public Transform[] area2_1WayP;
     public Transform[] area3WayP;
-    public Transform[,] pointsAreas = new Transform[4,3];
+    public Transform[] area4WayP;
+    public Transform[,] pointsAreas = new Transform[6,3];
     public int stoppedArea;
-    public GameObject sayOrder;
     public GameObject sayPickBow;
-    public Transform area3Stop;
+    private GameObject player;
+    //public Transform area3Stop;
     private float x, y;
     private Animator anim;
     private void Start()
@@ -27,8 +29,7 @@ public class GuideAi : MonoBehaviour {
         x = 0;
         y = -1;
         anim = GetComponent<Animator>();
-        //lineRenderer.positionCount = numPoints;
-
+        lineRenderer.positionCount = numPoints;
         pointsAreas[0, 0] = area2_1WayP[0];
         pointsAreas[0, 1] = area2_1WayP[1];
         pointsAreas[0, 2] = area2_1WayP[2];
@@ -45,38 +46,44 @@ public class GuideAi : MonoBehaviour {
         pointsAreas[3, 1] = area3WayP[1];
         pointsAreas[3, 2] = area3WayP[2];
 
-        sayOrder.SetActive(false);
-        sayPickBow.SetActive(false);
+        pointsAreas[4, 0] = area1_1WayP[0];
+        pointsAreas[4, 1] = area1_1WayP[1];
+        pointsAreas[4, 2] = area1_1WayP[2];
+
+        pointsAreas[5, 0] = area4WayP[0];
+        pointsAreas[5, 1] = area4WayP[1];
+        pointsAreas[5, 2] = area4WayP[2];
+
         DrawQuadraticCurve();
+
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     public void Update()
     {
         anim.SetFloat("x", x);
         anim.SetFloat("y", y);
+        DrawQuadraticCurve();
 
         if (startMove)
             move();
 
-        if (stoppedArea == 2 && !startMove)
-        {
-            x = -1;
-            y = 0;
-            sayOrder.SetActive(true);
-        }
+        else
+            SetFacingToPath(player.transform.position);
 
-        if (stoppedArea == 1 && !startMove)
+        /*
+        if (stoppedArea == 2 && !startMove || stoppedArea == 1 && !startMove)
         {
             x = -1;
             y = 0;
         }
 
-        if (stoppedArea == 4 && !startMove || stoppedArea == 5 && !startMove)
+        if (stoppedArea == 4 && !startMove || stoppedArea == 5 && !startMove || stoppedArea == 0 && !startMove || stoppedArea == 3 && !startMove)
         {
             x = 0;
             y = -1;
-        }
-
+        }*/
+        /*
         if (stoppedArea == 3 && !sayPickBow.activeSelf)
         {
             float r = Vector2.Distance(transform.position, area3Stop.position);
@@ -96,14 +103,15 @@ public class GuideAi : MonoBehaviour {
             }
 
         }
-
+        */
 
         if(index == positions.Length && startMove)
         {
             startMove = false;
-            stoppedArea++;
-            if (stoppedArea != 3)
-                anim.SetBool("isWalking", false);
+            if(point0.position != area1_1WayP[0].position)
+                stoppedArea++;
+
+            anim.SetBool("isWalking", false);
             index = 0;
         }
     }
@@ -174,7 +182,7 @@ public class GuideAi : MonoBehaviour {
             float t = i / (float)numPoints;
             positions[i - 1] = CalculateQuadraticBezierPoint(t, point0.position, point1.position, point2.position);
         }
-        //lineRenderer.SetPositions(positions);
+        lineRenderer.SetPositions(positions);
     }
 
     private Vector3 CalculateLinearBezierPoint(float t, Vector3 p0, Vector3 p1)

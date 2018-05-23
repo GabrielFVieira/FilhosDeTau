@@ -43,10 +43,10 @@ public class EnemyHealth : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update () {/*
         if(curHealth < maxHealth && !isDoll)
             healthBarCanvas.SetActive(true);
-
+        */
         if(attacked)
         {
             timer += Time.deltaTime;
@@ -72,7 +72,7 @@ public class EnemyHealth : MonoBehaviour {
             healthBarCanvas.SetActive(false);
             curHealth = 0;
         }
-
+        /*
         if (curHealth != 0)
         {
             GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -89,7 +89,7 @@ public class EnemyHealth : MonoBehaviour {
         }
 
         else
-            healthBarCanvas.SetActive(false);
+            healthBarCanvas.SetActive(false);*/
     }
 
     public void TakeDamage(int dano)

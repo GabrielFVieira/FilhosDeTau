@@ -43,6 +43,7 @@ public class Area4 : MonoBehaviour {
         {
             tutorial.StartTutorialDialogue(11);
             tutorial.gameObject.GetComponent<DialogueManager>().waitTime = 1f;
+            GameObject.FindObjectOfType<GuideAi>().ChangeWaypoints(5);
             tutorial.partCompleted[4] = true;
         }
 

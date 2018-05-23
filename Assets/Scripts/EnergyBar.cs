@@ -21,7 +21,7 @@ public class EnergyBar : MonoBehaviour {
         maxEnergy = 50;
         curEnergy = maxEnergy;
 
-        rechargeMaxTimer = 1.5f;
+        rechargeMaxTimer = 1f;
     }
 
     private void FixedUpdate()
@@ -56,7 +56,7 @@ public class EnergyBar : MonoBehaviour {
 
             if(rechargeTimer >= rechargeMaxTimer && curEnergy < maxEnergy)
             {
-                curEnergy += 8 * Time.deltaTime;
+                curEnergy += 10 * Time.deltaTime;
             }
         }
 
