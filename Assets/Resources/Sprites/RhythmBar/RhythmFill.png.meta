@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 3cc3095ec5ced5341a0460e44b3eb6a0
-timeCreated: 1526493957
+timeCreated: 1527074007
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -98,10 +98,10 @@ TextureImporter:
       name: RhythmFill_0
       rect:
         serializedVersion: 2
-        x: 24
-        y: 750
-        width: 672
-        height: 120
+        x: 27
+        y: 375
+        width: 306
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -112,10 +112,10 @@ TextureImporter:
       name: RhythmFill_1
       rect:
         serializedVersion: 2
-        x: 24
-        y: 570
-        width: 672
-        height: 120
+        x: 27
+        y: 294
+        width: 306
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -126,10 +126,10 @@ TextureImporter:
       name: RhythmFill_2
       rect:
         serializedVersion: 2
-        x: 24
-        y: 390
-        width: 672
-        height: 120
+        x: 27
+        y: 213
+        width: 306
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,10 +140,10 @@ TextureImporter:
       name: RhythmFill_3
       rect:
         serializedVersion: 2
-        x: 24
-        y: 210
-        width: 672
-        height: 120
+        x: 27
+        y: 129
+        width: 306
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,10 +154,10 @@ TextureImporter:
       name: RhythmFill_4
       rect:
         serializedVersion: 2
-        x: 24
-        y: 30
-        width: 672
-        height: 120
+        x: 27
+        y: 42
+        width: 306
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

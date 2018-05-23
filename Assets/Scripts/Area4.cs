@@ -39,11 +39,16 @@ public class Area4 : MonoBehaviour {
             three = true;
         }
 
+        if (tutorial.GetComponent<DialogueManager>().area4DialogueFinished)
+        {
+            GameObject.FindObjectOfType<GuideAi>().ChangeWaypoints(5);
+            tutorial.GetComponent<DialogueManager>().area4DialogueFinished = false;
+        }
+
         if (GameObject.FindObjectOfType<EnemyAI>() == null && startWave && !tutorial.partCompleted[4])
         {
             tutorial.StartTutorialDialogue(11);
             tutorial.gameObject.GetComponent<DialogueManager>().waitTime = 1f;
-            GameObject.FindObjectOfType<GuideAi>().ChangeWaypoints(5);
             tutorial.partCompleted[4] = true;
         }
 

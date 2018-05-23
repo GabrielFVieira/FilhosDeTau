@@ -25,21 +25,16 @@ public class ArrowTarget : MonoBehaviour {
         {
             hits++;
             hit = true;
-            Debug.Log(collision.gameObject.transform.rotation.eulerAngles.z);
+
             if (collision.gameObject.transform.rotation.eulerAngles.z >= 0 && collision.gameObject.transform.rotation.eulerAngles.z < 45)
-            {
                 target.GetComponent<SpriteRenderer>().sprite = wasHitL;
-            }
 
             else if (collision.gameObject.transform.rotation.eulerAngles.z > 135 && collision.gameObject.transform.rotation.eulerAngles.z <= 179)
-            {
                 target.GetComponent<SpriteRenderer>().sprite = wasHitR;
-            }
 
             else
-            {
                 target.GetComponent<SpriteRenderer>().sprite = wasHit;
-            }
+
             Destroy(collision.gameObject);
         }
     }

@@ -11,10 +11,13 @@ public class DialogueManager : MonoBehaviour {
     public TextMeshProUGUI tutorialText;
     public GameObject textBox;
     public GameObject tutorialBox;
-    public float timer;
+    public GameObject playerHud;
+    private float timer;
     public bool startTimer;
-    public bool finishWrite;
+    private bool finishWrite;
     public float waitTime;
+    public bool area4Dialogue;
+    public bool area4DialogueFinished;
 	// Use this for initialization
 	void Start () {
         tutorialBox.SetActive(false);
@@ -45,6 +48,7 @@ public class DialogueManager : MonoBehaviour {
     {
         nameText.text = dialogue.name;
         GetComponent<TutorialManager>().canWalk = false;
+        playerHud.SetActive(false);
         GameObject.FindObjectOfType<GuideAi>().startMove = false;
         sentences.Clear();
 
@@ -83,6 +87,7 @@ public class DialogueManager : MonoBehaviour {
     {
         textBox.SetActive(false);
         GetComponent<TutorialManager>().canWalk = true;
+        playerHud.SetActive(true);
         GameObject.FindObjectOfType<GuideAi>().startMove = true;
     }
 
@@ -133,6 +138,8 @@ public class DialogueManager : MonoBehaviour {
 
     void EndDialogueTutorial()
     {
+        if (area4Dialogue)
+            area4DialogueFinished = true;
         tutorialBox.SetActive(false);
     }
 }

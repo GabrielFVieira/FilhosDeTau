@@ -54,13 +54,25 @@ public class TutorialManager : MonoBehaviour {
     public bool lastCanChangeWeapon;
     [HideInInspector]
     public bool lastCanOpenInv;
+
+    public GameObject fade;
     // Use this for initialization
     void Start () {
         dManager = GetComponent<DialogueManager>();
         player = GameObject.FindGameObjectWithTag("Player");
         inventoryUI = GameObject.FindObjectOfType<InventoryUI>();
-        StartDialogue(0);
-	}
+        //StartDialogue(0);
+
+        player.GetComponent<PlayerMovement>().canWalk = canWalk;
+        player.GetComponent<PlayerMovement>().canRun = canRun;
+        player.GetComponent<PlayerMovement>().canAttack = canAttack;
+        player.GetComponent<PlayerMovement>().canRoll = canRoll;
+        player.GetComponent<PlayerMovement>().canUseMagic = canUseMagic;
+        player.GetComponent<PlayerMovement>().canPursuit = canPursuit;
+        player.GetComponent<ItemHUD>().canChangeWeapon = canChangeWeapon;
+        inventoryUI.canOpenInv = canOpenInv;
+        fade.SetActive(true);
+    }
 
     private void Update()
     {
@@ -188,6 +200,9 @@ public class TutorialManager : MonoBehaviour {
 
     public void StartTutorialDialogue(int i)
     {
+        if (i == 11)
+            dManager.area4Dialogue = true;
+
         dManager.StartTutorialDialogue(tutorialDialogues[i]);
     }
 }

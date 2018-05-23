@@ -105,10 +105,14 @@ public class PlayerMovement : MonoBehaviour
     private bool walkToObjective;
     #endregion
 
+    public bool onStart;
+    public float startTimer;
+    public GameObject[] doubt;
     #region Main Functions
     // Use this for initialization
     void Start()
     {
+        onStart = true;
         objectiveDist = 10;
         velocity = new Vector2(1.75f, 1.1f);
         rb2D = gameObject.GetComponent<Rigidbody2D>();
@@ -138,11 +142,12 @@ public class PlayerMovement : MonoBehaviour
 
         ////// GET THE ANIMATOR COMPONENT AND SET THE PLAYER VELOCITY ///////
         anim = GetComponent<Animator>();
+
         vel = 3f;
 
         anim.SetBool("isWalking", isWalking);
-        anim.SetFloat("x", x);
-        anim.SetFloat("y", y);
+        anim.SetFloat("x", 0);
+        anim.SetFloat("y", -1);
 
         ////////////// SET THE ATTACKS DAMAGE /////////////////
         dmg.Add("Close", 15); // Close Range Attack DMG
@@ -156,6 +161,57 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (onStart)
+        {
+            startTimer += Time.deltaTime;
+
+            if (startTimer > 1 && startTimer < 1.3f)
+                anim.SetBool("WokeUp", true);
+
+
+            if (startTimer > 2.1f && startTimer <= 2.7f)
+            {
+                anim.SetFloat("x", 1);
+                anim.SetFloat("y", 0);
+            }
+
+            else if (startTimer > 2.7f && startTimer <= 3.3f)
+            {
+                anim.SetFloat("x", 0);
+                anim.SetFloat("y", 1);
+            }
+
+            else if (startTimer > 3.3f && startTimer <= 3.9f)
+            {
+                anim.SetFloat("x", -1);
+                anim.SetFloat("y", 0);
+            }
+
+            else if (startTimer > 3.9f && startTimer <= 4.5f)
+            {
+                anim.SetFloat("x", 0);
+                anim.SetFloat("y", -1);
+            }
+
+            else if (startTimer > 4.5f && startTimer <= 5f && !FindObjectOfType<GuideAi>().start)
+            {
+                doubt[0].SetActive(true);
+                FindObjectOfType<GuideAi>().start = true;
+
+            }
+            else if (startTimer <= 5.5f)
+            {
+                if (startTimer >= 4.8f)
+                    doubt[1].SetActive(true);
+
+                if (startTimer >= 5f)
+                {
+                    doubt[2].SetActive(true);
+                    onStart = false;
+                }
+            }
+        }
+
         energy = GetComponent<EnergyBar>().curEnergy;
 
         Vector3 mousePos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
@@ -178,7 +234,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (anim.GetBool("PickUp") == false)
         {
-            if (Input.GetKey(leftButton) == false && Input.GetKey(rightButton) == false && Input.GetKey(upButton) == false && Input.GetKey(downButton) == false && anim.GetBool("isAttacking") == false && anim.GetBool("isAiming") == false && anim.GetBool("isMagicActive") == false && !roll && anim.GetBool("PickUp") == false && walkToObjective == false)
+            if (Input.GetKey(leftButton) == false && Input.GetKey(rightButton) == false && Input.GetKey(upButton) == false && Input.GetKey(downButton) == false && anim.GetBool("isAttacking") == false && anim.GetBool("isAiming") == false && anim.GetBool("isMagicActive") == false && !roll && anim.GetBool("PickUp") == false && walkToObjective == false && canWalk)
             {
                 isWalking = false;
                 mouseLook = true;

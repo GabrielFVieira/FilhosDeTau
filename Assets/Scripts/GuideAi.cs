@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GuideAi : MonoBehaviour {
+    public Transform startPoint;
+    [HideInInspector]
+    public bool start;
     public LineRenderer lineRenderer;
     public Transform point0, point1, point2;
 
@@ -70,6 +73,32 @@ public class GuideAi : MonoBehaviour {
 
         else
             SetFacingToPath(player.transform.position);
+
+        if (start)
+        {
+            float r = Vector2.Distance(transform.position, startPoint.position);
+
+            if (r > 0)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, startPoint.position, vel * 0.5f * Time.deltaTime);
+                SetFacingToPath(startPoint.position);
+                anim.SetBool("isWalking", true);
+            }
+
+            else
+            {
+                anim.SetBool("isWalking", false);
+                x = 0;
+                y = -1;
+                player.GetComponent<PlayerMovement>().doubt[0].SetActive(false);
+                player.GetComponent<PlayerMovement>().doubt[1].SetActive(false);
+                player.GetComponent<PlayerMovement>().doubt[2].SetActive(false);
+                player.GetComponent<Animator>().SetFloat("x", 0);
+                player.GetComponent<Animator>().SetFloat("y", 1);
+                FindObjectOfType<TutorialManager>().StartDialogue(0);
+                start = false;
+            }
+        }
 
         /*
         if (stoppedArea == 2 && !startMove || stoppedArea == 1 && !startMove)
