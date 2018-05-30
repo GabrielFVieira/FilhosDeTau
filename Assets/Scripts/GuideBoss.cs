@@ -11,28 +11,24 @@ public class GuideBoss : MonoBehaviour
     public Vector3[] positions = new Vector3[50];
     private int index;
     public float vel;
-    public bool startMove;
+    public bool startMove = true;
     public Transform[] area1WayP;
     public Transform[] area2WayP;
     public Transform[] area2_1WayP;
     public Transform[] area3WayP;
-    public Transform[,] pointsAreas = new Transform[4, 3];
+    public Transform[,] pointsAreas = new Transform[6, 3];
     public int stoppedArea;
     public GameObject sayOrder;
     public GameObject sayPickBow;
-    public Transform area3Stop;
+    //public Transform area3Stop;
     private float x, y;
     private Animator anim;
     private void Start()
     {
         x = 0;
         y = -1;
-        anim = GetComponent<Animator>();
-        //lineRenderer.positionCount = numPoints;
-
-        pointsAreas[0, 0] = area2_1WayP[0];
-        pointsAreas[0, 1] = area2_1WayP[1];
-        pointsAreas[0, 2] = area2_1WayP[2];
+        //anim = GetComponent<Animator>();
+        lineRenderer.positionCount = numPoints;
 
         pointsAreas[1, 0] = area1WayP[0];
         pointsAreas[1, 1] = area1WayP[1];
@@ -42,29 +38,49 @@ public class GuideBoss : MonoBehaviour
         pointsAreas[2, 1] = area2WayP[1];
         pointsAreas[2, 2] = area2WayP[2];
 
+        pointsAreas[0, 0] = area2_1WayP[0];
+        pointsAreas[0, 1] = area2_1WayP[1];
+        pointsAreas[0, 2] = area2_1WayP[2];
+
         pointsAreas[3, 0] = area3WayP[0];
         pointsAreas[3, 1] = area3WayP[1];
         pointsAreas[3, 2] = area3WayP[2];
 
         sayOrder.SetActive(false);
         sayPickBow.SetActive(false);
-       
+
+        DrawQuadraticCurve();
     }
 
     public void Update()
     {
-        anim.SetFloat("x", x);
-        anim.SetFloat("y", y);
+        //anim.SetFloat("x", x);
+        //anim.SetFloat("y", y);
         DrawQuadraticCurve();
         if (startMove)
             move();
 
+        if (stoppedArea == 1 && !startMove)
+        {        
+            ChangeWaypoints(1);
+        }
         if (stoppedArea == 2 && !startMove)
         {
-            x = -1;
-            y = 0;
-            sayOrder.SetActive(true);
+            ChangeWaypoints(2);
         }
+        if (stoppedArea == 3 && !startMove)
+        {
+            ChangeWaypoints(0);
+        }
+        if (stoppedArea == 4 && !startMove)
+        {
+            ChangeWaypoints(3);
+        }
+        if (stoppedArea == 5 && !startMove)
+        {
+            ChangeWaypoints(4);
+        }
+
 
         if (stoppedArea == 1 && !startMove)
         {
@@ -78,33 +94,16 @@ public class GuideBoss : MonoBehaviour
             y = -1;
         }
 
-        if (stoppedArea == 3 && !sayPickBow.activeSelf)
-        {
-            float r = Vector2.Distance(transform.position, area3Stop.position);
-
-            if (r > 0)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, area3Stop.position, vel * Time.deltaTime);
-                SetFacingToPath(area3Stop.position);
-                anim.SetBool("isWalking", true);
-            }
-            else
-            {
-                anim.SetBool("isWalking", false);
-                sayPickBow.SetActive(true);
-                x = 0;
-                y = -1;
-            }
-
-        }
 
 
         if (index == positions.Length && startMove)
         {
             startMove = false;
             stoppedArea++;
-            if (stoppedArea != 3)
-                anim.SetBool("isWalking", false);
+            if (stoppedArea > 4)
+            {
+                stoppedArea = 1;
+            }
             index = 0;
         }
     }
@@ -161,7 +160,7 @@ public class GuideBoss : MonoBehaviour
             {
                 transform.position = Vector2.MoveTowards(transform.position, positions[index], vel * Time.deltaTime);
                 SetFacingToPath(positions[index]);
-                anim.SetBool("isWalking", true);
+                //anim.SetBool("isWalking", true);
             }
             else
                 index++;
